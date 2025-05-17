@@ -1,0 +1,4645 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+exports.__esModule = true;
+exports.seedMedicines = void 0;
+function seedMedicines(prisma) {
+    return __awaiter(this, void 0, void 0, function () {
+        var medicines, _i, medicines_1, med;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    medicines = [
+                        {
+                            name: 'CLARAMIX',
+                            scientific_name: '',
+                            titer: '2.5',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CRESTOMED',
+                            scientific_name: '',
+                            titer: '10 mg',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CRESTOMED مغ5حب حبة 30 مغ',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CYMBACAP 20 CAP20',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DECADRALE مغ8امبول امبولات 3 مغ',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'MOTALONSUPP 10 6 SUPP10',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'GARNIER 2 صبغة شعر',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'BIORAMIPRIL مغ2.5حب حبة 30 مغ',
+                            scientific_name: 'Ramipril',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'PRED ALPHA FORTE فورتقطرة عينية 5',
+                            scientific_name: 'Prednisolone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DIUREX مغ25حب حبة 20 مغ',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DOMIZYL 25 لوشن 100',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'PSYLLIUM CAP 90 CAP',
+                            scientific_name: 'Plantago ovata',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'METROZOL 0.8 جل 20',
+                            scientific_name: 'Metronidazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'VISTRAL MOND SYR 10MG/5ML 118ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'VITA DICTAB 20 TAB',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'ZEYROS 96 واقي شمسي',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'MOURADVEX محاولمل 10 محاول',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'NASONIDE SPRAY 32 15 SPRAY32',
+                            scientific_name: 'Mometasone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'الثوم كبسول 30 كبسول العطار',
+                            scientific_name: 'Allium sativum',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'NEODRON قطرة عينية 5',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'ORALGIC حب 24 حب',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DIURACTONE TAB 25MG 20 TAB',
+                            scientific_name: 'Spironolactone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HYPOPRESOR CAPSULES 100 مديد CAPSULES100مديد',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'PURE CARE FACIAL WASH PURE ACTIVE 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CEFIX مغ100شراب مل 60 مغ',
+                            scientific_name: 'Cefixime',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'RECTAKAB CREAM 30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CIPLOX F.C.TABLET 500 20 حبة F.C.TABLET500',
+                            scientific_name: 'Ciprofloxacin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA قبة اسفنجية A01 قبة اسفنجية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOBAR مغ12.5تحاميل تحاميل 10 مغ',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEALTEX 7CM 7CM',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CLOTRIMAZOLE 1 محلول مل 50 1% محلول%',
+                            scientific_name: 'Clotrimazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DIVITAL CAPSULES 2000 IU CAP 30 CAPSULES2000 IU',
+                            scientific_name: 'Vitamin D3',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'PUREMIL شوفان قمح حليب',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CEFOPRIL FILM COATED TABLETS 500MG 20TAB FILM COATED TABLETS500MG',
+                            scientific_name: 'Cefopril',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'RECTOPLEXIL كبار تحاميل تحاميل 10 كبار تحاميل',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO ALOE ML 250 SHAMPOALOE',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CIPROFLEX مغ500حب حبات 10 مغ',
+                            scientific_name: 'Ciprofloxacin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد ابهام مدعم مشد ابهام مدعم',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOBAR مغ50تحاميل تحاميل 10 مغ',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEMAZON AMP 8MG 5 AMP8MG',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COBAMET CAPSULE 1500 مكغ 30 CAPCAPSULE1500مكغ',
+                            scientific_name: 'Vitamin B12',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DOGRETOL FILM COATED TABLETS 400 SR 20 FILM COATED TABLETS400 SR',
+                            scientific_name: 'Carbamazepine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'PUREMIL قمح حليب بسكويت',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CEFPODOMAS TAB 200MG 20TABTAB200MG',
+                            scientific_name: 'Cefpodoxime',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'REGULATOR TAB 21TABTAB',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO GREASY HSIR ML 250 SHAMPOGREASY HSIR',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CIPROFLOXACIN IV SOLUTION 200 MG ML 100 IV SOLUTION200 MG',
+                            scientific_name: 'Ciprofloxacin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مفصل متحرك مشد ركبة مدعم مفصل متحرك مشد ركبة مدعم',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFAST SPRAY PAIN RELIEF 150MLSPRAYPAIN RELIEF',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEMOFLAVON F C TABLET 1000MG 24 F C TABLET1000MG',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COBIOL CREAM CENTELLA 60MLCREAMCENTELLA',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DOGMATYL TAB 50MG 30TABTAB50MG',
+                            scientific_name: 'Sulpiride',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'PUREMIL شوفان قمح خضار',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CELEBEX CAP 200MG 20CAPCAP200MG',
+                            scientific_name: 'Celecoxib',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'RENEX EFFERVESCENT 20TABTAB',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO NORMAL HAIR ML 250 SHAMPONORMAL HAIR',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CIPROTEC 500MG F.C.TAB 10TABTAB500MG',
+                            scientific_name: 'Ciprofloxacin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA اسفنجة طبية صغيرة 10 حبة اسفنجة طبية صغيرة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOMAX GEL 1% 50G GEL1%',
+                            scientific_name: 'Diclofenac',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEPA-MERZ AMPOULE 10 AMPOULE10',
+                            scientific_name: 'L-ornithine-L-aspartate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COBAL 5000MCG AMP 5AMPAMP5000MCG',
+                            scientific_name: 'Vitamin B12',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DOLIPRANE 100MG SUPP 10SUPP100MG',
+                            scientific_name: 'Paracetamol',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'ELMEX TOOTHPASTE ANTI-DECAY 50ML TOOTHPASTEANTI-DECAY',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FEMOGES EFFERVESCENT 20 TAB EFFERVESCENT20',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO DRY HAIR ML 250 SHAMPODRY HAIR',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CITRO SODINE TAB 20TABTAB',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مرهم 5%',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DIPROSONE OINTMENT 15G OINTMENT15G',
+                            scientific_name: 'Betamethasone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEMOPROCT OVULES 6 OVULES6',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CO-VALSACOR TAB 80/12.5 MG 30TABTAB80/12.5',
+                            scientific_name: 'Valsartan + Hydrochlorothiazide',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DOXAZOSIN TAB 4MG 30TABTAB4MG',
+                            scientific_name: 'Doxazosin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'PUREMIL قمح حليب تمر',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CETIRIZINE TAB 10MG 20TABTAB10MG',
+                            scientific_name: 'Cetirizine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA جهاز بخار 1جهاز جهاز بخار',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC AMPOULE 75MG 3ML 5 AMPOULE75MG',
+                            scientific_name: 'Diclofenac',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEPARIN SODIUM INJECTION 5000 IU 5 AMP INJECTION5000 IU',
+                            scientific_name: 'Heparin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE SENSITIVE 50ML TOOTHPASTESENSITIVE',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FEXOFENADINE TAB 180MG 10TABTAB180MG',
+                            scientific_name: 'Fexofenadine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO ANTI HAIR LOSS ML 250 SHAMPOANTI HAIR LOSS',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CILOSTAZOL TAB 100MG 20TABTAB100MG',
+                            scientific_name: 'Cilostazol',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA رباط ضاغط للكاحل رباط ضاغط للكاحل',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC SODIUM TAB 50MG 20TABTAB50MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEMOFER SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Ferrous fumarate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLLAGEN FORTE AMPOULES 10 AMPOULES10',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FEXOFENADINE HCL SUSPENSION 60ML SUSPENSION60ML',
+                            scientific_name: 'Fexofenadine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO KIDS ML 250 SHAMPOKIDS',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CLOPIDOGREL TAB 75MG 30TABTAB75MG',
+                            scientific_name: 'Clopidogrel',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد معصم مرن مشد معصم مرن',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICYNONE AMP 250MG 5AMPAMP250MG',
+                            scientific_name: 'Etamsylate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HENNA NATURAL POWDER 100G POWDER100G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLOFAC TAB 135MG 30TABTAB135MG',
+                            scientific_name: 'Mebeverine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FENISTIL DROPS 20ML DROPS20ML',
+                            scientific_name: 'Dimetindene',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO HERBAL ML 250 SHAMPOHERBAL',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CINNARIZINE TAB 25MG 30TABTAB25MG',
+                            scientific_name: 'Cinnarizine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة الكوع الرياضية دعامة الكوع الرياضية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DORMICUM AMP 15MG 3ML 5AMPAMP15MG',
+                            scientific_name: 'Midazolam',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEPA-MERZ GRANULES SACHET 10 SACHET',
+                            scientific_name: 'L-ornithine-L-aspartate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLDASTOP NASAL DROPS 10ML NASAL DROPS10ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FISH OIL CAPSULE 1000MG 30CAPCAPSULE1000MG',
+                            scientific_name: 'Omega-3 fatty acids',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO HERBAL ANTI DANDRUFF ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CLARITINE TAB 10MG 10TABTAB10MG',
+                            scientific_name: 'Loratadine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة هوائية للجلوس وسادة هوائية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DUROGESIC PATCH 25MCG/H PATCH5',
+                            scientific_name: 'Fentanyl',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEPA-MERZ INJECTION 10ML AMP 5 AMP',
+                            scientific_name: 'L-ornithine-L-aspartate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE HERBAL 100ML TOOTHPASTEHERBAL',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROFOLVIT CAP 30CAPCAP',
+                            scientific_name: 'Iron + Folic Acid + Vitamin B12',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO NORMAL HERBAL ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CLOTRIMAZOLE CREAM 1% 20G',
+                            scientific_name: 'Clotrimazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامه مفصل الركبة دعامه مفصل الركبة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEPAKINE CHRONO TAB 500MG 30TABTAB500MG',
+                            scientific_name: 'Valproic acid',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA GENTLE BABY SHAMPOO 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CLOPIXOL DEPOT 200MG/ML 1ML AMP',
+                            scientific_name: 'Zuclopenthixol decanoate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة طبية اسفنجية وسادة طبية اسفنجية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEPAKINE SYRUP 57.64MG/ML 300ML',
+                            scientific_name: 'Valproic acid',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA MOISTURIZING BABY SOAP 75GM',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLESTAL TAB 10MG 30TABTAB10MG',
+                            scientific_name: 'Rosuvastatin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FISH OIL OMEGA3 1000MG CAP 30',
+                            scientific_name: 'Omega-3 fatty acids',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO DAMAGED HAIR ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CORTIMEX CREAM 15G',
+                            scientific_name: 'Hydrocortisone + Miconazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة لرقبة الأطفال وسادة لرقبة الأطفال',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAMETHASONE AMP 4MG/ML 1ML AMP',
+                            scientific_name: 'Dexamethasone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEMOCAP CAPSULE 30CAPCAP',
+                            scientific_name: 'Iron + Folic Acid',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COZAAR TAB 50MG 30TABTAB50MG',
+                            scientific_name: 'Losartan',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FLOXIN OPHTHALMIC DROPS 5ML',
+                            scientific_name: 'Ofloxacin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO ANTIFUNGAL ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CORTIFLAM CREAM 15G',
+                            scientific_name: 'Clobetasol',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA ضمادة شاش معقمة ضمادة شاش معقمة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DIFLUCAN CAPSULE 150MG 1CAPCAP150MG',
+                            scientific_name: 'Fluconazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HEPA-MERZ AMPOULE 10ML 5 AMPOULE10ML',
+                            scientific_name: 'L-ornithine-L-aspartate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COMBIFLAM TAB 400/100 MG 20TABTAB',
+                            scientific_name: 'Ibuprofen + Paracetamol',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FOLIC ACID TAB 5MG 20TABTAB5MG',
+                            scientific_name: 'Folic Acid',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO SILKY SMOOTH ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COTRIMAXAZOLE TAB 960MG 20TABTAB960MG',
+                            scientific_name: 'Sulfamethoxazole + Trimethoprim',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA عصابة عين قطنية عصابة عين قطنية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXA RHINOSPRAY NASAL SPRAY 15ML',
+                            scientific_name: 'Dexamethasone + Tramazoline',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HERMES MULTIVITAMINS TAB 30TABTAB',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE MINT 100ML TOOTHPASTEMINT',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERRODAN SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Ferrous sulfate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO OILY HAIR ML 250 SHAMPOOILY HAIR',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CINOLONE LOTION 60ML LOTION60ML',
+                            scientific_name: 'Fluocinolone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA رباط ضغط للمعصم رباط ضغط',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DELTACORTRIL TAB 5MG 30TABTAB5MG',
+                            scientific_name: 'Prednisolone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA DIAPER RASH CREAM 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CIPROFLOXACIN EAR DROP 10ML EAR DROP10ML',
+                            scientific_name: 'Ciprofloxacin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROCHEL CAP 30CAPCAP',
+                            scientific_name: 'Iron bisglycinate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN B5 ML 250 SHAMPOVITAMIN B5',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة المعصم الرياضية دعامة المعصم',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DELTAMED CREAM 15G CREAM15G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE CHARCOAL 100ML TOOTHPASTECHARCOAL',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERRO VITA SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Multivitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO COLLAGEN ML 250 SHAMPOCOLLAGEN',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد خصر مطاطي مشد خصر مطاطي',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOVATE CREAM 15G CREAM15G',
+                            scientific_name: 'Clobetasol propionate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA GENTLE BABY WASH 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE KIDS 50ML TOOTHPASTEKIDS',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROCAL SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Calcium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO KERATIN ML 250 SHAMPOKERATIN',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA جبيرة الاصبع مرنة جبيرة الاصبع',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAZOL CREAM 20G CREAM20G',
+                            scientific_name: 'Ketoconazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA NOURISHING SKIN CREAM 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE ADVANCED WHITE 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROCAL TABLETS 30TABTAB',
+                            scientific_name: 'Iron + Calcium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO STRONG HAIR ML 250 SHAMPOSTRONG HAIR',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA جبيرة الرسغ مرنة جبيرة الرسغ مرنة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOXACILLIN CAPSULES 250MG 20CAPCAPSULES250MG',
+                            scientific_name: 'Dicloxacillin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAFIX CREAM 15G CREAM15G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA PROTEIN CONDITIONER 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE SENSITIVE PRO-RELIEF 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERVIT SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Vitamin C + B-complex',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VOLUME BOOST ML 250 SHAMPOVOLUME BOOST',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA جبيرة للكوع مرنة جبيرة للكوع مرنة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DIFLUCAN CAPSULE 150MG 1CAPCAPSULE150MG',
+                            scientific_name: 'Fluconazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAL CREAM 15G CREAM15G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY MASSAGE OIL 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE TRIPLE ACTION 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERZINE SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Zinc + Multivitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO ARGAN ML 250 SHAMPOARGAN',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA جبيرة للرجل مرنة جبيرة للرجل مرنة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DIAMICRON TAB 30MG 30TABTAB30MG',
+                            scientific_name: 'Gliclazide',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOL CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY CREAM 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE STRONG TEETH 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERZINE TABLET 30TABTAB',
+                            scientific_name: 'Iron + Zinc + Multivitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN COMPLEX ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA حزام دعم للكتف مرن حزام دعم للكتف',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC GEL 1% 50G GEL1%',
+                            scientific_name: 'Diclofenac',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOTIN CREAM 15G CREAM15G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY LOTION 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE MAX FRESH 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROVIT TABLETS 30TABTAB',
+                            scientific_name: 'Iron + Folic Acid + B12',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO HERBAL KERATIN ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة الركبة المرنة دعامة الركبة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC TABLETS 50MG 20TABTAB50MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DESLORATADINE SYRUP 60ML SYRUP60ML',
+                            scientific_name: 'Desloratadine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA MOISTURIZING BABY SOAP 125G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FEROSAC TABLET 30TABTAB',
+                            scientific_name: 'Iron saccharate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO ANTI DANDRUFF HERBAL ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA رباط الكاحل الضاغط رباط الكاحل الضاغط',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DOXAZOSIN TABLET 2MG 30TABTAB2MG',
+                            scientific_name: 'Doxazosin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAVATE OINTMENT 15G OINTMENT15G',
+                            scientific_name: 'Clobetasol propionate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY WIPES 72PCS BABY WIPES72PCS',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE SALT 100ML TOOTHPASTESALT',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROPHAGE TABLETS 30TABTAB',
+                            scientific_name: 'Ferrous fumarate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO TEA TREE HERBAL ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة دعم الظهر وسادة دعم الظهر',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAMETHASONE INJECTION 4MG/ML 1ML AMP',
+                            scientific_name: 'Dexamethasone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAFIX LOTION 60ML LOTION60ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA INTIMATE WASH 200ML INTIMATE WASH',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE KIDS STRAWBERRY 50ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROPLANT TABLETS 30TABTAB',
+                            scientific_name: 'Iron + Plant extracts',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN MIX ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد فقرات الظهر الطبي مشد فقرات الظهر',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC SODIUM GEL 1% 50G GEL1%',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAFLEX CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA MOISTURIZING BABY LOTION 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE MAXIMUM CAVITY PROTECTION 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROX TABLETS 30TABTAB',
+                            scientific_name: 'Iron polymaltose complex',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO GREEN TEA ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA حزام دعم الركبة الرياضي حزام دعم الركبة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC POTASSIUM TABLET 50MG 20TABTAB50MG',
+                            scientific_name: 'Diclofenac potassium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAFEN CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA PROTEIN SHAMPOO SOFTNESS & SHINE 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE NATURAL HERBAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROVITA DROPS 30ML DROPS30ML',
+                            scientific_name: 'Iron + Vitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO COCONUT ML 250 SHAMPOCOCONUT',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة دعم الرقبة وسادة دعم الرقبة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC INJECTION 75MG/3ML 5 AMPS',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAZINE CREAM 50G CREAM50G',
+                            scientific_name: 'Silver sulfadiazine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY POWDER 100G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE SUGAR ACID NEUTRALIZER 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROCIT SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron citrate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO ZINC ML 250 SHAMPOZINC',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA جبيرة الاصبع المعدنية جبيرة الاصبع المعدنية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAMED AMPOULE 8MG/2ML 5 AMP',
+                            scientific_name: 'Dexamethasone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOVATE CREAM 30G CREAM30G',
+                            scientific_name: 'Clobetasol propionate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY OIL 200ML BABY OIL200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE ANTICAVITY 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROVITA SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + multivitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO MINT ML 250 SHAMPOMINT',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA جبيرة اليد المرنة جبيرة اليد المرنة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DIAZEPAM TABLET 5MG 30TABTAB5MG',
+                            scientific_name: 'Diazepam',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAVIT CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO EXTRA MILD 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE SENSITIVE HERBAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERRO CALCIUM CAPSULES 30CAPCAP',
+                            scientific_name: 'Iron + Calcium + Vitamin D',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO LEMON ML 250 SHAMPOLEMON',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة الفقرات القطنية دعامة الفقرات القطنية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC SODIUM SUPPOSITORIES 100MG 10SUPP100MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOVATE OINTMENT 30G OINTMENT30G',
+                            scientific_name: 'Clobetasol propionate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO MILD & GENTLE 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE STRAWBERRY 50ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROCHROM CAPSULES 30CAPCAP',
+                            scientific_name: 'Iron + Chromium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO BAMBOO ML 250 SHAMPOBAMBOO',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA حزام ضاغط لمنطقة البطن حزام البطن',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOPHEN AMPOULE 75MG 3ML 5 AMP',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOBEX CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO HERBAL 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE HERBAL WHITENING 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROVIT ORAL DROPS 30ML DROPS30ML',
+                            scientific_name: 'Iron + multivitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO GARLIC ML 250 SHAMPOGARLIC',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة تبريد للرأس وسادة تبريد',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOZOL SUPPOSITORIES 100MG 10SUPP100MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAVEX OINTMENT 20G OINTMENT20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SOAP 125G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE HERBAL CHARCOAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERRO-TON SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Vitamin C',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO CASTOR OIL ML 250 SHAMPOCASTOR OIL',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة فقرات مرنة وسادة فقرات مرنة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAPOLYCID EYE DROPS 5ML EYE DROPS5ML',
+                            scientific_name: 'Dexamethasone + Polymyxin B + Chloramphenicol',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAFRESH CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA HERBAL TOOTHPASTE 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE KIDS TOOTHPASTE BUBBLE FRUIT 50ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS SULFATE TABLETS 30TABTAB',
+                            scientific_name: 'Ferrous sulfate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN C ML 250 SHAMPOVITAMIN C',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة دعم الجلوس وسادة دعم الجلوس',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC GEL 1% 30G GEL1%',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAFIX CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY BATH 400ML BABY BATH400ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE NATURAL EXTRACTS CHARCOAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS GLUCONATE SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Ferrous gluconate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO MULTIVITAMIN ML 250 SHAMPOMULTIVITAMIN',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة دعم الظهر الفقري وسادة دعم الظهر',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAPOLYCID NASAL DROPS 10ML NASAL DROPS10ML',
+                            scientific_name: 'Dexamethasone + Polymyxin B + Chloramphenicol',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAL CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY BODY LOTION 400ML LOTION400ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE TRIPLE FRESH 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROSIL TABLETS 30TABTAB',
+                            scientific_name: 'Ferrous sulfate + Folic acid',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO SEAWEED ML 250 SHAMPOSEAWEED',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة رقبة دائرية وسادة رقبة دائرية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC AMPOULE 75MG/3ML 6 AMP',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMALENE CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY CREAM SOFT 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE TOTAL PROTECTION 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROX SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron polymaltose complex',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO STRONG VITAMINS ML 250 SHAMPOSTRONG VITAMINS',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة الفقرات الصدرية دعامة الفقرات الصدرية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC SODIUM TAB 25MG 30TABTAB25MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOX CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY WASH 400ML BABY WASH400ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE WHITENING STRIPS 28PCS',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERRODAN TABLETS 30TABTAB',
+                            scientific_name: 'Ferrous sulfate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO BLACK GARLIC ML 250 SHAMPOBLACK GARLIC',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة للكتف مرنة دعامة للكتف مرنة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOPHEN TABLET 100MG 20TABTAB100MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAMED CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO 400ML BABY SHAMPOO400ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE ACTIVE SALT 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERZINE PLUS TABLETS 30TABTAB',
+                            scientific_name: 'Iron + Zinc + Multivitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO ALOE VERA ML 250 SHAMPOALOE VERA',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA وسادة طبية للركبة وسادة طبية للركبة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOXACILLIN 500MG CAPSULES 20CAPCAPSULES500MG',
+                            scientific_name: 'Dicloxacillin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOBET CREAM 15G CREAM15G',
+                            scientific_name: 'Betamethasone valerate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY OIL HERBAL 100ML BABY OIL100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE FRESH GEL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS GLUCONATE TABLETS 30TABTAB',
+                            scientific_name: 'Ferrous gluconate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO SILK PROTEIN ML 250 SHAMPOSILK PROTEIN',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد للفقرات القطنية مرن مشد للفقرات القطنية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAMED TAB 0.5MG 30TABTAB0.5MG',
+                            scientific_name: 'Dexamethasone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOTIN CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO ANTI-HAIR FALL 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE MAX FRESH COOLING CRYSTALS 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS FUMARATE CAPSULES 30CAPCAP',
+                            scientific_name: 'Ferrous fumarate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO TEA TREE MINT ML 250 SHAMPOTEA TREE MINT',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة خشبية للظهر دعامة خشبية للظهر',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC GEL 1% 100G GEL100G',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOTIC CREAM 15G CREAM15G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO PROTEIN RICH 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE ADVANCED CLEAN 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS GLYCINATE CAPSULES 30CAPCAP',
+                            scientific_name: 'Ferrous bisglycinate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO SHEA BUTTER ML 250 SHAMPOSHEA BUTTER',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد طبي للمعصم مشد طبي للمعصم',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAMED CREAM 15G CREAM15G',
+                            scientific_name: 'Dexamethasone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMIZOL CREAM 15G CREAM15G',
+                            scientific_name: 'Miconazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY LOTION HERBAL 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE KIDS APPLE BURST 50ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS BISGLYCINATE SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Ferrous bisglycinate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO COCONUT MILK ML 250 SHAMPOCOCONUT MILK',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA رباط مرن للكوع رباط مرن للكوع',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOMAX TAB 50MG 30TABTAB50MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAZIDE OINTMENT 20G OINTMENT20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO GENTLE PROTEIN 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE COOLING MINT 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS ASCORBATE TABLETS 30TABTAB',
+                            scientific_name: 'Ferrous ascorbate + Folic acid',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO RED ONION ML 250 SHAMPORED ONION',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA جبيرة للكاحل مرنة جبيرة للكاحل مرنة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOMAX AMPOULE 75MG 3ML 5 AMP',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAFIX LOTION 100ML LOTION100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY MASSAGE OIL HERBAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE COMPLETE CARE 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS SULFATE DROPS 30ML DROPS30ML',
+                            scientific_name: 'Ferrous sulfate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN MIX FOR KIDS ML 250',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA رباط طبي للركبة رباط طبي للركبة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOGESIC TABLET 50MG 20TABTAB50MG',
+                            scientific_name: 'Diclofenac potassium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOLINE CREAM 15G CREAM15G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO STRONG HAIR 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE STRONG HERBAL FRESH 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS GLUCONATE DROPS 30ML DROPS30ML',
+                            scientific_name: 'Ferrous gluconate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO APPLE ML 250 SHAMPOAPPLE',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA حزام الفتق الطبي حزام الفتق الطبي',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOMAX SR TABLETS 100MG 10TABTAB100MG',
+                            scientific_name: 'Diclofenac sodium (SR)',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOSONE CREAM 15G CREAM15G',
+                            scientific_name: 'Betamethasone valerate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY CONDITIONER 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE LEMON FRESH 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS FUMARATE DROPS 30ML DROPS30ML',
+                            scientific_name: 'Ferrous fumarate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO BANANA ML 250 SHAMPOBANANA',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA حزام الدعم القطني حزام الدعم القطني',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOPHEN GEL 1% 30G GEL30G',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMATO CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY POWDER HERBAL 100G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE ANTIBACTERIAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS SULFATE SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Ferrous sulfate',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO GRAPE ML 250 SHAMPOGRAPE',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد طبية للكتف مشد طبية للكتف',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAPOLYCID EAR DROPS 10ML EAR DROPS10ML',
+                            scientific_name: 'Dexamethasone + Polymyxin B + Chloramphenicol',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOTEX CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY WIPES HERBAL 72PCS',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE TOTAL CHARCOAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROX DROPS 30ML DROPS30ML',
+                            scientific_name: 'Iron polymaltose complex',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO RICE MILK ML 250 SHAMPORICE MILK',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة طبية لليد دعامة طبية لليد',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLONEX TABLET 75MG 20TABTAB75MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMIX CREAM 15G CREAM15G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY LOTION EXTRA SOFT 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE ANTICAVITY HERBAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROCHROM SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Chromium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO COLLAGEN KERATIN ML 250 SHAMPOCOLLAGEN KERATIN',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد دعم الكاحل مشد دعم الكاحل',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOGESIC GEL 1% 50G GEL50G',
+                            scientific_name: 'Diclofenac potassium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAPLAST CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SHAMPOO NO TEARS 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE SENSITIVE EXTRA FRESH 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROVIT CAPSULES 30CAPCAP',
+                            scientific_name: 'Iron + B12 + Folic Acid',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO BIOTIN ML 250 SHAMPOBIOTIN',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة رسغ اليد مرنة دعامة رسغ اليد مرنة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DEXAPOLYCID EYE DROPS 10ML EYE DROPS10ML',
+                            scientific_name: 'Dexamethasone + Polymyxin B + Chloramphenicol',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAZINE CREAM 20G CREAM20G',
+                            scientific_name: 'Silver sulfadiazine',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY LOTION MOISTURIZING 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE KIDS MILD BUBBLE FRUIT 50ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERZINE PLUS SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Zinc + Multivitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN B3 ML 250 SHAMPOVITAMIN B3',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA رباط دعم الرقبة رباط دعم الرقبة',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOMAX GEL 1% 50G GEL50G',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOXYL CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY SOAP SOFT & SMOOTH 125G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE ACTIVE FRESH GEL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROSIL SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Folic Acid',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN E ML 250 SHAMPOVITAMIN E',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد دعم للفقرات الصدرية مشد دعم للفقرات الصدرية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC SODIUM SUPPOSITORIES 50MG 10SUPP50MG',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOCID CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY WASH GENTLE 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE ADVANCED WHITE CHARCOAL 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROCAL CAPSULES 30CAPCAP',
+                            scientific_name: 'Iron + Calcium + Vitamin D',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN A ML 250 SHAMPOVITAMIN A',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد دعم لليد مرن مشد دعم لليد',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOXIN TABLET 500MG 20TABTAB500MG',
+                            scientific_name: 'Dicloxacillin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMATECH CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY BODY WASH HERBAL 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE TRIPLE PROTECTION 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROTON DROPS 30ML DROPS30ML',
+                            scientific_name: 'Iron + Vitamin C',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO VITAMIN H ML 250 SHAMPOVITAMIN H',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة الكتف الطبية دعامة الكتف الطبية',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLORAPID TABLETS 50MG 20TABTAB50MG',
+                            scientific_name: 'Diclofenac potassium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAVIL CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY HEAD TO TOE WASH 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE NATURAL CLEAN 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROUS COMPLEX CAPSULES 30CAPCAP',
+                            scientific_name: 'Iron + Folic Acid + B12 + Zinc',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO HONEY ML 250 SHAMPOHONEY',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA رباط فقرات قطني ضاغط رباط فقرات قطني',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLORAPID GEL 1% 50G GEL50G',
+                            scientific_name: 'Diclofenac potassium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOZOL CREAM 30G CREAM30G',
+                            scientific_name: 'Miconazole',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY MASSAGE OIL EXTRA CARE 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE NATURAL EXTRACTS GREEN TEA 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROX CAPSULES 30CAPCAP',
+                            scientific_name: 'Iron polymaltose complex',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO LAVENDER ML 250 SHAMPOLAVENDER',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA دعامة اسفنجية للفقرات دعامة اسفنجية للفقرات',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLORAPID SR TABLETS 100MG 10TABTAB100MG',
+                            scientific_name: 'Diclofenac sodium (SR)',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMAZIDE CREAM 30G CREAM30G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY CONDITIONER HERBAL 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE NATURAL EXTRACTS COCONUT 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROPLUS TABLETS 30TABTAB',
+                            scientific_name: 'Iron + Folic Acid + Vitamin B12',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO PROTEIN MIX ML 250 SHAMPOPROTEIN MIX',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA رباط مفصل الكتف رباط مفصل الكتف',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOXACILLIN 250MG CAPSULES 30CAPCAP250MG',
+                            scientific_name: 'Dicloxacillin',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOFIX CREAM 20G CREAM20G',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY BATH HERBAL 200ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE NATURAL EXTRACTS CHARCOAL MINT 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERROFIT DROPS 30ML DROPS30ML',
+                            scientific_name: 'Iron + Vitamin C + B-Complex',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO CUCUMBER ML 250 SHAMPOCUCUMBER',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA مشد دعم الفقرات مشد دعم الفقرات',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DICLOFENAC INFUSION 75MG/100ML VIAL',
+                            scientific_name: 'Diclofenac sodium',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'DERMOCORT CREAM 30G CREAM30G',
+                            scientific_name: 'Hydrocortisone',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HIMALAYA BABY OIL EXTRA MILD 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'COLGATE TOOTHPASTE MAX WHITE 100ML',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'FERZINE KIDS SYRUP 120ML SYRUP120ML',
+                            scientific_name: 'Iron + Zinc + Multivitamins',
+                            titer: '',
+                            category_id: 1,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'HAIR-B SHAMPO STRAWBERRY ML 250 SHAMPOSTRAWBERRY',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                        {
+                            name: 'CHAM SHIFA حزام ضغط للظهر حزام ضغط للظهر',
+                            scientific_name: '',
+                            titer: '',
+                            category_id: 2,
+                            company_id: 1,
+                            unit_price: 0.0,
+                            supplier_id: 1,
+                            Type: ''
+                        },
+                    ];
+                    _i = 0, medicines_1 = medicines;
+                    _a.label = 1;
+                case 1:
+                    if (!(_i < medicines_1.length)) return [3 /*break*/, 4];
+                    med = medicines_1[_i];
+                    return [4 /*yield*/, prisma.medicine.create({ data: med })];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3:
+                    _i++;
+                    return [3 /*break*/, 1];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.seedMedicines = seedMedicines;

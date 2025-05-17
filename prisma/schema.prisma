@@ -14,18 +14,19 @@ datasource db {
 }
 
 model User {
-  user_id       Int            @id @default(autoincrement())
-  username      String         @unique
+  id            Int            @id @default(autoincrement())
+  username      String
+  email         String         @unique
   password_hash String
   role          String
   created_at    DateTime       @default(now())
   pharmacy_id   Int?
-  Pharmacy      Pharmacy?      @relation(fields: [pharmacy_id], references: [pharmacy_id])
+  Pharmacy      Pharmacy?      @relation(fields: [pharmacy_id], references: [id])
   Notifications Notification[]
 }
 
 model Pharmacy {
-  pharmacy_id    Int             @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   name           String
   address        String
   contact_number String
@@ -37,7 +38,7 @@ model Pharmacy {
 }
 
 model Warehouse {
-  warehouse_id   Int         @id @default(autoincrement())
+  id             Int         @id @default(autoincrement())
   name           String
   address        String
   contact_number String
@@ -45,7 +46,7 @@ model Warehouse {
 }
 
 model Supplier {
-  supplier_id    Int             @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   name           String
   contact_person String?
   phone          String
@@ -57,20 +58,14 @@ model Supplier {
 }
 
 model Category {
-  category_id Int        @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String     @unique
   description String?
   Medicines   Medicine[]
 }
 
-model Type {
-  type_id   Int        @id @default(autoincrement())
-  name      String     @unique
-  Medicines Medicine[]
-}
-
 model Company {
-  company_id     Int        @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   name           String     @unique
   contact_person String?
   phone          String
@@ -80,42 +75,42 @@ model Company {
 }
 
 model Medicine {
-  medicine_id        Int                 @id @default(autoincrement())
+  id                 Int                 @id @default(autoincrement())
   name               String
   scientific_name    String
+  titer              String
   category_id        Int
-  category           Category            @relation(fields: [category_id], references: [category_id])
+  category           Category            @relation(fields: [category_id], references: [id])
   company_id         Int
-  company            Company             @relation(fields: [company_id], references: [company_id])
+  company            Company             @relation(fields: [company_id], references: [id])
   unit_price         Decimal
   supplier_id        Int
-  supplier           Supplier            @relation(fields: [supplier_id], references: [supplier_id])
+  supplier           Supplier            @relation(fields: [supplier_id], references: [id])
   Inventory          Inventory[]
   PurchaseOrderItems PurchaseOrderItem[]
   SaleItems          SaleItem[]
-  Type               Type?               @relation(fields: [typeType_id], references: [type_id])
-  typeType_id        Int?
+  Type               String?
 }
 
 model Inventory {
-  inventory_id  Int        @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   medicine_id   Int
-  medicine      Medicine   @relation(fields: [medicine_id], references: [medicine_id])
+  medicine      Medicine   @relation(fields: [medicine_id], references: [id])
   location_type String
-  location_id   Int
   quantity      Int
   expiry_date   DateTime
   last_updated  DateTime   @default(now())
-  pharmacy      Pharmacy?  @relation(fields: [location_id], references: [pharmacy_id], map: "Inventory_pharmacy_fkey") // Unique constraint name
-  warehouse     Warehouse? @relation(fields: [location_id], references: [warehouse_id], map: "Inventory_warehouse_fkey") // Unique constraint name
+  location_id   Int
+  pharmacy      Pharmacy?  @relation(fields: [location_id], references: [id], map: "Inventory_pharmacy_fkey") // Unique constraint name
+  warehouse     Warehouse? @relation(fields: [location_id], references: [id], map: "Inventory_warehouse_fkey") // Unique constraint name
 }
 
 model PurchaseOrder {
-  order_id           Int                 @id @default(autoincrement())
+  id                 Int                 @id @default(autoincrement())
   supplier_id        Int
-  supplier           Supplier            @relation(fields: [supplier_id], references: [supplier_id])
+  supplier           Supplier            @relation(fields: [supplier_id], references: [id])
   pharmacy_id        Int
-  pharmacy           Pharmacy            @relation(fields: [pharmacy_id], references: [pharmacy_id])
+  pharmacy           Pharmacy            @relation(fields: [pharmacy_id], references: [id])
   order_date         DateTime            @default(now())
   delivery_date      DateTime?
   status             String
@@ -124,30 +119,30 @@ model PurchaseOrder {
 }
 
 model PurchaseOrderItem {
-  order_item_id Int           @id @default(autoincrement())
-  order_id      Int
-  order         PurchaseOrder @relation(fields: [order_id], references: [order_id])
-  medicine_id   Int
-  medicine      Medicine      @relation(fields: [medicine_id], references: [medicine_id])
-  quantity      Int
-  unit_price    Decimal
+  id          Int           @id @default(autoincrement())
+  order_id    Int
+  order       PurchaseOrder @relation(fields: [order_id], references: [id])
+  medicine_id Int
+  medicine    Medicine      @relation(fields: [medicine_id], references: [id])
+  quantity    Int
+  unit_price  Decimal
 }
 
 model Invoice {
-  invoice_id     Int           @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   order_id       Int           @unique
-  order          PurchaseOrder @relation(fields: [order_id], references: [order_id])
+  order          PurchaseOrder @relation(fields: [order_id], references: [id])
   supplier_id    Int
-  supplier       Supplier      @relation(fields: [supplier_id], references: [supplier_id])
+  supplier       Supplier      @relation(fields: [supplier_id], references: [id])
   invoice_date   DateTime      @default(now())
   total_amount   Decimal
   payment_status String
 }
 
 model Sale {
-  sale_id       Int        @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   pharmacy_id   Int
-  pharmacy      Pharmacy   @relation(fields: [pharmacy_id], references: [pharmacy_id])
+  pharmacy      Pharmacy   @relation(fields: [pharmacy_id], references: [id])
   customer_name String?
   sale_date     DateTime   @default(now())
   total_amount  Decimal
@@ -156,21 +151,21 @@ model Sale {
 }
 
 model SaleItem {
-  sale_item_id Int      @id @default(autoincrement())
-  sale_id      Int
-  sale         Sale     @relation(fields: [sale_id], references: [sale_id])
-  medicine_id  Int
-  medicine     Medicine @relation(fields: [medicine_id], references: [medicine_id])
-  quantity     Int
-  unit_price   Decimal
+  id          Int      @id @default(autoincrement())
+  sale_id     Int
+  sale        Sale     @relation(fields: [sale_id], references: [id])
+  medicine_id Int
+  medicine    Medicine @relation(fields: [medicine_id], references: [id])
+  quantity    Int
+  unit_price  Decimal
 }
 
 model Notification {
-  notification_id Int      @id @default(autoincrement())
-  user_id         Int
-  user            User     @relation(fields: [user_id], references: [user_id])
-  message         String
-  type            String
-  created_at      DateTime @default(now())
-  is_read         Boolean  @default(false)
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  user       User     @relation(fields: [user_id], references: [id])
+  message    String
+  type       String
+  created_at DateTime @default(now())
+  is_read    Boolean  @default(false)
 }
