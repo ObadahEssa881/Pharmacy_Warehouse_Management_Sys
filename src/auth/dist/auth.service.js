@@ -77,13 +77,15 @@ var AuthService = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 4:
                         error_1 = _a.sent();
+                        console.error(error_1 instanceof library_1.PrismaClientKnownRequestError);
                         if (error_1 instanceof library_1.PrismaClientKnownRequestError) {
-                            if (error_1.code == 'p2002') {
+                            if (error_1.code == 'P2002') {
+                                console.log(1);
                                 throw new common_1.ForbiddenException('Credential Taken');
                             }
                         }
                         return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/, { msg: 'success' }];
+                    case 5: return [2 /*return*/];
                 }
             });
         });

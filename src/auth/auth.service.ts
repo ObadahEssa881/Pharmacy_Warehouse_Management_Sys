@@ -27,13 +27,14 @@ export class AuthService {
         },
       });
     } catch (error) {
+      console.error(error instanceof PrismaClientKnownRequestError);
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code == 'p2002') {
+        if (error.code == 'P2002') {
+          console.log(1);
           throw new ForbiddenException('Credential Taken');
         }
       }
     }
-    return { msg: 'success' };
   }
 
   async signin(dto: SignInDto) {
