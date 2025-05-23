@@ -77,7 +77,6 @@ model Company {
 model Medicine {
   id                 Int                 @id @default(autoincrement())
   name               String
-  scientific_name    String
   titer              String
   category_id        Int
   category           Category            @relation(fields: [category_id], references: [id])
