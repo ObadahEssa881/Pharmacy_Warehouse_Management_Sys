@@ -13,12 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  PHARMACY_OWNER // Owns one or more pharmacies
+  PHARMACIST // Can handle sales, inventory checks
+}
+
 model User {
   id            Int            @id @default(autoincrement())
   username      String
   email         String         @unique
   password_hash String
-  role          String
+  role          UserRole
   created_at    DateTime       @default(now())
   pharmacy_id   Int?
   Pharmacy      Pharmacy?      @relation(fields: [pharmacy_id], references: [id])
@@ -45,12 +50,19 @@ model Warehouse {
   Inventory      Inventory[]
 }
 
+enum SupplierRole {
+  SUPPLIER_ADMIN
+  SUPPLIER_EMPLOYEE
+}
+
 model Supplier {
   id             Int             @id @default(autoincrement())
   name           String
+  email          String          @unique
+  password_hash  String
+  role           SupplierRole
   contact_person String?
   phone          String
-  email          String          @unique
   address        String
   Medicines      Medicine[]
   PurchaseOrders PurchaseOrder[]
@@ -91,17 +103,24 @@ model Medicine {
   Type               String?
 }
 
+enum LocationType {
+  PHARMACY
+  WAREHOUSE
+}
+
 model Inventory {
-  id            Int        @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   medicine_id   Int
-  medicine      Medicine   @relation(fields: [medicine_id], references: [id])
-  location_type String
+  medicine      Medicine     @relation(fields: [medicine_id], references: [id])
+  location_type LocationType
   quantity      Int
+  cost_price    Decimal // Purchase cost
+  selling_price Decimal // Retail price
   expiry_date   DateTime
-  last_updated  DateTime   @default(now())
+  last_updated  DateTime     @default(now())
   location_id   Int
-  pharmacy      Pharmacy?  @relation(fields: [location_id], references: [id], map: "Inventory_pharmacy_fkey") // Unique constraint name
-  warehouse     Warehouse? @relation(fields: [location_id], references: [id], map: "Inventory_warehouse_fkey") // Unique constraint name
+  pharmacy      Pharmacy?    @relation(fields: [location_id], references: [id], map: "Inventory_pharmacy_fkey") // Unique constraint name
+  warehouse     Warehouse?   @relation(fields: [location_id], references: [id], map: "Inventory_warehouse_fkey") // Unique constraint name
 }
 
 model PurchaseOrder {
@@ -168,3 +187,234 @@ model Notification {
   created_at DateTime @default(now())
   is_read    Boolean  @default(false)
 }
+
+// Looking at your Prisma schema, it's a solid foundation for a pharmacy management system, but there are several areas that need refinement. Let me break down the issues and suggestions:
+
+// ## Major Issues & Modifications Needed
+
+// ### 1. **User Model - Role Management**
+// **Current Issue**: Role is just a string without validation or clear structure.
+
+// **Suggested Modification**:
+// ```prisma
+// enum UserRole {
+//   SUPER_ADMIN    // System-wide admin
+//   PHARMACY_OWNER // Owns one or more pharmacies
+//   PHARMACY_MANAGER // Manages a specific pharmacy
+//   PHARMACIST     // Can handle sales, inventory checks
+//   CASHIER        // Can only process sales
+//   WAREHOUSE_MANAGER // Manages warehouse operations
+// }
+
+// model User {
+//   id            Int            @id @default(autoincrement())
+//   username      String         @unique // Should be unique
+//   email         String         @unique
+//   password_hash String
+//   role          UserRole       // Use enum instead of string
+//   is_active     Boolean        @default(true) // Add user status
+//   created_at    DateTime       @default(now())
+//   updated_at    DateTime       @updatedAt // Track updates
+
+//   // Relationships
+//   pharmacy_id   Int?
+//   pharmacy      Pharmacy?      @relation(fields: [pharmacy_id], references: [id])
+//   notifications Notification[]
+//   sales         Sale[]         // Track who made each sale
+
+//   @@map("users")
+// }
+// ```
+
+// ### 2. **Pharmacy Model - Ownership Issues**
+// **Current Issue**: `owner_id` field exists but no relation to User model.
+
+// **Suggested Modification**:
+// ```prisma
+// model Pharmacy {
+//   id             Int             @id @default(autoincrement())
+//   name           String
+//   address        String
+//   contact_number String
+//   license_number String?         @unique // Pharmacy license
+//   is_active      Boolean         @default(true)
+//   created_at     DateTime        @default(now())
+//   updated_at     DateTime        @updatedAt
+
+//   // Owner relationship
+//   owner_id       Int
+//   owner          User            @relation("PharmacyOwner", fields: [owner_id], references: [id])
+
+//   // Other relationships
+//   staff          User[]          @relation("PharmacyStaff")
+//   inventory      Inventory[]
+//   purchaseOrders PurchaseOrder[]
+//   sales          Sale[]
+
+//   @@map("pharmacies")
+// }
+// ```
+
+// ### 3. **Inventory Model - Location Logic**
+// **Current Issue**: Confusing location logic with conditional foreign keys.
+
+// **Suggested Modification**:
+// ```prisma
+// enum LocationType {
+//   PHARMACY
+//   WAREHOUSE
+// }
+
+// model Inventory {
+//   id            Int          @id @default(autoincrement())
+//   medicine_id   Int
+//   medicine      Medicine     @relation(fields: [medicine_id], references: [id])
+//   location_type LocationType
+//   location_id   Int
+//   quantity      Int          @default(0)
+//   reserved_qty  Int          @default(0) // Reserved for pending orders
+//   expiry_date   DateTime
+//   batch_number  String?      // Important for tracking
+//   cost_price    Decimal      // Purchase cost
+//   selling_price Decimal      // Retail price
+//   reorder_level Int          @default(0) // Minimum stock level
+//   last_updated  DateTime     @default(now()) @updatedAt
+
+//   // Use a single relation approach
+//   pharmacy      Pharmacy?    @relation(fields: [location_id], references: [id])
+//   warehouse     Warehouse?   @relation(fields: [location_id], references: [id])
+
+//   @@unique([medicine_id, location_type, location_id, batch_number])
+//   @@map("inventory")
+// }
+// ```
+
+// ### 4. **Medicine Model - Enhanced Structure**
+// **Suggested Modification**:
+// ```prisma
+// enum MedicineType {
+//   TABLET
+//   CAPSULE
+//   SYRUP
+//   INJECTION
+//   CREAM
+//   DROPS
+//   OTHER
+// }
+
+// model Medicine {
+//   id                 Int                 @id @default(autoincrement())
+//   name               String
+//   generic_name       String?             // Generic equivalent
+//   titer              String              // Strength/dosage
+//   type               MedicineType?
+//   description        String?
+//   barcode            String?             @unique
+//   requires_prescription Boolean          @default(false)
+//   is_active          Boolean             @default(true)
+//   created_at         DateTime            @default(now())
+//   updated_at         DateTime            @updatedAt
+
+//   // Relationships
+//   category_id        Int
+//   category           Category            @relation(fields: [category_id], references: [id])
+//   company_id         Int
+//   company            Company             @relation(fields: [company_id], references: [id])
+//   base_price         Decimal             // Base unit price
+
+//   // Remove supplier relationship from here - it should be in PurchaseOrderItem
+//   inventory          Inventory[]
+//   purchaseOrderItems PurchaseOrderItem[]
+//   saleItems          SaleItem[]
+
+//   @@map("medicines")
+// }
+// ```
+
+// ### 5. **Sale Model - Enhanced Tracking**
+// **Suggested Modification**:
+// ```prisma
+// enum PaymentMode {
+//   CASH
+//   CARD
+//   DIGITAL_WALLET
+//   CREDIT
+// }
+
+// enum SaleStatus {
+//   COMPLETED
+//   REFUNDED
+//   PARTIALLY_REFUNDED
+// }
+
+// model Sale {
+//   id            Int         @id @default(autoincrement())
+//   invoice_number String     @unique // Generate invoice numbers
+//   pharmacy_id   Int
+//   pharmacy      Pharmacy    @relation(fields: [pharmacy_id], references: [id])
+//   cashier_id    Int         // Track who made the sale
+//   cashier       User        @relation(fields: [cashier_id], references: [id])
+//   customer_name String?
+//   customer_phone String?
+//   sale_date     DateTime    @default(now())
+//   total_amount  Decimal
+//   discount      Decimal     @default(0)
+//   tax_amount    Decimal     @default(0)
+//   payment_mode  PaymentMode
+//   status        SaleStatus  @default(COMPLETED)
+//   notes         String?
+
+//   saleItems     SaleItem[]
+
+//   @@map("sales")
+// }
+// ```
+
+// ### 6. **Add Audit Trail Model**
+// **New Addition**:
+// ```prisma
+// enum AuditAction {
+//   CREATE
+//   UPDATE
+//   DELETE
+//   SALE
+//   PURCHASE
+//   INVENTORY_ADJUSTMENT
+// }
+
+// model AuditLog {
+//   id          Int         @id @default(autoincrement())
+//   user_id     Int
+//   user        User        @relation(fields: [user_id], references: [id])
+//   action      AuditAction
+//   table_name  String
+//   record_id   Int
+//   old_values  Json?       // Store old values for updates
+//   new_values  Json?       // Store new values
+//   timestamp   DateTime    @default(now())
+//   ip_address  String?
+//   user_agent  String?
+
+//   @@map("audit_logs")
+// }
+// ```
+
+// ## Key Improvements Summary:
+
+// 1. **Clear Role Hierarchy**: Defined user roles with specific permissions
+// 2. **Better Relationships**: Fixed ownership and foreign key relationships
+// 3. **Enhanced Inventory**: Better tracking with batch numbers, cost/selling prices
+// 4. **Audit Trail**: Complete system activity logging
+// 5. **Data Integrity**: Added unique constraints and validation
+// 6. **Business Logic**: Added fields for real-world pharmacy operations
+
+// ## Recommended Permission Structure:
+
+// - **SUPER_ADMIN**: Full system access
+// - **PHARMACY_OWNER**: Manage owned pharmacies, view reports
+// - **PHARMACY_MANAGER**: Full pharmacy operations, inventory management
+// - **PHARMACIST**: Sales, inventory checks, customer service
+// - **CASHIER**: Sales transactions only
+// - **WAREHOUSE_MANAGER**: Warehouse inventory, purchase orders
+
+// Would you like me to elaborate on any of these modifications or discuss the implementation approach?
