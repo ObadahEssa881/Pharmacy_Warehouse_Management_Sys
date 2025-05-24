@@ -110,22 +110,85 @@ var AuthService = /** @class */ (function () {
                         if (!(_a.sent())) {
                             throw new common_1.ForbiddenException('Credintials incorrect');
                         }
-                        return [2 /*return*/, this.signToken(user.id, user.email)];
+                        return [2 /*return*/, this.signToken(user.id, user.email, user.role, 'user')];
                 }
             });
         });
     };
-    AuthService.prototype.signToken = function (userId, email) {
+    AuthService.prototype.signupSupplier = function (dto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var hash, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, argon.hash(dto.password)];
+                    case 1:
+                        hash = _a.sent();
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, this.prisma.supplier.create({
+                                data: {
+                                    name: dto.name,
+                                    email: dto.email,
+                                    password_hash: hash,
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                    role: dto.role,
+                                    contact_person: dto.contact_person,
+                                    phone: dto.phone,
+                                    address: dto.address
+                                }
+                            })];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_2 = _a.sent();
+                        if (error_2 instanceof library_1.PrismaClientKnownRequestError &&
+                            error_2.code === 'P2002') {
+                            throw new common_1.ForbiddenException('Credential Taken');
+                        }
+                        throw error_2;
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AuthService.prototype.signinSupplier = function (dto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var supplier, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.prisma.supplier.findUnique({
+                            where: { email: dto.email }
+                        })];
+                    case 1:
+                        supplier = _b.sent();
+                        _a = !supplier;
+                        if (_a) return [3 /*break*/, 3];
+                        return [4 /*yield*/, argon.verify(supplier.password_hash, dto.password)];
+                    case 2:
+                        _a = !(_b.sent());
+                        _b.label = 3;
+                    case 3:
+                        if (_a) {
+                            throw new common_1.ForbiddenException('Credentials incorrect');
+                        }
+                        return [2 /*return*/, this.signToken(supplier.id, supplier.email, supplier.role, 'supplier')];
+                }
+            });
+        });
+    };
+    // auth.service.ts
+    AuthService.prototype.signToken = function (id, email, role, accountType) {
         return __awaiter(this, void 0, Promise, function () {
-            var payload, secret, token;
+            var payload, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        payload = { id: userId, email: email };
-                        secret = this.config.get('JWT_SECRET');
+                        payload = { id: id, email: email, role: role, type: accountType };
                         return [4 /*yield*/, this.jwt.signAsync(payload, {
                                 expiresIn: '1h',
-                                secret: secret
+                                secret: this.config.get('JWT_SECRET')
                             })];
                     case 1:
                         token = _a.sent();
