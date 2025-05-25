@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSupplierDto } from './dto/create-supplier.dto';
-import { UpdateSupplierDto } from './dto/update-supplier.dto';
+
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SupplierService {
-  create(createSupplierDto: CreateSupplierDto) {
-    return 'This action adds a new supplier';
+  constructor(private prisma: PrismaService) {}
+  async findAll() {
+    const supplier = await this.prisma.supplier.findMany();
+    if (!supplier) {
+      return 'there is no users to show';
+    }
+    return supplier;
   }
 
-  findAll() {
-    return `This action returns all supplier`;
+  async findOne(email: string) {
+    const supplier = await this.prisma.supplier.findUnique({
+      where: {
+        email: email,
+      },
+    });
+    if (!supplier) {
+      return 'not found please verify credintials';
+    }
+    return supplier;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} supplier`;
-  }
-
-  update(id: number, updateSupplierDto: UpdateSupplierDto) {
-    return `This action updates a #${id} supplier`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} supplier`;
+  async remove(email: string) {
+    const supplier = await this.prisma.supplier.delete({
+      where: {
+        email: email,
+      },
+    });
+    if (!supplier) {
+      return 'not found please verify credintials';
+    }
+    return `the user ${email} deleted`;
   }
 }
