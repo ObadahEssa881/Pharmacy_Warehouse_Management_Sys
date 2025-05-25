@@ -20,8 +20,8 @@ var AuthModule = /** @class */ (function () {
         common_1.Module({
             imports: [jwt_1.JwtModule.register({})],
             controllers: [auth_controller_1.AuthController],
-            providers: [auth_service_1.AuthService, strategy_1.JwtStrategy, guard_1.JwtGuard],
-            exports: [guard_1.JwtGuard]
+            providers: [auth_service_1.AuthService, strategy_1.JwtStrategy, guard_1.JwtGuard, guard_1.RoleGuard],
+            exports: [guard_1.JwtGuard, guard_1.RoleGuard]
         })
     ], AuthModule);
     return AuthModule;

@@ -1,45 +1,25 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Param, Delete, UseGuards } from '@nestjs/common';
 import { SupplierService } from './supplier.service';
-import { CreateSupplierDto } from './dto/create-supplier.dto';
-import { UpdateSupplierDto } from './dto/update-supplier.dto';
-
+import { JwtGuard, RoleGuard } from 'src/auth/guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+@Roles('SUPPLIER_ADMIN')
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('supplier')
 export class SupplierController {
   constructor(private readonly supplierService: SupplierService) {}
-
-  @Post()
-  create(@Body() createSupplierDto: CreateSupplierDto) {
-    return this.supplierService.create(createSupplierDto);
-  }
 
   @Get()
   findAll() {
     return this.supplierService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.supplierService.findOne(+id);
+  @Get(':email')
+  findOne(@Param('email') email: string) {
+    return this.supplierService.findOne(email);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateSupplierDto: UpdateSupplierDto,
-  ) {
-    return this.supplierService.update(+id, updateSupplierDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.supplierService.remove(+id);
+  @Delete('delete/:email')
+  remove(@Param('email') email: string) {
+    return this.supplierService.remove(email);
   }
 }

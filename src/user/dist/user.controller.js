@@ -9,39 +9,39 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 exports.__esModule = true;
-exports.SupplierController = void 0;
+exports.UserController = void 0;
 var common_1 = require("@nestjs/common");
 var guard_1 = require("src/auth/guard");
 var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
-var SupplierController = /** @class */ (function () {
-    function SupplierController(supplierService) {
-        this.supplierService = supplierService;
+var UserController = /** @class */ (function () {
+    function UserController(userService) {
+        this.userService = userService;
     }
-    SupplierController.prototype.findAll = function () {
-        return this.supplierService.findAll();
+    UserController.prototype.findAll = function () {
+        return this.userService.findAll();
     };
-    SupplierController.prototype.findOne = function (email) {
-        return this.supplierService.findOne(email);
+    UserController.prototype.findOne = function (email) {
+        return this.userService.findOne(email);
     };
-    SupplierController.prototype.remove = function (email) {
-        return this.supplierService.remove(email);
+    UserController.prototype.remove = function (email) {
+        return this.userService.remove(email);
     };
     __decorate([
         common_1.Get()
-    ], SupplierController.prototype, "findAll");
+    ], UserController.prototype, "findAll");
     __decorate([
         common_1.Get(':email'),
         __param(0, common_1.Param('email'))
-    ], SupplierController.prototype, "findOne");
+    ], UserController.prototype, "findOne");
     __decorate([
         common_1.Delete('delete/:email'),
         __param(0, common_1.Param('email'))
-    ], SupplierController.prototype, "remove");
-    SupplierController = __decorate([
-        roles_decorator_1.Roles('SUPPLIER_ADMIN'),
+    ], UserController.prototype, "remove");
+    UserController = __decorate([
+        roles_decorator_1.Roles('PHARMACY_OWNER'),
         common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard),
-        common_1.Controller('supplier')
-    ], SupplierController);
-    return SupplierController;
+        common_1.Controller('user')
+    ], UserController);
+    return UserController;
 }());
-exports.SupplierController = SupplierController;
+exports.UserController = UserController;
