@@ -1,10 +1,10 @@
 import {
   Controller,
-  // Get,
+  Get,
   Post,
   Body,
   // Patch,
-  // Param,/
+  Param,
   // Delete,
   UseGuards,
 } from '@nestjs/common';
@@ -26,15 +26,15 @@ export class PurchaseController {
     return this.purchaseService.create(dto, user);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.purchaseService.findAll();
-  // }
+  @Get()
+  findAll() {
+    return this.purchaseService.findAll();
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.purchaseService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.purchaseService.findOne(+id);
+  }
 
   // @Patch(':id')
   // update(

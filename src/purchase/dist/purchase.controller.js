@@ -22,10 +22,23 @@ var PurchaseController = /** @class */ (function () {
     PurchaseController.prototype.create = function (dto, user) {
         return this.purchaseService.create(dto, user);
     };
+    PurchaseController.prototype.findAll = function () {
+        return this.purchaseService.findAll();
+    };
+    PurchaseController.prototype.findOne = function (id) {
+        return this.purchaseService.findOne(+id);
+    };
     __decorate([
         common_1.Post('create'),
         __param(0, common_1.Body()), __param(1, decorators_1.User())
     ], PurchaseController.prototype, "create");
+    __decorate([
+        common_1.Get()
+    ], PurchaseController.prototype, "findAll");
+    __decorate([
+        common_1.Get(':id'),
+        __param(0, common_1.Param('id'))
+    ], PurchaseController.prototype, "findOne");
     PurchaseController = __decorate([
         roles_decorator_1.Roles('PHARMACY_OWNER'),
         common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard),

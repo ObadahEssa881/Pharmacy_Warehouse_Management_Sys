@@ -105,6 +105,42 @@ var PurchaseService = /** @class */ (function () {
             });
         });
     };
+    PurchaseService.prototype.findAll = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var purchase;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.purchaseOrder.findMany()];
+                    case 1:
+                        purchase = _a.sent();
+                        if (!purchase) {
+                            return [2 /*return*/, 'there is no purchases to show'];
+                        }
+                        return [2 /*return*/, purchase];
+                }
+            });
+        });
+    };
+    PurchaseService.prototype.findOne = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var purchase;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.purchaseOrder.findUnique({
+                            where: {
+                                id: id
+                            }
+                        })];
+                    case 1:
+                        purchase = _a.sent();
+                        if (!purchase) {
+                            return [2 /*return*/, 'not found please verify credintials'];
+                        }
+                        return [2 /*return*/, purchase];
+                }
+            });
+        });
+    };
     PurchaseService = __decorate([
         common_1.Injectable()
     ], PurchaseService);

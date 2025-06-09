@@ -46,13 +46,25 @@ export class PurchaseService {
     }
   }
 
-  // findAll() {
-  //   return `This action returns all purchase`;
-  // }
+  async findAll() {
+    const purchase = await this.prisma.purchaseOrder.findMany();
+    if (!purchase) {
+      return 'there is no purchases to show';
+    }
+    return purchase;
+  }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} purchase`;
-  // }
+  async findOne(id: number) {
+    const purchase = await this.prisma.purchaseOrder.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (!purchase) {
+      return 'not found please verify credintials';
+    }
+    return purchase;
+  }
 
   // update(id: number, updatePurchaseDto: UpdatePurchaseDto) {
   //   return `This action updates a #${id} purchase`;
