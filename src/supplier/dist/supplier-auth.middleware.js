@@ -36,28 +36,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var core_1 = require("@nestjs/core");
-var app_module_1 = require("./app.module");
-var common_1 = require("@nestjs/common");
-var http_exception_filter_1 = require("./filters/http-exception.filter");
-function bootstrap() {
-    return __awaiter(this, void 0, void 0, function () {
-        var app;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, core_1.NestFactory.create(app_module_1.AppModule)];
-                case 1:
-                    app = _a.sent();
-                    app.useGlobalPipes(new common_1.ValidationPipe({
-                        whitelist: true
-                    }));
-                    app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
-                    return [4 /*yield*/, app.listen(process.env.PORT || 3333)];
-                case 2:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+exports.supplierAdminAuth = void 0;
+function supplierAdminAuth(jwtService) {
+    return function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var authHeader, token, decoded;
+            return __generator(this, function (_a) {
+                authHeader = req.headers.authorization;
+                if (!(authHeader === null || authHeader === void 0 ? void 0 : authHeader.startsWith('Bearer '))) {
+                    return [2 /*return*/, res.redirect('/admin/supplier/login')];
+                }
+                token = authHeader.split(' ')[1];
+                try {
+                    decoded = jwtService.verify(token);
+                    if (decoded.role !== 'SUPPLIER_ADMIN') {
+                        return [2 /*return*/, res.status(403).send('Forbidden')];
+                    }
+                    req.session.adminUser = {
+                        email: decoded.email,
+                        role: decoded.role
+                    };
+                    next();
+                }
+                catch (err) {
+                    return [2 /*return*/, res.redirect('/admin/supplier/login')];
+                }
+                return [2 /*return*/];
+            });
         });
-    });
+    };
 }
-bootstrap();
+exports.supplierAdminAuth = supplierAdminAuth;
