@@ -16,15 +16,16 @@ import { JwtGuard } from 'src/auth/guard';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  @Post('create')
+  @Post()
   create(@Body() createCompanyDto: CreateCompanyDto) {
     return this.companyService.create(createCompanyDto);
   }
 
   @UseGuards(JwtGuard)
-  @Get('all')
-  findAll() {
-    return this.companyService.findAll();
+  @Get()
+  async findAll() {
+    const companies = await this.companyService.findAll();
+    return {companies : companies};
   }
 
   @UseGuards(JwtGuard)

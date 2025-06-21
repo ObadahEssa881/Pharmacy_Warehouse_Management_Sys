@@ -1,15 +1,22 @@
+import { PrismaService } from 'src/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 @Injectable()
 export class CompanyService {
+
+  constructor(
+    private prisma: PrismaService,
+  ) {}
   create(createCompanyDto: CreateCompanyDto) {
     return 'This action adds a new company';
   }
 
-  findAll() {
-    return `This action returns all company`;
+  async findAll() {
+
+    const companies = await this.prisma.company.findMany();
+    return companies;
   }
 
   findOne(id: number) {
