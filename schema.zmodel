@@ -1,0 +1,229 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  PHARMACY_OWNER
+  PHARMACIST
+}
+
+enum SupplierRole {
+  SUPPLIER_ADMIN
+  SUPPLIER_EMPLOYEE
+}
+
+enum LocationType {
+  PHARMACY
+  WAREHOUSE
+}
+
+model User {
+  id              Int            @id @default(autoincrement())
+  username        String
+  email           String         @unique
+  password_hash   String
+  role            UserRole
+  created_at      DateTime       @default(now())
+  pharmacy_id     Int?
+  Pharmacy        Pharmacy?      @relation("PharmacyUsers", fields: [pharmacy_id], references: [id])
+  OwnedPharmacy   Pharmacy?      @relation("PharmacyOwner")
+  Notifications   Notification[]
+
+  @@allow('read,create,update,delete', auth().role == 'PHARMACY_OWNER' && auth().pharmacy_id == pharmacy_id)
+}
+
+model Pharmacy {
+  id             Int             @id @default(autoincrement())
+  name           String
+  address        String
+  contact_number String
+  owner_id       Int             @unique
+  Inventory      Inventory[]
+  PurchaseOrders PurchaseOrder[]
+  Sales          Sale[]
+  User           User[]          @relation("PharmacyUsers")
+  Owner          User            @relation("PharmacyOwner", fields: [owner_id], references: [id])
+
+  @@allow('read,update', auth().id == owner_id)
+}
+
+model Warehouse {
+  id             Int         @id @default(autoincrement())
+  name           String
+  address        String
+  contact_number String
+  supplier_id    Int
+  Supplier       Supplier    @relation(fields: [supplier_id], references: [id])
+  Inventory      Inventory[]
+
+  @@allow('read,create,update,delete', auth().role == 'SUPPLIER_ADMIN' && auth().id == supplier_id)
+}
+
+model Supplier {
+  id             Int             @id @default(autoincrement())
+  name           String
+  email          String          @unique
+  password_hash  String
+  role           SupplierRole
+  contact_person String?
+  phone          String
+  address        String
+  Medicines      Medicine[]
+  PurchaseOrders PurchaseOrder[]
+  Invoices       Invoice[]
+  Warehouse      Warehouse[]
+
+  @@allow('read,create,update,delete', auth().role == 'SUPPLIER_ADMIN' && auth().id == id)
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  Medicines   Medicine[]
+
+  @@allow('read', true)
+  @@deny('create,update,delete', true)
+}
+
+model Company {
+  id             Int        @id @default(autoincrement())
+  name           String     @unique
+  contact_person String?
+  phone          String
+  email          String     @unique
+  address        String
+  Medicines      Medicine[]
+
+  @@allow('read', true)
+  @@deny('create,update,delete', true)
+}
+
+model Medicine {
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  titer              String
+  category_id        Int
+  category           Category            @relation(fields: [category_id], references: [id])
+  company_id         Int
+  company            Company             @relation(fields: [company_id], references: [id])
+  unit_price         Decimal
+  supplier_id        Int
+  supplier           Supplier            @relation(fields: [supplier_id], references: [id])
+  Inventory          Inventory[]
+  PurchaseOrderItems PurchaseOrderItem[]
+  SaleItems          SaleItem[]
+  Type               String?
+
+  @@allow('read', true)
+  @@deny('create,update,delete', true)
+}
+
+model Inventory {
+  id            Int          @id @default(autoincrement())
+  medicine_id   Int
+  medicine      Medicine     @relation(fields: [medicine_id], references: [id])
+  location_type LocationType
+  quantity      Int
+  cost_price    Decimal
+  selling_price Decimal
+  expiry_date   DateTime
+  last_updated  DateTime     @default(now())
+  location_id   Int
+
+  pharmacy  Pharmacy?  @relation(fields: [location_id], references: [id], map: "FK_Inventory_Pharmacy")
+  warehouse Warehouse? @relation(fields: [location_id], references: [id], map: "FK_Inventory_Warehouse")
+
+  @@allow('read', 
+    (auth().role == "PHARMACY_OWNER" && location_type == "PHARMACY" && pharmacy.owner_id == auth().id) ||
+    (auth().role == "SUPPLIER_ADMIN" && location_type == "WAREHOUSE" && warehouse.supplier_id == auth().id)
+  )
+
+  @@allow('create,update,delete', 
+    (auth().role == "PHARMACY_OWNER" && location_type == "PHARMACY" && pharmacy.owner_id == auth().id) ||
+    (auth().role == "SUPPLIER_ADMIN" && location_type == "WAREHOUSE" && warehouse.supplier_id == auth().id)
+  )
+}
+
+model PurchaseOrder {
+  id                 Int                 @id @default(autoincrement())
+  supplier_id        Int
+  supplier           Supplier            @relation(fields: [supplier_id], references: [id])
+  pharmacy_id        Int
+  pharmacy           Pharmacy            @relation(fields: [pharmacy_id], references: [id])
+  order_date         DateTime            @default(now())
+  delivery_date      DateTime?
+  status             String
+  Invoice            Invoice?
+  PurchaseOrderItems PurchaseOrderItem[]
+
+  @@allow('read,create,update,delete', true)
+}
+
+model PurchaseOrderItem {
+  id          Int           @id @default(autoincrement())
+  order_id    Int
+  order       PurchaseOrder @relation(fields: [order_id], references: [id])
+  medicine_id Int
+  medicine    Medicine      @relation(fields: [medicine_id], references: [id])
+  quantity    Int
+  unit_price  Decimal
+
+  @@allow('read', true)
+}
+
+model Invoice {
+  id             Int           @id @default(autoincrement())
+  order_id       Int           @unique
+  order          PurchaseOrder @relation(fields: [order_id], references: [id])
+  supplier_id    Int
+  supplier       Supplier      @relation(fields: [supplier_id], references: [id])
+  invoice_date   DateTime      @default(now())
+  total_amount   Decimal
+  payment_status String
+
+  @@allow('read', true)
+}
+
+model Sale {
+  id            Int        @id @default(autoincrement())
+  pharmacy_id   Int
+  pharmacy      Pharmacy   @relation(fields: [pharmacy_id], references: [id])
+  customer_name String?
+  sale_date     DateTime   @default(now())
+  total_amount  Decimal
+  payment_mode  String
+  SaleItems     SaleItem[]
+
+  @@allow('read,create,update,delete', true)
+}
+
+model SaleItem {
+  id          Int      @id @default(autoincrement())
+  sale_id     Int
+  sale        Sale     @relation(fields: [sale_id], references: [id])
+  medicine_id Int
+  medicine    Medicine @relation(fields: [medicine_id], references: [id])
+  quantity    Int
+  unit_price  Decimal
+
+  @@allow('read', true)
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  user       User     @relation(fields: [user_id], references: [id])
+  message    String
+  type       String
+  created_at DateTime @default(now())
+  is_read    Boolean  @default(false)
+
+  @@allow('read', auth().id == user_id)
+  @@allow('create,update,delete', false)
+}

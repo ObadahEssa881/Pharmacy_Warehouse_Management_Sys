@@ -16,6 +16,15 @@ var SignUpDto = /** @class */ (function () {
         class_validator_1.IsNotEmpty()
     ], SignUpDto.prototype, "username");
     __decorate([
+        class_validator_1.IsNotEmpty()
+    ], SignUpDto.prototype, "propertyName");
+    __decorate([
+        class_validator_1.IsNotEmpty()
+    ], SignUpDto.prototype, "address");
+    __decorate([
+        class_validator_1.IsNotEmpty()
+    ], SignUpDto.prototype, "contact_number");
+    __decorate([
         class_validator_1.IsEmail()
     ], SignUpDto.prototype, "email");
     __decorate([

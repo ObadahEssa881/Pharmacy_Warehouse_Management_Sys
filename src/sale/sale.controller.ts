@@ -1,34 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Get, Query, Body, UseGuards } from '@nestjs/common';
+import { JwtGuard, RoleGuard } from '../auth/guard';
 import { SaleService } from './sale.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
-import { UpdateSaleDto } from './dto/update-sale.dto';
+import { PaginationDto } from '../common/pagination/pagination.dto';
+import { GetUser } from '../common/decorators/get‑user.decorator';
 
-@Controller('sale')
+@Controller('sales')
+@UseGuards(JwtGuard, RoleGuard)
 export class SaleController {
-  constructor(private readonly saleService: SaleService) {}
+  constructor(private readonly service: SaleService) {}
 
   @Post()
-  create(@Body() createSaleDto: CreateSaleDto) {
-    return this.saleService.create(createSaleDto);
+  create(@GetUser() user, @Body() dto: CreateSaleDto) {
+    return this.service.create(user, dto);
   }
 
   @Get()
-  findAll() {
-    return this.saleService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.saleService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
-    return this.saleService.update(+id, updateSaleDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.saleService.remove(+id);
+  paginate(@GetUser() user, @Query() q: PaginationDto) {
+    return this.service.paginate(user, q);
   }
 }
