@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.AppModule = void 0;
 var common_1 = require("@nestjs/common");
+// import { PrismaService } from './prisma/prisma.service';
 var config_1 = require("@nestjs/config");
 var app_controller_1 = require("./app.controller");
 var app_service_1 = require("./app.service");
@@ -29,11 +30,9 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         common_1.Module({
             imports: [
+                config_1.ConfigModule.forRoot({ isGlobal: true }),
                 auth_module_1.AuthModule,
                 prisma_module_1.PrismaModule,
-                config_1.ConfigModule.forRoot({
-                    isGlobal: true
-                }),
                 supplier_module_1.SupplierModule,
                 purchase_module_1.PurchaseModule,
                 sale_module_1.SaleModule,

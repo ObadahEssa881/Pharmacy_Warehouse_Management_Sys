@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
     "moduleResolution": "node16",
     "module": "node16",
     "declaration": true,
@@ -18,5 +19,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "exclude": ["node_modules", "dist", "admin-panel"],
+  "include": ["src/**/*"]
 }

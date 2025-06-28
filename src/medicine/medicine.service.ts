@@ -1,26 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMedicineDto } from './dto/create-medicine.dto';
-import { UpdateMedicineDto } from './dto/update-medicine.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateMedicineDto, UpdateMedicineDto } from './dto';
 
 @Injectable()
 export class MedicineService {
-  create(createMedicineDto: CreateMedicineDto) {
-    return 'This action adds a new medicine';
+  constructor(private prisma: PrismaService) {}
+
+  async create(dto: CreateMedicineDto) {
+    const medicine = await this.prisma.medicine.create({ data: dto });
+    return { message: 'Medicine created successfully', data: medicine };
   }
 
-  findAll() {
-    return `This action returns all medicine`;
+  async findAll(page = 1, limit = 10) {
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.medicine.findMany({
+        skip: (page - 1) * limit,
+        take: limit,
+        include: { category: true, company: true, supplier: true },
+      }),
+      this.prisma.medicine.count(),
+    ]);
+
+    return {
+      message: 'Medicines retrieved successfully',
+      data,
+      meta: { total, page, limit },
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} medicine`;
+  async findOne(id: number) {
+    const medicine = await this.prisma.medicine.findUnique({ where: { id } });
+    if (!medicine) throw new NotFoundException('Medicine not found');
+    return { message: 'Medicine retrieved successfully', data: medicine };
   }
 
-  update(id: number, updateMedicineDto: UpdateMedicineDto) {
-    return `This action updates a #${id} medicine`;
+  async update(id: number, dto: UpdateMedicineDto) {
+    const updated = await this.prisma.medicine.update({
+      where: { id },
+      data: dto,
+    });
+    return { message: 'Medicine updated successfully', data: updated };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} medicine`;
+  async remove(id: number) {
+    await this.prisma.medicine.delete({ where: { id } });
+    return { message: 'Medicine deleted successfully' };
   }
 }

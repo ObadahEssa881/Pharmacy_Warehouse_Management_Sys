@@ -1,4 +1,7 @@
-// import { PartialType } from '@nestjs/mapped-types';
-// import { CreatePurchaseDto } from './create-purchase.dto';
+// src/purchase/dto/update-status.dto.ts
+import { IsEnum } from 'class-validator';
+import { PurchaseStatus } from '../../common/enums/purchase‑status.enum';
 
-// export class UpdatePurchaseDto extends PartialType(CreatePurchaseDto) {}
+export class UpdatePurchaseStatusDto {
+  @IsEnum(PurchaseStatus) status: PurchaseStatus;
+}

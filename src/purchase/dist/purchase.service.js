@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -44,99 +55,149 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.PurchaseService = void 0;
 var common_1 = require("@nestjs/common");
-var library_1 = require("@prisma/client/runtime/library");
-// import { UpdatePurchaseDto } from './dto/update-purchase.dto';
+var index_1 = require("../common/pagination/index");
+var purchase_status_enum_1 = require("../common/enums/purchase\u2011status.enum");
 var PurchaseService = /** @class */ (function () {
     function PurchaseService(prisma) {
         this.prisma = prisma;
     }
-    PurchaseService.prototype.create = function (dto, user) {
+    PurchaseService.prototype.pharmacyScope = function (user) {
+        if (!user.pharmacy_id)
+            throw new common_1.ForbiddenException('Must be a pharmacy account');
+        return { pharmacy_id: user.pharmacy_id };
+    };
+    /** CREATE purchase + items + invoice in one transaction */
+    PurchaseService.prototype.create = function (user, dto) {
         return __awaiter(this, void 0, void 0, function () {
-            var purchaseOrder, error_1;
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.prisma.$transaction(function (tx) { return __awaiter(_this, void 0, void 0, function () {
+                        var order;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, tx.purchaseOrder.create({
+                                        data: __assign({ supplier_id: dto.supplier_id, status: purchase_status_enum_1.PurchaseStatus.PENDING }, this.pharmacyScope(user))
+                                    })];
+                                case 1:
+                                    order = _a.sent();
+                                    return [4 /*yield*/, tx.purchaseOrderItem.createMany({
+                                            data: dto.items.map(function (it) { return ({
+                                                order_id: order.id,
+                                                medicine_id: it.medicine_id,
+                                                quantity: it.quantity,
+                                                unit_price: it.unit_price
+                                            }); })
+                                        })];
+                                case 2:
+                                    _a.sent();
+                                    return [4 /*yield*/, tx.invoice.create({
+                                            data: {
+                                                order_id: order.id,
+                                                supplier_id: dto.supplier_id,
+                                                total_amount: dto.items
+                                                    .reduce(function (sum, it) { return sum + Number(it.unit_price) * it.quantity; }, 0)
+                                                    .toString(),
+                                                payment_status: 'UNPAID'
+                                            }
+                                        })];
+                                case 3:
+                                    _a.sent();
+                                    return [2 /*return*/, order];
+                            }
+                        });
+                    }); })];
+            });
+        });
+    };
+    PurchaseService.prototype.paginate = function (user, q) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.prisma.purchaseOrder.findMany(__assign({ where: this.pharmacyScope(user), include: { PurchaseOrderItems: true, Invoice: true }, orderBy: { order_date: 'desc' } }, index_1.buildPagination(q)))];
+            });
+        });
+    };
+    /** Approve / Reject & move stock */
+    PurchaseService.prototype.updateStatus = function (user, id, dto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var order;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.prisma.$transaction(function (tx) { return __awaiter(_this, void 0, void 0, function () {
-                                var order, orderItemsData;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0: return [4 /*yield*/, tx.purchaseOrder.create({
-                                                data: {
-                                                    pharmacy_id: user.pharmacy_id,
-                                                    supplier_id: dto.supplier_id,
-                                                    status: 'PENDING',
-                                                    order_date: new Date(),
-                                                    delivery_date: dto.deliveryDate
-                                                }
-                                            })];
+                    case 0: return [4 /*yield*/, this.prisma.purchaseOrder.findUnique({
+                            where: { id: id },
+                            include: { PurchaseOrderItems: true }
+                        })];
+                    case 1:
+                        order = _a.sent();
+                        if (!order)
+                            throw new common_1.NotFoundException();
+                        if (order.pharmacy_id !== user.pharmacy_id)
+                            throw new common_1.ForbiddenException();
+                        if (order.status !== purchase_status_enum_1.PurchaseStatus.PENDING)
+                            throw new common_1.BadRequestException('Order already processed');
+                        return [2 /*return*/, this.prisma.$transaction(function (tx) { return __awaiter(_this, void 0, void 0, function () {
+                                var _i, _a, item, inv;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            if (!(dto.status === purchase_status_enum_1.PurchaseStatus.APPROVED)) return [3 /*break*/, 8];
+                                            _i = 0, _a = order.PurchaseOrderItems;
+                                            _b.label = 1;
                                         case 1:
-                                            order = _a.sent();
-                                            // Step 2: Create purchase order items
-                                            console.log(dto.items);
-                                            orderItemsData = dto.items.map(function (item) { return ({
-                                                order_id: order.id,
-                                                medicine_id: item.medicine_id,
-                                                quantity: item.quantity,
-                                                unit_price: item.unit_price
-                                            }); });
-                                            console.log(orderItemsData);
-                                            return [4 /*yield*/, tx.purchaseOrderItem.createMany({
-                                                    data: orderItemsData
+                                            if (!(_i < _a.length)) return [3 /*break*/, 8];
+                                            item = _a[_i];
+                                            // 1. decrement warehouse
+                                            return [4 /*yield*/, tx.inventory.updateMany({
+                                                    where: {
+                                                        medicine_id: item.medicine_id,
+                                                        warehouse_id: user.warehouse_id
+                                                    },
+                                                    data: { quantity: { decrement: item.quantity } }
                                                 })];
                                         case 2:
-                                            _a.sent();
-                                            return [2 /*return*/, order];
+                                            // 1. decrement warehouse
+                                            _b.sent();
+                                            return [4 /*yield*/, tx.inventory.findFirst({
+                                                    where: {
+                                                        medicine_id: item.medicine_id,
+                                                        pharmacy_id: user.pharmacy_id
+                                                    }
+                                                })];
+                                        case 3:
+                                            inv = _b.sent();
+                                            if (!inv) return [3 /*break*/, 5];
+                                            return [4 /*yield*/, tx.inventory.update({
+                                                    where: { id: inv.id },
+                                                    data: { quantity: { increment: item.quantity } }
+                                                })];
+                                        case 4:
+                                            _b.sent();
+                                            return [3 /*break*/, 7];
+                                        case 5: return [4 /*yield*/, tx.inventory.create({
+                                                data: {
+                                                    medicine_id: item.medicine_id,
+                                                    pharmacy_id: user.pharmacy_id,
+                                                    location_type: 'PHARMACY',
+                                                    quantity: item.quantity,
+                                                    cost_price: item.unit_price,
+                                                    selling_price: item.unit_price,
+                                                    expiry_date: new Date()
+                                                }
+                                            })];
+                                        case 6:
+                                            _b.sent();
+                                            _b.label = 7;
+                                        case 7:
+                                            _i++;
+                                            return [3 /*break*/, 1];
+                                        case 8: return [2 /*return*/, tx.purchaseOrder.update({
+                                                where: { id: id },
+                                                data: { status: dto.status },
+                                                include: { PurchaseOrderItems: true, Invoice: true }
+                                            })];
                                     }
                                 });
                             }); })];
-                    case 1:
-                        purchaseOrder = _a.sent();
-                        return [2 /*return*/, purchaseOrder];
-                    case 2:
-                        error_1 = _a.sent();
-                        if (error_1 instanceof library_1.PrismaClientKnownRequestError) {
-                            throw new common_1.ForbiddenException(error_1);
-                        }
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    PurchaseService.prototype.findAll = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var purchase;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.prisma.purchaseOrder.findMany()];
-                    case 1:
-                        purchase = _a.sent();
-                        if (!purchase) {
-                            return [2 /*return*/, 'there is no purchases to show'];
-                        }
-                        return [2 /*return*/, purchase];
-                }
-            });
-        });
-    };
-    PurchaseService.prototype.findOne = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var purchase;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.prisma.purchaseOrder.findUnique({
-                            where: {
-                                id: id
-                            }
-                        })];
-                    case 1:
-                        purchase = _a.sent();
-                        if (!purchase) {
-                            return [2 /*return*/, 'not found please verify credintials'];
-                        }
-                        return [2 /*return*/, purchase];
                 }
             });
         });
