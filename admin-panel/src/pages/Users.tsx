@@ -6,10 +6,12 @@ export const UsersPage = () => (
     <TwTable
       resource="users"
       columns={[
-        { source: 'id', label: 'ID' },
-        { source: 'username', label: 'Username' },
-        { source: 'email', label: 'Email' },
-        { source: 'role', label: 'Role' },
+        { source: 'id',          label: 'ID' },
+        { source: 'username',    label: 'Username' },
+        { source: 'email',       label: 'Email' },
+        { source: 'role',        label: 'Role' },
+        { source: 'pharmacy_id', label: 'Pharmacy' },
+        { source: 'created_at',  label: 'Created' },
       ]}
     />
   </>

@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -48,62 +37,59 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.LoginPage = void 0;
-// src/pages/LoginPage.tsx
 var react_1 = require("react");
 var react_router_dom_1 = require("react-router-dom");
-var antd_1 = require("antd");
+var hi_1 = require("react-icons/hi"); // 👈 fixed import
+var AuthContext_1 = require("../auth/AuthContext");
 exports.LoginPage = function () {
+    var login = AuthContext_1.useAuth().login;
     var navigate = react_router_dom_1.useNavigate();
-    var _a = react_1.useState({ email: '', password: '', userType: 'pharmacy' }), formData = _a[0], setFormData = _a[1];
-    var _b = react_1.useState(''), error = _b[0], setError = _b[1];
-    var handleChange = function (changed) {
-        setFormData(function (prev) { return (__assign(__assign({}, prev), changed)); });
-    };
-    var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var endpoint, res, data, err_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+    var _a = react_1.useState(''), email = _a[0], setEmail = _a[1];
+    var _b = react_1.useState(''), password = _b[0], setPassword = _b[1];
+    var _c = react_1.useState('user'), type = _c[0], setType = _c[1];
+    var _d = react_1.useState(''), error = _d[0], setError = _d[1];
+    var handleLogin = function (e) { return __awaiter(void 0, void 0, void 0, function () {
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    endpoint = formData.userType === 'pharmacy' ? '/auth/user/signin' : '/auth/supplier/signin';
-                    _a.label = 1;
+                    e.preventDefault();
+                    setError('');
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch("http://localhost:3333" + endpoint, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email: formData.email, password: formData.password })
-                        })];
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, login({ email: email, password: password, type: type })];
                 case 2:
-                    res = _a.sent();
-                    if (!res.ok)
-                        throw new Error('Invalid credentials');
-                    return [4 /*yield*/, res.json()];
-                case 3:
-                    data = _a.sent();
-                    localStorage.setItem('token', data.access_token);
+                    _b.sent();
                     navigate('/');
-                    return [3 /*break*/, 5];
-                case 4:
-                    err_1 = _a.sent();
-                    setError(err_1.message);
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 3:
+                    _a = _b.sent();
+                    setError('Invalid email or password');
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     }); };
-    return (React.createElement("div", { style: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' } },
-        React.createElement(antd_1.Card, { title: "Pharmacy Admin Login", style: { width: 400, boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' } },
-            React.createElement(antd_1.Form, { layout: "vertical", onFinish: handleSubmit },
-                React.createElement(antd_1.Form.Item, { label: "Login As" },
-                    React.createElement(antd_1.Select, { value: formData.userType, onChange: function (val) { return handleChange({ userType: val }); }, options: [
-                            { value: 'pharmacy', label: 'Pharmacy Owner' },
-                            { value: 'supplier', label: 'Supplier Admin' },
-                        ] })),
-                React.createElement(antd_1.Form.Item, { label: "Email", required: true },
-                    React.createElement(antd_1.Input, { type: "email", value: formData.email, onChange: function (e) { return handleChange({ email: e.target.value }); } })),
-                React.createElement(antd_1.Form.Item, { label: "Password", required: true },
-                    React.createElement(antd_1.Input.Password, { value: formData.password, onChange: function (e) { return handleChange({ password: e.target.value }); } })),
-                React.createElement(antd_1.Form.Item, null,
-                    React.createElement(antd_1.Button, { type: "primary", htmlType: "submit", block: true }, "Login")),
-                error && React.createElement(antd_1.Typography.Text, { type: "danger" }, error)))));
+    return (React.createElement("div", { className: "flex items-center justify-center h-screen bg-gray-100" },
+        React.createElement("div", { className: "w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-md" },
+            React.createElement("h2", { className: "text-2xl font-bold text-center text-primary" }, "PharmaSys Login"),
+            React.createElement("form", { className: "space-y-4", onSubmit: handleLogin },
+                React.createElement("div", null,
+                    React.createElement("label", { className: "block mb-1 font-medium text-gray-700" }, "Email"),
+                    React.createElement("div", { className: "relative" },
+                        hi_1.HiMail({ className: 'absolute top-3 left-3 text-gray-400' }),
+                        React.createElement("input", { type: "email", required: true, value: email, onChange: function (e) { return setEmail(e.target.value); }, className: "w-full px-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary", placeholder: "you@example.com" }))),
+                React.createElement("div", null,
+                    React.createElement("label", { className: "block mb-1 font-medium text-gray-700" }, "Password"),
+                    React.createElement("div", { className: "relative" },
+                        hi_1.HiLockClosed({ className: 'absolute top-3 left-3 text-gray-400' }),
+                        React.createElement("input", { type: "password", required: true, value: password, onChange: function (e) { return setPassword(e.target.value); }, className: "w-full px-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary", placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" }))),
+                React.createElement("div", null,
+                    React.createElement("label", { className: "block mb-1 font-medium text-gray-700" }, "Login as"),
+                    React.createElement("select", { value: type, onChange: function (e) { return setType(e.target.value); }, className: "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" },
+                        React.createElement("option", { value: "user" }, "Pharmacy Owner"),
+                        React.createElement("option", { value: "supplier" }, "Supplier Admin"))),
+                error && React.createElement("p", { className: "text-sm text-red-600" }, error),
+                React.createElement("button", { type: "submit", className: "w-full py-2 text-white bg-primary hover:bg-primary-dark rounded-md transition" }, "Sign In")))));
 };

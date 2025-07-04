@@ -9,8 +9,7 @@ exports.__esModule = true;
 exports.PrismaModule = void 0;
 var common_1 = require("@nestjs/common");
 var prisma_service_1 = require("./prisma.service");
-var runtime_1 = require("@zenstackhq/runtime");
-var client_1 = require("@prisma/client");
+// import { ConfigService } from '@nestjs/config';
 var PrismaModule = /** @class */ (function () {
     function PrismaModule() {
     }
@@ -19,13 +18,13 @@ var PrismaModule = /** @class */ (function () {
         common_1.Module({
             providers: [
                 prisma_service_1.PrismaService,
+                // Optional: If you still want to expose PrismaClient as a separate provider
                 {
                     provide: 'PRISMA_CLIENT',
-                    useFactory: function () {
-                        var prisma = new client_1.PrismaClient();
-                        var enhancedPrisma = runtime_1.enhance(prisma); // ✅ use enhance, NOT middleware
-                        return enhancedPrisma;
-                    }
+                    useFactory: function (prismaService) {
+                        return prismaService;
+                    },
+                    inject: [prisma_service_1.PrismaService]
                 },
             ],
             exports: [prisma_service_1.PrismaService, 'PRISMA_CLIENT']
