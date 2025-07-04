@@ -9,4 +9,6 @@ exports.UsersPage = function () { return (React.createElement(React.Fragment, nu
             { source: 'username', label: 'Username' },
             { source: 'email', label: 'Email' },
             { source: 'role', label: 'Role' },
+            { source: 'pharmacy_id', label: 'Pharmacy' },
+            { source: 'created_at', label: 'Created' },
         ] }))); };

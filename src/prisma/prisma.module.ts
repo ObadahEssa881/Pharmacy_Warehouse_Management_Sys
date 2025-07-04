@@ -1,19 +1,18 @@
 import { Global, Module } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { enhance } from '@zenstackhq/runtime';
-import { PrismaClient } from '@prisma/client';
+// import { ConfigService } from '@nestjs/config';
 
 @Global()
 @Module({
   providers: [
     PrismaService,
+    // Optional: If you still want to expose PrismaClient as a separate provider
     {
       provide: 'PRISMA_CLIENT',
-      useFactory: () => {
-        const prisma = new PrismaClient();
-        const enhancedPrisma = enhance(prisma); // ✅ use enhance, NOT middleware
-        return enhancedPrisma;
+      useFactory: (prismaService: PrismaService) => {
+        return prismaService;
       },
+      inject: [PrismaService],
     },
   ],
   exports: [PrismaService, 'PRISMA_CLIENT'],

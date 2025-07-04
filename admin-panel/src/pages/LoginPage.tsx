@@ -1,73 +1,87 @@
-// src/pages/LoginPage.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Form, Input, Button, Select, Typography } from 'antd';
+import { HiMail, HiLockClosed } from 'react-icons/hi'; // 👈 fixed import
+import { useAuth } from '../auth/AuthContext';
 
 export const LoginPage = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: '', password: '', userType: 'pharmacy' });
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [type, setType] = useState<'user' | 'supplier'>('user');
   const [error, setError] = useState('');
 
-  const handleChange = (changed: Partial<typeof formData>) => {
-    setFormData((prev) => ({ ...prev, ...changed }));
-  };
-
-  const handleSubmit = async () => {
-    const endpoint =
-      formData.userType === 'pharmacy' ? '/auth/user/signin' : '/auth/supplier/signin';
-
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
     try {
-      const res = await fetch(`http://localhost:3333${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, password: formData.password }),
-      });
-
-      if (!res.ok) throw new Error('Invalid credentials');
-
-      const data = await res.json();
-      localStorage.setItem('token', data.access_token);
+      await login({ email, password, type });
       navigate('/');
-    } catch (err: any) {
-      setError(err.message);
+    } catch {
+      setError('Invalid email or password');
     }
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Card title="Pharmacy Admin Login" style={{ width: 400, boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' }}>
-        <Form layout="vertical" onFinish={handleSubmit}>
-          <Form.Item label="Login As">
-            <Select
-              value={formData.userType}
-              onChange={(val) => handleChange({ userType: val })}
-              options={[
-                { value: 'pharmacy', label: 'Pharmacy Owner' },
-                { value: 'supplier', label: 'Supplier Admin' },
-              ]}
-            />
-          </Form.Item>
-          <Form.Item label="Email" required>
-            <Input
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleChange({ email: e.target.value })}
-            />
-          </Form.Item>
-          <Form.Item label="Password" required>
-            <Input.Password
-              value={formData.password}
-              onChange={(e) => handleChange({ password: e.target.value })}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Login
-            </Button>
-          </Form.Item>
-          {error && <Typography.Text type="danger">{error}</Typography.Text>}
-        </Form>
-      </Card>
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-md">
+        <h2 className="text-2xl font-bold text-center text-primary">PharmaSys Login</h2>
+
+        <form className="space-y-4" onSubmit={handleLogin}>
+          <div>
+            <label className="block mb-1 font-medium text-gray-700">Email</label>
+            <div className="relative">
+              {/* ✅ TS-safe JSX cast */}
+              {HiMail({ className: 'absolute top-3 left-3 text-gray-400' }) as JSX.Element}
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium text-gray-700">Password</label>
+            <div className="relative">
+              {HiLockClosed({ className: 'absolute top-3 left-3 text-gray-400' }) as JSX.Element}
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium text-gray-700">Login as</label>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value as 'user' | 'supplier')}
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="user">Pharmacy Owner</option>
+              <option value="supplier">Supplier Admin</option>
+            </select>
+          </div>
+
+          {error && <p className="text-sm text-red-600">{error}</p>}
+
+          <button
+            type="submit"
+            className="w-full py-2 text-white bg-primary hover:bg-primary-dark rounded-md transition"
+          >
+            Sign In
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
