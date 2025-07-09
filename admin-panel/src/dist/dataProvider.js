@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,8 +49,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.dataProvider = void 0;
 // src/dataProvider.ts
-var ra_data_simple_rest_1 = require("ra-data-simple-rest");
 var react_admin_1 = require("react-admin");
+var ra_data_simple_rest_1 = require("ra-data-simple-rest");
 var API_URL = 'http://localhost:3333';
 var httpClient = function (url, options) {
     if (options === void 0) { options = {}; }
@@ -50,11 +61,41 @@ var httpClient = function (url, options) {
             if (!options.headers) {
                 options.headers = new Headers({ Accept: 'application/json' });
             }
+            // Force set Authorization header (Postman style)
             if (token) {
                 options.headers.set('Authorization', "Bearer " + token);
             }
+            console.log('🔐 Using token:', token); // ✅ log token
+            console.log('📡 Request URL:', url);
+            console.log('📨 Headers:', options.headers);
             return [2 /*return*/, react_admin_1.fetchUtils.fetchJson(url, options)];
         });
     });
 };
-exports.dataProvider = ra_data_simple_rest_1["default"](API_URL, httpClient);
+var defaultDataProvider = ra_data_simple_rest_1["default"](API_URL, httpClient);
+exports.dataProvider = __assign(__assign({}, defaultDataProvider), { getList: function (resource, params) { return __awaiter(void 0, void 0, void 0, function () {
+        var json;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, httpClient(API_URL + "/" + resource)];
+                case 1:
+                    json = (_a.sent()).json;
+                    return [2 /*return*/, {
+                            data: json.data,
+                            total: json.total
+                        }];
+            }
+        });
+    }); }, getOne: function (resource, params) { return __awaiter(void 0, void 0, void 0, function () {
+        var json;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, httpClient(API_URL + "/" + resource + "/" + params.id)];
+                case 1:
+                    json = (_a.sent()).json;
+                    return [2 /*return*/, {
+                            data: json
+                        }];
+            }
+        });
+    }); } });

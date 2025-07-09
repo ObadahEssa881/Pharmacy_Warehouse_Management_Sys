@@ -1,6 +1,6 @@
 import { TwTable } from '../components/tw/Table';
 
-export const SuppliersPage = () => (
+export const SuppliersList = () => (
   <>
     <h1 className="text-2xl font-semibold mb-4">Suppliers</h1>
     <TwTable

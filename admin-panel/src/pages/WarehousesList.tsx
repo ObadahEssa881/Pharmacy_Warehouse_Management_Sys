@@ -1,10 +1,10 @@
 import { TwTable } from '../components/tw/Table';
 
-export const PharmaciesPage = () => (
+export const WarehousesList = () => (
   <>
-    <h1 className="text-2xl font-semibold mb-4">Pharmacies</h1>
+    <h1 className="text-2xl font-semibold mb-4">Warehouses</h1>
     <TwTable
-      resource="pharmacies"
+      resource="warehouses"
       columns={[
         { source: 'id',             label: 'ID' },
         { source: 'name',           label: 'Name' },

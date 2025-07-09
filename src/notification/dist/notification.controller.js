@@ -44,82 +44,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 exports.__esModule = true;
-exports.UserController = void 0;
+exports.NotificationController = void 0;
 var common_1 = require("@nestjs/common");
-var guard_1 = require("src/auth/guard");
-var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
-var UserController = /** @class */ (function () {
-    function UserController(userService) {
-        this.userService = userService;
+var get_user_decorator_1 = require("../common/decorators/get\u2011user.decorator");
+var roles_decorator_1 = require("../auth/decorators/roles.decorator");
+var guard_1 = require("../auth/guard");
+var NotificationController = /** @class */ (function () {
+    function NotificationController(notificationService) {
+        this.notificationService = notificationService;
     }
-    UserController.prototype.findAll = function (res) {
+    NotificationController.prototype.createNotification = function (createNotificationDto, user) {
         return __awaiter(this, void 0, void 0, function () {
-            var users, sanitized, total;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.findAll()];
-                    case 1:
-                        users = _a.sent();
-                        // If no users found, return empty array with proper headers
-                        if (!Array.isArray(users)) {
-                            res.setHeader('Content-Range', "users 0-0/0");
-                            res.setHeader('Access-Control-Expose-Headers', 'Content-Range');
-                            return [2 /*return*/, res.json({ data: [], total: 0 })];
-                        }
-                        sanitized = users.map(function (_a) {
-                            var password_hash = _a.password_hash, rest = __rest(_a, ["password_hash"]);
-                            return rest;
-                        });
-                        total = sanitized.length;
-                        res.setHeader('Content-Range', "users 0-" + (total - 1) + "/" + total);
-                        res.setHeader('Access-Control-Expose-Headers', 'Content-Range');
-                        return [2 /*return*/, res.json({ data: sanitized, total: total })];
-                }
+                return [2 /*return*/, this.notificationService.createNotification(user.id, createNotificationDto)];
             });
         });
     };
-    UserController.prototype.findOne = function (id) {
-        return this.userService.findOne(+id);
+    NotificationController.prototype.getNotifications = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.notificationService.getUserNotifications(user.id)];
+            });
+        });
     };
-    UserController.prototype.remove = function (id) {
-        return this.userService.remove(+id);
+    NotificationController.prototype.markAsRead = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.notificationService.markAsRead(parseInt(id))];
+            });
+        });
     };
-    UserController.prototype.updateUser = function (id, dto) {
-        return this.userService.update(+id, dto);
-    };
+    __decorate([
+        common_1.Post(),
+        __param(0, common_1.Body()),
+        __param(1, get_user_decorator_1.GetUser())
+    ], NotificationController.prototype, "createNotification");
     __decorate([
         common_1.Get(),
-        __param(0, common_1.Res())
-    ], UserController.prototype, "findAll");
+        __param(0, get_user_decorator_1.GetUser())
+    ], NotificationController.prototype, "getNotifications");
     __decorate([
-        common_1.Get(':id'),
+        common_1.Patch(':id/read'),
         __param(0, common_1.Param('id'))
-    ], UserController.prototype, "findOne");
-    __decorate([
-        common_1.Delete('delete/:id'),
-        __param(0, common_1.Param('id'))
-    ], UserController.prototype, "remove");
-    __decorate([
-        common_1.Put(':id'),
-        __param(0, common_1.Param('id')), __param(1, common_1.Body())
-    ], UserController.prototype, "updateUser");
-    UserController = __decorate([
+    ], NotificationController.prototype, "markAsRead");
+    NotificationController = __decorate([
+        common_1.Controller('notifications'),
         roles_decorator_1.Roles('PHARMACY_OWNER'),
-        common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard),
-        common_1.Controller('users')
-    ], UserController);
-    return UserController;
+        common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard)
+    ], NotificationController);
+    return NotificationController;
 }());
-exports.UserController = UserController;
+exports.NotificationController = NotificationController;
