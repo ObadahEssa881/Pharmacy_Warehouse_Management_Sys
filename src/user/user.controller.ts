@@ -21,11 +21,21 @@ export class UserController {
   @Get()
   async findAll(@Res() res: Response) {
     const users = await this.userService.findAll();
-    const total = users.length;
+
+    // If no users found, return empty array with proper headers
+    if (!Array.isArray(users)) {
+      res.setHeader('Content-Range', `users 0-0/0`);
+      res.setHeader('Access-Control-Expose-Headers', 'Content-Range');
+      return res.json({ data: [], total: 0 });
+    }
+
+    // Remove password_hash from each user
+    const sanitized = users.map(({ password_hash, ...rest }) => rest);
+    const total = sanitized.length;
 
     res.setHeader('Content-Range', `users 0-${total - 1}/${total}`);
     res.setHeader('Access-Control-Expose-Headers', 'Content-Range');
-    res.json(users);
+    return res.json({ data: sanitized, total });
   }
   @Get(':id')
   findOne(@Param('id') id: number) {

@@ -56,7 +56,7 @@ function bootstrap() {
                         whitelist: true
                     }));
                     app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
-                    return [4 /*yield*/, app.listen(process.env.PORT || 3333)];
+                    return [4 /*yield*/, app.listen(process.env.PORT || 3333, '0.0.0.0')];
                 case 2:
                     _a.sent();
                     return [2 /*return*/];
