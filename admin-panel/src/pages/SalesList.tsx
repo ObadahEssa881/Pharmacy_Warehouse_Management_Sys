@@ -1,18 +1,22 @@
-import { TwTable } from '../components/tw/Table';
+// src/pages/SalesList.tsx
+import {
+  List, Datagrid, TextField, DateField, TextInput, Pagination,
+} from 'react-admin';
+import { useAuth } from '../auth/AuthContext';
 
-export const SalesList = () => (
-  <>
-    <h1 className="text-2xl font-semibold mb-4">Sales</h1>
-    <TwTable
-      resource="sales"
-      columns={[
-        { source: 'id',            label: 'ID' },
-        { source: 'pharmacy_id',   label: 'Pharmacy' },
-        { source: 'customer_name', label: 'Customer' },
-        { source: 'sale_date',     label: 'Date' },
-        { source: 'total_amount',  label: 'Total' },
-        { source: 'payment_mode',  label: 'Payment' },
-      ]}
-    />
-  </>
-);
+const Filter = [<TextInput label="Customer Name" source="customer_name" />];
+
+export const SalesList = () => {
+  const { pharmacy_id } = useAuth();
+  return (
+    <List filter={{ pharmacy_id }} filters={Filter} perPage={10} pagination={<Pagination />}>
+      <Datagrid rowClick="edit">
+        <TextField source="id" />
+        <TextField source="customer_name" />
+        <DateField source="sale_date" />
+        <TextField source="total_amount" />
+        <TextField source="payment_mode" />
+      </Datagrid>
+    </List>
+  );
+};

@@ -1,19 +1,26 @@
-import { TwTable } from '../components/tw/Table';
+// src/pages/SuppliersList.tsx
+import {
+  List, Datagrid, TextField, TextInput, Pagination,
+} from 'react-admin';
+import { useAuth } from '../auth/AuthContext';
 
-export const SuppliersList = () => (
-  <>
-    <h1 className="text-2xl font-semibold mb-4">Suppliers</h1>
-    <TwTable
-      resource="suppliers"
-      columns={[
-        { source: 'id',            label: 'ID' },
-        { source: 'name',          label: 'Name' },
-        { source: 'email',         label: 'Email' },
-        { source: 'role',          label: 'Role' },
-        { source: 'contact_person',label: 'Contact' },
-        { source: 'phone',         label: 'Phone' },
-        { source: 'warehouseId',   label: 'Warehouse' },
-      ]}
-    />
-  </>
-);
+const Filter = [
+  <TextInput label="Name" source="name" alwaysOn />,
+  <TextInput label="Email" source="email" />,
+];
+
+export const SuppliersList = () => {
+  const { warehouse_id } = useAuth();
+  return (
+    <List filter={{ warehouseId: warehouse_id }} filters={Filter} perPage={10} pagination={<Pagination />}>
+      <Datagrid rowClick="edit">
+        <TextField source="id" />
+        <TextField source="name" />
+        <TextField source="email" />
+        <TextField source="role" />
+        <TextField source="phone" />
+        <TextField source="address" />
+      </Datagrid>
+    </List>
+  );
+};

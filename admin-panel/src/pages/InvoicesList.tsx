@@ -1,18 +1,19 @@
-import { TwTable } from '../components/tw/Table';
+// src/pages/InvoicesList.tsx
+import {
+  List, Datagrid, TextField, DateField, TextInput, Pagination,
+} from 'react-admin';
+
+const Filter = [<TextInput label="Order ID" source="order_id" />];
 
 export const InvoicesList = () => (
-  <>
-    <h1 className="text-2xl font-semibold mb-4">Invoices</h1>
-    <TwTable
-      resource="invoices"
-      columns={[
-        { source: 'id',             label: 'ID' },
-        { source: 'order_id',       label: 'Order' },
-        { source: 'supplier_id',    label: 'Supplier' },
-        { source: 'invoice_date',   label: 'Date' },
-        { source: 'total_amount',   label: 'Amount' },
-        { source: 'payment_status', label: 'Payment' },
-      ]}
-    />
-  </>
+  <List filters={Filter} perPage={10} pagination={<Pagination />}>
+    <Datagrid rowClick="edit">
+      <TextField source="id" />
+      <TextField source="order_id" />
+      <TextField source="supplier_id" />
+      <DateField source="invoice_date" />
+      <TextField source="total_amount" />
+      <TextField source="payment_status" />
+    </Datagrid>
+  </List>
 );

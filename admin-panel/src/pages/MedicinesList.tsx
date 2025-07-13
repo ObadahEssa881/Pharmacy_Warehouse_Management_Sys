@@ -1,19 +1,20 @@
-import { TwTable } from '../components/tw/Table';
+// src/pages/MedicinesList.tsx
+import {
+  List, Datagrid, TextField, TextInput, Pagination,
+} from 'react-admin';
+
+const Filter = [<TextInput label="Name" source="name" alwaysOn />];
 
 export const MedicinesList = () => (
-  <>
-    <h1 className="text-2xl font-semibold mb-4">Medicines</h1>
-    <TwTable
-      resource="medicines"
-      columns={[
-        { source: 'id',          label: 'ID' },
-        { source: 'name',        label: 'Name' },
-        { source: 'titer',       label: 'Titer' },
-        { source: 'category_id', label: 'Category' },
-        { source: 'company_id',  label: 'Company' },
-        { source: 'unit_price',  label: 'Price' },
-        { source: 'Type',        label: 'Type' },
-      ]}
-    />
-  </>
+  <List filters={Filter} perPage={10} pagination={<Pagination />}>
+    <Datagrid rowClick="edit">
+      <TextField source="id" />
+      <TextField source="name" />
+      <TextField source="titer" />
+      <TextField source="unit_price" />
+      <TextField source="Type" />
+      <TextField source="category_id" />
+      <TextField source="company_id" />
+    </Datagrid>
+  </List>
 );

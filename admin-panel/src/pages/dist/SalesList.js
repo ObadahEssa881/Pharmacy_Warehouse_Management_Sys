@@ -1,14 +1,17 @@
 "use strict";
 exports.__esModule = true;
 exports.SalesList = void 0;
-var Table_1 = require("../components/tw/Table");
-exports.SalesList = function () { return (React.createElement(React.Fragment, null,
-    React.createElement("h1", { className: "text-2xl font-semibold mb-4" }, "Sales"),
-    React.createElement(Table_1.TwTable, { resource: "sales", columns: [
-            { source: 'id', label: 'ID' },
-            { source: 'pharmacy_id', label: 'Pharmacy' },
-            { source: 'customer_name', label: 'Customer' },
-            { source: 'sale_date', label: 'Date' },
-            { source: 'total_amount', label: 'Total' },
-            { source: 'payment_mode', label: 'Payment' },
-        ] }))); };
+// src/pages/SalesList.tsx
+var react_admin_1 = require("react-admin");
+var AuthContext_1 = require("../auth/AuthContext");
+var Filter = [React.createElement(react_admin_1.TextInput, { label: "Customer Name", source: "customer_name" })];
+exports.SalesList = function () {
+    var pharmacy_id = AuthContext_1.useAuth().pharmacy_id;
+    return (React.createElement(react_admin_1.List, { filter: { pharmacy_id: pharmacy_id }, filters: Filter, perPage: 10, pagination: React.createElement(react_admin_1.Pagination, null) },
+        React.createElement(react_admin_1.Datagrid, { rowClick: "edit" },
+            React.createElement(react_admin_1.TextField, { source: "id" }),
+            React.createElement(react_admin_1.TextField, { source: "customer_name" }),
+            React.createElement(react_admin_1.DateField, { source: "sale_date" }),
+            React.createElement(react_admin_1.TextField, { source: "total_amount" }),
+            React.createElement(react_admin_1.TextField, { source: "payment_mode" }))));
+};

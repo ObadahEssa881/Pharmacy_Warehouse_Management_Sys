@@ -21,8 +21,10 @@ var PurchaseController = /** @class */ (function () {
     PurchaseController.prototype.create = function (user, dto) {
         return this.service.create(user, dto);
     };
-    PurchaseController.prototype.paginate = function (user, q) {
-        return this.service.paginate(user, q);
+    PurchaseController.prototype.paginate = function (user, page, limit) {
+        if (page === void 0) { page = 1; }
+        if (limit === void 0) { limit = 10; }
+        return this.service.paginate(user, page, limit);
     };
     PurchaseController.prototype.updateStatus = function (user, id, dto) {
         return this.service.updateStatus(user, id, dto);
@@ -34,7 +36,9 @@ var PurchaseController = /** @class */ (function () {
     ], PurchaseController.prototype, "create");
     __decorate([
         common_1.Get(),
-        __param(0, get_user_decorator_1.GetUser()), __param(1, common_1.Query())
+        __param(0, get_user_decorator_1.GetUser()),
+        __param(1, common_1.Query('page')),
+        __param(2, common_1.Query('limit'))
     ], PurchaseController.prototype, "paginate");
     __decorate([
         roles_decorator_1.Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN'),

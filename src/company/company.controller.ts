@@ -51,4 +51,12 @@ export class CompanyController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.companyService.remove(id);
   }
+  @Get(':id/medicines')
+  getMedicinesByCompany(
+    @Param('id') companyId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.companyService.getMedicinesByCompany(+companyId, page, limit);
+  }
 }

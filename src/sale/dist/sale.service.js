@@ -1,15 +1,5 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
+// sale.service.ts
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -55,31 +45,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.SaleService = void 0;
 var common_1 = require("@nestjs/common");
-var pagination_1 = require("../common/pagination");
 var SaleService = /** @class */ (function () {
     function SaleService(prisma) {
         this.prisma = prisma;
     }
-    SaleService.prototype.pharmacyScope = function (user) {
-        if (!user.pharmacy_id)
-            throw new common_1.ForbiddenException('Must be a pharmacy');
-        return { pharmacy_id: user.pharmacy_id };
-    };
     SaleService.prototype.create = function (user, dto) {
         return __awaiter(this, void 0, void 0, function () {
+            var pharmacyId, totalAmount, i, item, quantity, unitPrice;
             var _this = this;
             return __generator(this, function (_a) {
+                pharmacyId = user.pharmacy_id;
+                if (!dto.items || dto.items.length === 0) {
+                    throw new common_1.BadRequestException('Sale must include at least one item');
+                }
+                totalAmount = 0;
+                for (i = 0; i < dto.items.length; i++) {
+                    item = dto.items[i];
+                    if (!item.medicine_id || item.medicine_id <= 0) {
+                        throw new common_1.BadRequestException("Item at index " + i + " has invalid medicine_id");
+                    }
+                    quantity = Number(item.quantity);
+                    if (isNaN(quantity) || quantity <= 0) {
+                        throw new common_1.BadRequestException("Item at index " + i + " has invalid quantity");
+                    }
+                    unitPrice = Number(item.unit_price);
+                    console.log(item);
+                    if (isNaN(unitPrice) || unitPrice <= 0) {
+                        throw new common_1.BadRequestException("Item at index " + i + " has invalid unit_price");
+                    }
+                    totalAmount += quantity * unitPrice;
+                }
                 return [2 /*return*/, this.prisma.$transaction(function (tx) { return __awaiter(_this, void 0, void 0, function () {
-                        var sale, _i, _a, it;
+                        var sale, _i, _a, item, inventory;
                         return __generator(this, function (_b) {
                             switch (_b.label) {
                                 case 0: return [4 /*yield*/, tx.sale.create({
-                                        data: __assign(__assign({}, this.pharmacyScope(user)), { customer_name: dto.customer_name, total_amount: dto.items
-                                                .reduce(function (sum, it) { return sum + Number(it.unit_price) * it.quantity; }, 0)
-                                                .toString(), payment_mode: dto.payment_mode })
+                                        data: {
+                                            pharmacy: { connect: { id: user.pharmacy_id } },
+                                            customer_name: dto.customer_name,
+                                            payment_mode: dto.payment_mode,
+                                            total_amount: totalAmount
+                                        }
                                     })];
                                 case 1:
                                     sale = _b.sent();
+                                    // Step 2: Create sale items
                                     return [4 /*yield*/, tx.saleItem.createMany({
                                             data: dto.items.map(function (it) { return ({
                                                 sale_id: sale.id,
@@ -89,36 +99,75 @@ var SaleService = /** @class */ (function () {
                                             }); })
                                         })];
                                 case 2:
+                                    // Step 2: Create sale items
                                     _b.sent();
                                     _i = 0, _a = dto.items;
                                     _b.label = 3;
                                 case 3:
-                                    if (!(_i < _a.length)) return [3 /*break*/, 6];
-                                    it = _a[_i];
-                                    return [4 /*yield*/, tx.inventory.updateMany({
+                                    if (!(_i < _a.length)) return [3 /*break*/, 7];
+                                    item = _a[_i];
+                                    return [4 /*yield*/, tx.inventory.findFirst({
                                             where: {
-                                                medicine_id: it.medicine_id,
-                                                pharmacy_id: user.pharmacy_id
-                                            },
-                                            data: { quantity: { decrement: it.quantity } }
+                                                medicine_id: item.medicine_id,
+                                                pharmacy_id: pharmacyId
+                                            }
                                         })];
                                 case 4:
-                                    _b.sent();
-                                    _b.label = 5;
+                                    inventory = _b.sent();
+                                    if (!inventory) {
+                                        throw new common_1.ForbiddenException("Medicine ID " + item.medicine_id + " not found in your inventory");
+                                    }
+                                    if (inventory.quantity < item.quantity) {
+                                        throw new common_1.ForbiddenException("Not enough stock for medicine ID " + item.medicine_id + ". Available: " + inventory.quantity + ", Requested: " + item.quantity);
+                                    }
+                                    return [4 /*yield*/, tx.inventory.update({
+                                            where: { id: inventory.id },
+                                            data: { quantity: { decrement: item.quantity } }
+                                        })];
                                 case 5:
+                                    _b.sent();
+                                    _b.label = 6;
+                                case 6:
                                     _i++;
                                     return [3 /*break*/, 3];
-                                case 6: return [2 /*return*/, sale];
+                                case 7: return [2 /*return*/, sale];
                             }
                         });
                     }); })];
             });
         });
     };
-    SaleService.prototype.paginate = function (user, q) {
+    SaleService.prototype.paginate = function (user, page, limit) {
+        if (page === void 0) { page = 1; }
+        if (limit === void 0) { limit = 10; }
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.prisma.sale.findMany(__assign({ where: this.pharmacyScope(user), include: { SaleItems: true }, orderBy: { sale_date: 'desc' } }, pagination_1.buildPagination(q)))];
+            var skip, _a, sales, total;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        skip = (page - 1) * limit;
+                        return [4 /*yield*/, this.prisma.$transaction([
+                                this.prisma.sale.findMany({
+                                    where: { pharmacy_id: user.pharmacy_id },
+                                    include: { SaleItems: true },
+                                    orderBy: { sale_date: 'desc' },
+                                    skip: skip,
+                                    take: limit
+                                }),
+                                this.prisma.sale.count({ where: { pharmacy_id: user.pharmacy_id } }),
+                            ])];
+                    case 1:
+                        _a = _b.sent(), sales = _a[0], total = _a[1];
+                        return [2 /*return*/, {
+                                sales: sales,
+                                meta: {
+                                    total: total,
+                                    page: page,
+                                    limit: limit,
+                                    pages: Math.ceil(total / limit)
+                                }
+                            }];
+                }
             });
         });
     };

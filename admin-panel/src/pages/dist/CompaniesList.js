@@ -1,14 +1,14 @@
 "use strict";
 exports.__esModule = true;
 exports.CompaniesList = void 0;
-var Table_1 = require("../components/tw/Table");
-exports.CompaniesList = function () { return (React.createElement(React.Fragment, null,
-    React.createElement("h1", { className: "text-2xl font-semibold mb-4" }, "Companies"),
-    React.createElement(Table_1.TwTable, { resource: "companies", columns: [
-            { source: 'id', label: 'ID' },
-            { source: 'name', label: 'Name' },
-            { source: 'contact_person', label: 'Contact' },
-            { source: 'phone', label: 'Phone' },
-            { source: 'email', label: 'Email' },
-            { source: 'address', label: 'Address' },
-        ] }))); };
+// src/pages/CompaniesList.tsx
+var react_admin_1 = require("react-admin");
+var Filter = [React.createElement(react_admin_1.TextInput, { label: "Company Name", source: "name", alwaysOn: true })];
+exports.CompaniesList = function () { return (React.createElement(react_admin_1.List, { filters: Filter, perPage: 10, pagination: React.createElement(react_admin_1.Pagination, null) },
+    React.createElement(react_admin_1.Datagrid, { rowClick: "edit" },
+        React.createElement(react_admin_1.TextField, { source: "id" }),
+        React.createElement(react_admin_1.TextField, { source: "name" }),
+        React.createElement(react_admin_1.TextField, { source: "contact_person" }),
+        React.createElement(react_admin_1.TextField, { source: "email" }),
+        React.createElement(react_admin_1.TextField, { source: "phone" }),
+        React.createElement(react_admin_1.TextField, { source: "address" })))); };

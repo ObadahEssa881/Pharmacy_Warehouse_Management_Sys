@@ -166,6 +166,45 @@ var CompanyService = /** @class */ (function () {
             });
         });
     };
+    CompanyService.prototype.getMedicinesByCompany = function (companyId, page, limit) {
+        if (page === void 0) { page = 1; }
+        if (limit === void 0) { limit = 10; }
+        return __awaiter(this, void 0, void 0, function () {
+            var skip, _a, medicines, total;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        skip = (page - 1) * limit;
+                        return [4 /*yield*/, this.prisma.$transaction([
+                                this.prisma.medicine.findMany({
+                                    where: { company_id: companyId },
+                                    skip: skip,
+                                    take: limit,
+                                    include: {
+                                        category: true,
+                                        supplier: true
+                                    }
+                                }),
+                                this.prisma.medicine.count({ where: { company_id: companyId } }),
+                            ])];
+                    case 1:
+                        _a = _b.sent(), medicines = _a[0], total = _a[1];
+                        return [2 /*return*/, {
+                                message: medicines.length
+                                    ? 'Medicines fetched successfully'
+                                    : 'No medicines found.',
+                                data: medicines,
+                                meta: {
+                                    total: total,
+                                    page: page,
+                                    limit: limit,
+                                    pages: Math.ceil(total / limit)
+                                }
+                            }];
+                }
+            });
+        });
+    };
     CompanyService = __decorate([
         common_1.Injectable()
     ], CompanyService);

@@ -1,15 +1,16 @@
-import { TwTable } from '../components/tw/Table';
+// src/pages/CategoriesList.tsx
+import {
+  List, Datagrid, TextField, TextInput, Pagination,
+} from 'react-admin';
+
+const Filter = [<TextInput label="Name" source="name" alwaysOn />];
 
 export const CategoriesList = () => (
-  <>
-    <h1 className="text-2xl font-semibold mb-4">Categories</h1>
-    <TwTable
-      resource="categories"
-      columns={[
-        { source: 'id',          label: 'ID' },
-        { source: 'name',        label: 'Name' },
-        { source: 'description', label: 'Description' },
-      ]}
-    />
-  </>
+  <List filters={Filter} perPage={10} pagination={<Pagination />}>
+    <Datagrid rowClick="edit">
+      <TextField source="id" />
+      <TextField source="name" />
+      <TextField source="description" />
+    </Datagrid>
+  </List>
 );

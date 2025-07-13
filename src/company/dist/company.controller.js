@@ -34,6 +34,11 @@ var CompanyController = /** @class */ (function () {
     CompanyController.prototype.remove = function (id) {
         return this.companyService.remove(id);
     };
+    CompanyController.prototype.getMedicinesByCompany = function (companyId, page, limit) {
+        if (page === void 0) { page = 1; }
+        if (limit === void 0) { limit = 10; }
+        return this.companyService.getMedicinesByCompany(+companyId, page, limit);
+    };
     __decorate([
         roles_decorator_1.Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN'),
         common_1.Post('create'),
@@ -58,6 +63,12 @@ var CompanyController = /** @class */ (function () {
         common_1.Delete('delete/:id'),
         __param(0, common_1.Param('id', common_1.ParseIntPipe))
     ], CompanyController.prototype, "remove");
+    __decorate([
+        common_1.Get(':id/medicines'),
+        __param(0, common_1.Param('id')),
+        __param(1, common_1.Query('page')),
+        __param(2, common_1.Query('limit'))
+    ], CompanyController.prototype, "getMedicinesByCompany");
     CompanyController = __decorate([
         common_1.Controller('companies'),
         common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard)

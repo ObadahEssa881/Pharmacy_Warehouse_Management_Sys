@@ -1,8 +1,9 @@
+// sale.controller.ts
+
 import { Controller, Post, Get, Query, Body, UseGuards } from '@nestjs/common';
 import { JwtGuard, RoleGuard } from '../auth/guard';
 import { SaleService } from './sale.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
-import { PaginationDto } from '../common/pagination/pagination.dto';
 import { GetUser } from '../common/decorators/get‑user.decorator';
 
 @Controller('sales')
@@ -16,7 +17,11 @@ export class SaleController {
   }
 
   @Get()
-  paginate(@GetUser() user, @Query() q: PaginationDto) {
-    return this.service.paginate(user, q);
+  paginate(
+    @GetUser() user,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.service.paginate(user, page, limit);
   }
 }

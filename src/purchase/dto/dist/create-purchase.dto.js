@@ -6,22 +6,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.CreatePurchaseDto = void 0;
-// src/purchase/dto/create-purchase.dto.ts
+exports.CreatePurchaseDto = exports.PurchaseItemDto = void 0;
 var class_validator_1 = require("class-validator");
 var class_transformer_1 = require("class-transformer");
-var PurchaseItemInput = /** @class */ (function () {
-    function PurchaseItemInput() {
+var PurchaseItemDto = /** @class */ (function () {
+    function PurchaseItemDto() {
     }
     __decorate([
         class_validator_1.IsInt()
-    ], PurchaseItemInput.prototype, "medicine_id");
+    ], PurchaseItemDto.prototype, "medicine_id");
     __decorate([
-        class_validator_1.IsInt(),
-        class_validator_1.IsPositive()
-    ], PurchaseItemInput.prototype, "quantity");
-    return PurchaseItemInput;
+        class_validator_1.IsInt()
+    ], PurchaseItemDto.prototype, "quantity");
+    __decorate([
+        class_validator_1.IsNumber()
+    ], PurchaseItemDto.prototype, "unit_price");
+    return PurchaseItemDto;
 }());
+exports.PurchaseItemDto = PurchaseItemDto;
 var CreatePurchaseDto = /** @class */ (function () {
     function CreatePurchaseDto() {
     }
@@ -29,9 +31,9 @@ var CreatePurchaseDto = /** @class */ (function () {
         class_validator_1.IsInt()
     ], CreatePurchaseDto.prototype, "supplier_id");
     __decorate([
+        class_validator_1.IsArray(),
         class_validator_1.ValidateNested({ each: true }),
-        class_transformer_1.Type(function () { return PurchaseItemInput; }),
-        class_validator_1.IsArray()
+        class_transformer_1.Type(function () { return PurchaseItemDto; })
     ], CreatePurchaseDto.prototype, "items");
     return CreatePurchaseDto;
 }());

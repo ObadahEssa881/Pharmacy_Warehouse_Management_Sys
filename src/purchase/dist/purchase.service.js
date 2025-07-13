@@ -63,14 +63,34 @@ var PurchaseService = /** @class */ (function () {
     }
     PurchaseService.prototype.pharmacyScope = function (user) {
         if (!user.pharmacy_id)
-            throw new common_1.ForbiddenException('Must be a pharmacy account');
+            throw new common_1.ForbiddenException('Must be associated with a pharmacy');
         return { pharmacy_id: user.pharmacy_id };
     };
     /** CREATE purchase + items + invoice in one transaction */
     PurchaseService.prototype.create = function (user, dto) {
         return __awaiter(this, void 0, void 0, function () {
+            var totalAmount, i, item, quantity, unitPrice;
             var _this = this;
             return __generator(this, function (_a) {
+                if (!dto.items || dto.items.length === 0) {
+                    throw new common_1.BadRequestException('Purchase must include at least one item');
+                }
+                totalAmount = 0;
+                for (i = 0; i < dto.items.length; i++) {
+                    item = dto.items[i];
+                    if (!item.medicine_id || item.medicine_id <= 0) {
+                        throw new common_1.BadRequestException("Item at index " + i + " has invalid medicine_id");
+                    }
+                    quantity = Number(item.quantity);
+                    if (isNaN(quantity) || quantity <= 0) {
+                        throw new common_1.BadRequestException("Item at index " + i + " has invalid quantity");
+                    }
+                    unitPrice = Number(item.unit_price);
+                    if (isNaN(unitPrice) || unitPrice <= 0) {
+                        throw new common_1.BadRequestException("Item at index " + i + " has invalid unit_price");
+                    }
+                    totalAmount += quantity * unitPrice;
+                }
                 return [2 /*return*/, this.prisma.$transaction(function (tx) { return __awaiter(_this, void 0, void 0, function () {
                         var order;
                         return __generator(this, function (_a) {
@@ -80,6 +100,7 @@ var PurchaseService = /** @class */ (function () {
                                     })];
                                 case 1:
                                     order = _a.sent();
+                                    // Step 2: Create purchase order items
                                     return [4 /*yield*/, tx.purchaseOrderItem.createMany({
                                             data: dto.items.map(function (it) { return ({
                                                 order_id: order.id,
@@ -89,18 +110,19 @@ var PurchaseService = /** @class */ (function () {
                                             }); })
                                         })];
                                 case 2:
+                                    // Step 2: Create purchase order items
                                     _a.sent();
+                                    // Step 3: Create invoice
                                     return [4 /*yield*/, tx.invoice.create({
                                             data: {
                                                 order_id: order.id,
                                                 supplier_id: dto.supplier_id,
-                                                total_amount: dto.items
-                                                    .reduce(function (sum, it) { return sum + Number(it.unit_price) * it.quantity; }, 0)
-                                                    .toString(),
+                                                total_amount: totalAmount,
                                                 payment_status: 'UNPAID'
                                             }
                                         })];
                                 case 3:
+                                    // Step 3: Create invoice
                                     _a.sent();
                                     return [2 /*return*/, order];
                             }
@@ -109,10 +131,37 @@ var PurchaseService = /** @class */ (function () {
             });
         });
     };
-    PurchaseService.prototype.paginate = function (user, q) {
+    PurchaseService.prototype.paginate = function (user, page, limit) {
+        if (page === void 0) { page = 1; }
+        if (limit === void 0) { limit = 10; }
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.prisma.purchaseOrder.findMany(__assign({ where: this.pharmacyScope(user), include: { PurchaseOrderItems: true, Invoice: true }, orderBy: { order_date: 'desc' } }, index_1.buildPagination(q)))];
+            var _a, skip, take, _b, orders, total;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _a = index_1.buildPagination(page, limit), skip = _a.skip, take = _a.take;
+                        return [4 /*yield*/, this.prisma.$transaction([
+                                this.prisma.purchaseOrder.findMany({
+                                    where: this.pharmacyScope(user),
+                                    include: { PurchaseOrderItems: true, Invoice: true },
+                                    orderBy: { order_date: 'desc' },
+                                    skip: skip,
+                                    take: take
+                                }),
+                                this.prisma.purchaseOrder.count({ where: this.pharmacyScope(user) }),
+                            ])];
+                    case 1:
+                        _b = _c.sent(), orders = _b[0], total = _b[1];
+                        return [2 /*return*/, {
+                                orders: orders,
+                                meta: {
+                                    total: total,
+                                    page: page,
+                                    limit: limit,
+                                    pages: Math.ceil(total / limit)
+                                }
+                            }];
+                }
             });
         });
     };
@@ -130,32 +179,41 @@ var PurchaseService = /** @class */ (function () {
                     case 1:
                         order = _a.sent();
                         if (!order)
-                            throw new common_1.NotFoundException();
+                            throw new common_1.NotFoundException('Purchase order not found');
                         if (order.pharmacy_id !== user.pharmacy_id)
-                            throw new common_1.ForbiddenException();
+                            throw new common_1.ForbiddenException('Not authorized for this pharmacy');
                         if (order.status !== purchase_status_enum_1.PurchaseStatus.PENDING)
                             throw new common_1.BadRequestException('Order already processed');
                         return [2 /*return*/, this.prisma.$transaction(function (tx) { return __awaiter(_this, void 0, void 0, function () {
-                                var _i, _a, item, inv;
+                                var _i, _a, item, warehouseInventory, pharmacyInventory;
                                 return __generator(this, function (_b) {
                                     switch (_b.label) {
                                         case 0:
-                                            if (!(dto.status === purchase_status_enum_1.PurchaseStatus.APPROVED)) return [3 /*break*/, 8];
+                                            if (!(dto.status === purchase_status_enum_1.PurchaseStatus.APPROVED)) return [3 /*break*/, 9];
                                             _i = 0, _a = order.PurchaseOrderItems;
                                             _b.label = 1;
                                         case 1:
-                                            if (!(_i < _a.length)) return [3 /*break*/, 8];
+                                            if (!(_i < _a.length)) return [3 /*break*/, 9];
                                             item = _a[_i];
-                                            // 1. decrement warehouse
-                                            return [4 /*yield*/, tx.inventory.updateMany({
+                                            return [4 /*yield*/, tx.inventory.findFirst({
                                                     where: {
                                                         medicine_id: item.medicine_id,
                                                         warehouse_id: user.warehouse_id
-                                                    },
-                                                    data: { quantity: { decrement: item.quantity } }
+                                                    }
                                                 })];
                                         case 2:
-                                            // 1. decrement warehouse
+                                            warehouseInventory = _b.sent();
+                                            if (!warehouseInventory ||
+                                                warehouseInventory.quantity < item.quantity) {
+                                                throw new common_1.BadRequestException("Not enough stock in warehouse for medicine ID " + item.medicine_id);
+                                            }
+                                            // 2. Deduct from warehouse
+                                            return [4 /*yield*/, tx.inventory.update({
+                                                    where: { id: warehouseInventory.id },
+                                                    data: { quantity: { decrement: item.quantity } }
+                                                })];
+                                        case 3:
+                                            // 2. Deduct from warehouse
                                             _b.sent();
                                             return [4 /*yield*/, tx.inventory.findFirst({
                                                     where: {
@@ -163,34 +221,45 @@ var PurchaseService = /** @class */ (function () {
                                                         pharmacy_id: user.pharmacy_id
                                                     }
                                                 })];
-                                        case 3:
-                                            inv = _b.sent();
-                                            if (!inv) return [3 /*break*/, 5];
-                                            return [4 /*yield*/, tx.inventory.update({
-                                                    where: { id: inv.id },
-                                                    data: { quantity: { increment: item.quantity } }
-                                                })];
                                         case 4:
+                                            pharmacyInventory = _b.sent();
+                                            if (!pharmacyInventory) return [3 /*break*/, 6];
+                                            // Increment existing inventory
+                                            return [4 /*yield*/, tx.inventory.update({
+                                                    where: { id: pharmacyInventory.id },
+                                                    data: {
+                                                        quantity: { increment: item.quantity },
+                                                        cost_price: item.unit_price,
+                                                        last_updated: new Date()
+                                                    }
+                                                })];
+                                        case 5:
+                                            // Increment existing inventory
                                             _b.sent();
-                                            return [3 /*break*/, 7];
-                                        case 5: return [4 /*yield*/, tx.inventory.create({
+                                            return [3 /*break*/, 8];
+                                        case 6: 
+                                        // Create new inventory entry
+                                        return [4 /*yield*/, tx.inventory.create({
                                                 data: {
                                                     medicine_id: item.medicine_id,
                                                     pharmacy_id: user.pharmacy_id,
                                                     location_type: 'PHARMACY',
                                                     quantity: item.quantity,
                                                     cost_price: item.unit_price,
-                                                    selling_price: item.unit_price,
-                                                    expiry_date: new Date()
+                                                    selling_price: Number(item.unit_price) * 1.2,
+                                                    expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
                                                 }
                                             })];
-                                        case 6:
-                                            _b.sent();
-                                            _b.label = 7;
                                         case 7:
+                                            // Create new inventory entry
+                                            _b.sent();
+                                            _b.label = 8;
+                                        case 8:
                                             _i++;
                                             return [3 /*break*/, 1];
-                                        case 8: return [2 /*return*/, tx.purchaseOrder.update({
+                                        case 9: 
+                                        // Update order status
+                                        return [2 /*return*/, tx.purchaseOrder.update({
                                                 where: { id: id },
                                                 data: { status: dto.status },
                                                 include: { PurchaseOrderItems: true, Invoice: true }
