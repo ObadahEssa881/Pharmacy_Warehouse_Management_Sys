@@ -28,8 +28,12 @@ export class PurchaseController {
   }
 
   @Get()
-  paginate(@GetUser() user, @Query() q: PaginationDto) {
-    return this.service.paginate(user, q);
+  paginate(
+    @GetUser() user,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.service.paginate(user, page, limit);
   }
 
   @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')

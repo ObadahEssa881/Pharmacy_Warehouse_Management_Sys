@@ -84,4 +84,37 @@ export class CompanyService {
       message: `Company with id ${id} deleted successfully`,
     };
   }
+  async getMedicinesByCompany(
+    companyId: number,
+    page: number = 1,
+    limit: number = 10,
+  ) {
+    const skip = (page - 1) * limit;
+
+    const [medicines, total] = await this.prisma.$transaction([
+      this.prisma.medicine.findMany({
+        where: { company_id: companyId },
+        skip,
+        take: limit,
+        include: {
+          category: true,
+          supplier: true,
+        },
+      }),
+      this.prisma.medicine.count({ where: { company_id: companyId } }),
+    ]);
+
+    return {
+      message: medicines.length
+        ? 'Medicines fetched successfully'
+        : 'No medicines found.',
+      data: medicines,
+      meta: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
+      },
+    };
+  }
 }

@@ -1,4 +1,5 @@
 "use strict";
+// sale.controller.ts
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20,8 +21,10 @@ var SaleController = /** @class */ (function () {
     SaleController.prototype.create = function (user, dto) {
         return this.service.create(user, dto);
     };
-    SaleController.prototype.paginate = function (user, q) {
-        return this.service.paginate(user, q);
+    SaleController.prototype.paginate = function (user, page, limit) {
+        if (page === void 0) { page = 1; }
+        if (limit === void 0) { limit = 10; }
+        return this.service.paginate(user, page, limit);
     };
     __decorate([
         common_1.Post(),
@@ -29,7 +32,9 @@ var SaleController = /** @class */ (function () {
     ], SaleController.prototype, "create");
     __decorate([
         common_1.Get(),
-        __param(0, get_user_decorator_1.GetUser()), __param(1, common_1.Query())
+        __param(0, get_user_decorator_1.GetUser()),
+        __param(1, common_1.Query('page')),
+        __param(2, common_1.Query('limit'))
     ], SaleController.prototype, "paginate");
     SaleController = __decorate([
         common_1.Controller('sales'),

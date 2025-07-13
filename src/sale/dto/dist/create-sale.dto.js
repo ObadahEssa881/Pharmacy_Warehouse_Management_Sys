@@ -20,6 +20,9 @@ var SaleItemInput = /** @class */ (function () {
         class_validator_1.IsInt(),
         class_validator_1.IsPositive()
     ], SaleItemInput.prototype, "quantity");
+    __decorate([
+        class_validator_1.IsString()
+    ], SaleItemInput.prototype, "unit_price");
     return SaleItemInput;
 }());
 var CreateSaleDto = /** @class */ (function () {
@@ -33,6 +36,9 @@ var CreateSaleDto = /** @class */ (function () {
         class_transformer_1.Type(function () { return SaleItemInput; }),
         class_validator_1.IsArray()
     ], CreateSaleDto.prototype, "items");
+    __decorate([
+        class_validator_1.IsString()
+    ], CreateSaleDto.prototype, "payment_mode");
     return CreateSaleDto;
 }());
 exports.CreateSaleDto = CreateSaleDto;

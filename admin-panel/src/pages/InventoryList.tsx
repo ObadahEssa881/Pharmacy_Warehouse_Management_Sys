@@ -1,21 +1,29 @@
-import { TwTable } from '../components/tw/Table';
+// src/pages/InventoryList.tsx
+import {
+  List, Datagrid, TextField, DateField, TextInput, Pagination,
+} from 'react-admin';
+import { useAuth } from '../auth/AuthContext';
 
-export const InventoryList = () => (
-  <>
-    <h1 className="text-2xl font-semibold mb-4">Inventory</h1>
-    <TwTable
-      resource="inventory"
-      columns={[
-        { source: 'id',            label: 'ID' },
-        { source: 'medicine_id',   label: 'Medicine' },
-        { source: 'location_type', label: 'Loc' },
-        { source: 'quantity',      label: 'Qty' },
-        { source: 'cost_price',    label: 'Cost' },
-        { source: 'selling_price', label: 'Price' },
-        { source: 'expiry_date',   label: 'Expiry' },
-        { source: 'pharmacy_id',   label: 'Pharmacy' },
-        { source: 'warehouse_id',  label: 'Warehouse' },
-      ]}
-    />
-  </>
-);
+const Filter = [<TextInput label="Medicine ID" source="medicine_id" />];
+
+export const InventoryList = () => {
+  const { pharmacy_id, warehouse_id } = useAuth();
+  return (
+    <List
+      filter={{ pharmacy_id, warehouse_id }}
+      filters={Filter}
+      perPage={10}
+      pagination={<Pagination />}
+    >
+      <Datagrid rowClick="edit">
+        <TextField source="id" />
+        <TextField source="medicine_id" />
+        <TextField source="quantity" />
+        <TextField source="cost_price" />
+        <TextField source="selling_price" />
+        <DateField source="expiry_date" />
+        <DateField source="last_updated" />
+      </Datagrid>
+    </List>
+  );
+};

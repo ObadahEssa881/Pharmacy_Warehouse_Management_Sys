@@ -1,11 +1,11 @@
 "use strict";
 exports.__esModule = true;
 exports.CategoriesList = void 0;
-var Table_1 = require("../components/tw/Table");
-exports.CategoriesList = function () { return (React.createElement(React.Fragment, null,
-    React.createElement("h1", { className: "text-2xl font-semibold mb-4" }, "Categories"),
-    React.createElement(Table_1.TwTable, { resource: "categories", columns: [
-            { source: 'id', label: 'ID' },
-            { source: 'name', label: 'Name' },
-            { source: 'description', label: 'Description' },
-        ] }))); };
+// src/pages/CategoriesList.tsx
+var react_admin_1 = require("react-admin");
+var Filter = [React.createElement(react_admin_1.TextInput, { label: "Name", source: "name", alwaysOn: true })];
+exports.CategoriesList = function () { return (React.createElement(react_admin_1.List, { filters: Filter, perPage: 10, pagination: React.createElement(react_admin_1.Pagination, null) },
+    React.createElement(react_admin_1.Datagrid, { rowClick: "edit" },
+        React.createElement(react_admin_1.TextField, { source: "id" }),
+        React.createElement(react_admin_1.TextField, { source: "name" }),
+        React.createElement(react_admin_1.TextField, { source: "description" })))); };

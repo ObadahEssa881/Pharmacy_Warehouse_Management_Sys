@@ -1,44 +1,31 @@
 // src/pages/UsersList.tsx
-import { List, useListContext } from 'react-admin';
-import { Card, CardContent } from '@mui/material';
+import {
+  List, Datagrid, TextField, DateField, Pagination, TextInput,
+} from 'react-admin';
+import { useAuth } from '../auth/AuthContext';
 
-const UsersTable = () => {
-  const { data, isLoading } = useListContext();
+const UserFilter = [
+  <TextInput label="Search by username" source="username" alwaysOn />,
+  <TextInput label="Email" source="email" />,
+];
 
-  if (isLoading) return <p>Loading…</p>;
-  if (!data?.length) return <p>No records.</p>;
-
+export const UsersList = () => {
+  const { pharmacy_id } = useAuth();
   return (
-    <Card sx={{ m: 2 }}>
-      <CardContent>
-        <h2>Users</h2>
-        <table className="min-w-full">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Pharmacy ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((u: any) => (
-              <tr key={u.id}>
-                <td>{u.id}</td>
-                <td>{u.email}</td>
-                <td>{u.role}</td>
-                <td>{u.pharmacy_id ?? '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </CardContent>
-    </Card>
+    <List
+      filters={UserFilter}
+      filter={{ pharmacy_id }}
+      perPage={10}
+      pagination={<Pagination rowsPerPageOptions={[5, 10, 25]} />}
+    >
+      <Datagrid rowClick="edit">
+        <TextField source="id" />
+        <TextField source="username" />
+        <TextField source="email" />
+        <TextField source="role" />
+        <TextField source="pharmacy_id" />
+        <DateField source="created_at" showTime />
+      </Datagrid>
+    </List>
   );
 };
-
-export const UsersList = () => (
-  <List resource="users">
-    <UsersTable />
-  </List>
-);

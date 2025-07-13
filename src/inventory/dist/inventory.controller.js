@@ -13,13 +13,17 @@ exports.InventoryController = void 0;
 var common_1 = require("@nestjs/common");
 var guard_1 = require("src/auth/guard");
 var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
-var get_user_decorator_1 = require("src/auth/decorators/get-user.decorator"); // <-- Import user decorator
+var get_user_decorator_1 = require("src/auth/decorators/get-user.decorator");
 var InventoryController = /** @class */ (function () {
     function InventoryController(service) {
         this.service = service;
     }
-    InventoryController.prototype.findAll = function (user, q) {
-        return this.service.findAll(user, q);
+    InventoryController.prototype.findAll = function (user, page, limit) {
+        if (page === void 0) { page = '1'; }
+        if (limit === void 0) { limit = '10'; }
+        var pageNum = parseInt(page, 10);
+        var limitNum = parseInt(limit, 10);
+        return this.service.findAll(user, pageNum, limitNum);
     };
     InventoryController.prototype.findOne = function (id, user) {
         return this.service.findOne(+id, user);
@@ -35,7 +39,9 @@ var InventoryController = /** @class */ (function () {
     };
     __decorate([
         common_1.Get(),
-        __param(0, get_user_decorator_1.User()), __param(1, common_1.Query())
+        __param(0, get_user_decorator_1.User()),
+        __param(1, common_1.Query('page')),
+        __param(2, common_1.Query('limit'))
     ], InventoryController.prototype, "findAll");
     __decorate([
         common_1.Get(':id'),

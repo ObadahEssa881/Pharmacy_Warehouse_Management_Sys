@@ -48,7 +48,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.dataProvider = void 0;
-// src/dataProvider.ts
 var react_admin_1 = require("react-admin");
 var ra_data_simple_rest_1 = require("ra-data-simple-rest");
 var API_URL = 'http://localhost:3333';
@@ -99,3 +98,22 @@ exports.dataProvider = __assign(__assign({}, defaultDataProvider), { getList: fu
             }
         });
     }); } });
+// // src/dataProvider.ts
+// import simpleRestProvider from 'ra-data-simple-rest';
+// import { fetchUtils } from 'react-admin';
+// const API_URL = 'http://localhost:3333';
+// const httpClient = async (url: string, options: any = {}) => {
+//   const token = localStorage.getItem('token');
+//   options.headers = options.headers ?? new Headers({ Accept: 'application/json' });
+//   if (token) options.headers.set('Authorization', `Bearer ${token}`);
+//   return fetchUtils.fetchJson(url, options);
+// };
+// const defaultProvider = simpleRestProvider(API_URL, httpClient);
+// export const dataProvider = {
+//   ...defaultProvider,
+//   getList: async (resource: string, params: any) => {
+//     // ignore backend filtering, just call base
+//     const response = await defaultProvider.getList(resource, params);
+//     return response;
+//   },
+// };

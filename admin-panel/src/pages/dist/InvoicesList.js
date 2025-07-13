@@ -1,14 +1,14 @@
 "use strict";
 exports.__esModule = true;
 exports.InvoicesList = void 0;
-var Table_1 = require("../components/tw/Table");
-exports.InvoicesList = function () { return (React.createElement(React.Fragment, null,
-    React.createElement("h1", { className: "text-2xl font-semibold mb-4" }, "Invoices"),
-    React.createElement(Table_1.TwTable, { resource: "invoices", columns: [
-            { source: 'id', label: 'ID' },
-            { source: 'order_id', label: 'Order' },
-            { source: 'supplier_id', label: 'Supplier' },
-            { source: 'invoice_date', label: 'Date' },
-            { source: 'total_amount', label: 'Amount' },
-            { source: 'payment_status', label: 'Payment' },
-        ] }))); };
+// src/pages/InvoicesList.tsx
+var react_admin_1 = require("react-admin");
+var Filter = [React.createElement(react_admin_1.TextInput, { label: "Order ID", source: "order_id" })];
+exports.InvoicesList = function () { return (React.createElement(react_admin_1.List, { filters: Filter, perPage: 10, pagination: React.createElement(react_admin_1.Pagination, null) },
+    React.createElement(react_admin_1.Datagrid, { rowClick: "edit" },
+        React.createElement(react_admin_1.TextField, { source: "id" }),
+        React.createElement(react_admin_1.TextField, { source: "order_id" }),
+        React.createElement(react_admin_1.TextField, { source: "supplier_id" }),
+        React.createElement(react_admin_1.DateField, { source: "invoice_date" }),
+        React.createElement(react_admin_1.TextField, { source: "total_amount" }),
+        React.createElement(react_admin_1.TextField, { source: "payment_status" })))); };

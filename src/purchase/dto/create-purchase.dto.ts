@@ -1,18 +1,23 @@
-// src/purchase/dto/create-purchase.dto.ts
-import { IsInt, IsPositive, ValidateNested, IsArray } from 'class-validator';
+import { IsInt, IsArray, ValidateNested, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
 
-class PurchaseItemInput {
-  @IsInt() medicine_id: number;
-  @IsInt() @IsPositive() quantity: number;
-  unit_price: string; // decimal
+export class PurchaseItemDto {
+  @IsInt()
+  medicine_id: number;
+
+  @IsInt()
+  quantity: number;
+
+  @IsNumber()
+  unit_price: number;
 }
 
 export class CreatePurchaseDto {
-  @IsInt() supplier_id: number;
+  @IsInt()
+  supplier_id: number;
 
-  @ValidateNested({ each: true })
-  @Type(() => PurchaseItemInput)
   @IsArray()
-  items: PurchaseItemInput[];
+  @ValidateNested({ each: true })
+  @Type(() => PurchaseItemDto)
+  items: PurchaseItemDto[];
 }

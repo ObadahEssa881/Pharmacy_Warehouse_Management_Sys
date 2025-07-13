@@ -6,23 +6,25 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateInventoryDto, UpdateInventoryDto } from './dto/index';
 import { UserJwtPayload } from 'src/auth/types'; // <-- Assuming your JWT payload type
-import { buildPagination, PaginationDto } from 'src/common/pagination';
 
 @Injectable()
 export class InventoryService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(user: UserJwtPayload, p: PaginationDto) {
-    const { skip, take } = buildPagination(p);
+  // inventory.service.ts
+
+  async findAll(user: UserJwtPayload, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
 
     const where = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
       ? { pharmacy_id: user.pharmacy_id }
       : { warehouse_id: user.warehouse_id };
+    console.log(user.pharmacy_id);
 
     const [inventories, total] = await this.prisma.$transaction([
       this.prisma.inventory.findMany({
         skip,
-        take,
+        take: limit,
         where,
         orderBy: { id: 'asc' },
         include: { medicine: true },
@@ -37,9 +39,9 @@ export class InventoryService {
       data: inventories,
       meta: {
         total,
-        page: p.page ?? 1,
-        limit: p.limit ?? 10,
-        pages: Math.ceil(total / (p.limit ?? 10)),
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
       },
     };
   }

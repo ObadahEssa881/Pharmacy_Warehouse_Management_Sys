@@ -1,88 +1,103 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { SnackbarProvider } from 'notistack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AdminContext } from 'react-admin';
+
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { PrivateRoute } from './auth/PrivateRoute';
 import { LoginPage } from './pages/LoginPage';
-import { dataProvider } from './dataProvider';
-import { TailAdminShell } from './components/TailAdminShell';
-
-// Dashboard pages
+import { Unauthorized } from './pages/Unauthorized';
 import { DashboardOwner } from './pages/DashboardOwner';
 import { DashboardSupplier } from './pages/DashboardSupplier';
-import { Unauthorized } from './pages/Unauthorized';
-import { AdminContext } from 'react-admin';
-// Resource pages
-import { UsersList } from './pages/UsersList';
-import { PharmaciesList } from './pages/PharmaciesList';
-import { WarehousesList } from './pages/WarehousesList';
-import { SuppliersList } from './pages/SuppliersList';
-import { CategoriesList } from './pages/CategoriesList';
-import { CompaniesList } from './pages/CompaniesList';
-import { MedicinesList } from './pages/MedicinesList';
-import { InventoryList } from './pages/InventoryList';
-import { PurchaseOrdersList } from './pages/PurchaseOrdersList';
-import { PurchaseOrderItemsList } from './pages/PurchaseOrderItemsList';
-import { InvoicesList } from './pages/InvoicesList';
-import { SalesList } from './pages/SalesList';
-import { SaleItemsList } from './pages/SaleItemsList';
-import { NotificationsList } from './pages/NotificationsList';
+import { TailAdminShell } from './components/TailAdminShell';
+import roles from './auth/roles';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './auth/AuthProvider';
+import ListPages from './pages/ListPages';
+import { formRoutes } from './pages/FormPages';
 
-const RoleRedirect = () => {
-  const { role } = useAuth();
-  if (role === 'PHARMACY_OWNER')   return <Navigate to="/dashboard/owner" />;
-  if (role === 'SUPPLIER_ADMIN')   return <Navigate to="/dashboard/supplier" />;
-  return <Navigate to="/login" />;
-};
+const theme = createTheme({
+  palette: { mode: 'light', primary: { main: '#1976d2' } },
+});
 
 const queryClient = new QueryClient();
 
+const RoleRedirect = () => {
+  const { role } = useAuth();
+  if (role === roles.OWNER) return <Navigate to="/dashboard/owner" />;
+  if (role === roles.ADMIN) return <Navigate to="/dashboard/supplier" />;
+  return <Navigate to="/login" />;
+};
+
 export const App = () => (
-  <AuthProvider>
-    <QueryClientProvider client={queryClient}>
-    <AdminContext dataProvider={dataProvider}>
-      <Routes>
-        {/* public */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
+  <QueryClientProvider client={queryClient}>
+    <AdminContext dataProvider={dataProvider} authProvider={authProvider}>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider maxSnack={3}>
+          <AuthProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/unauthorized" element={<Unauthorized />} />
 
-        {/* dashboards */}
-        <Route
-          path="/dashboard/owner"
-          element={
-            <PrivateRoute roles={['PHARMACY_OWNER']}>
-              <TailAdminShell><DashboardOwner /></TailAdminShell>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/dashboard/supplier"
-          element={
-            <PrivateRoute roles={['SUPPLIER_ADMIN']}>
-              <TailAdminShell><DashboardSupplier /></TailAdminShell>
-            </PrivateRoute>
-          }
-        />
+                {/* Dashboards */}
+                <Route
+                  path="/dashboard/owner"
+                  element={
+                    <PrivateRoute roles={[roles.OWNER]}>
+                      <TailAdminShell>
+                        <DashboardOwner />
+                      </TailAdminShell>
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/supplier"
+                  element={
+                    <PrivateRoute roles={[roles.ADMIN]}>
+                      <TailAdminShell>
+                        <DashboardSupplier />
+                      </TailAdminShell>
+                    </PrivateRoute>
+                  }
+                />
 
-        {/* resources — both roles unless otherwise noted */}
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><UsersList /></TailAdminShell></PrivateRoute>}           path="/users" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><PharmaciesList /></TailAdminShell></PrivateRoute>}     path="/pharmacies" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><WarehousesList /></TailAdminShell></PrivateRoute>}     path="/warehouses" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><SuppliersList /></TailAdminShell></PrivateRoute>}      path="/suppliers" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><CategoriesList /></TailAdminShell></PrivateRoute>}     path="/categories" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER']}><TailAdminShell><CompaniesList /></TailAdminShell></PrivateRoute>}                       path="/companies" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><MedicinesList /></TailAdminShell></PrivateRoute>}      path="/medicines" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><InventoryList /></TailAdminShell></PrivateRoute>}      path="/inventory" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><PurchaseOrdersList /></TailAdminShell></PrivateRoute>} path="/purchase-orders" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><PurchaseOrderItemsList /></TailAdminShell></PrivateRoute>} path="/purchase-order-items" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><InvoicesList /></TailAdminShell></PrivateRoute>}        path="/invoices" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER']}><TailAdminShell><SalesList /></TailAdminShell></PrivateRoute>}                            path="/sales" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER']}><TailAdminShell><SaleItemsList /></TailAdminShell></PrivateRoute>}                       path="/sale-items" />
-        <Route element={<PrivateRoute roles={['PHARMACY_OWNER','SUPPLIER_ADMIN']}><TailAdminShell><NotificationsList /></TailAdminShell></PrivateRoute>} path="/notifications" />
+                {/* Resource List Pages */}
+                {ListPages.map(({ path, Element, roles: rl }) => (
+                  <Route
+                    key={path}
+                    path={path}
+                    element={
+                      <PrivateRoute roles={rl}>
+                        <TailAdminShell>
+                          <Element />
+                        </TailAdminShell>
+                      </PrivateRoute>
+                    }
+                  />
+                ))}
 
-        {/* default */}
-        <Route path="*" element={<RoleRedirect />} />
-      </Routes>
+                {/* Create/Edit Pages */}
+                {formRoutes.map(({ path, element }) => (
+                  <Route
+                    key={path}
+                    path={path}
+                    element={
+                      <TailAdminShell>
+                        {element}
+                      </TailAdminShell>
+                    }
+                  />
+                ))}
+
+                <Route path="*" element={<RoleRedirect />} />
+              </Routes>
+            </BrowserRouter>
+          </AuthProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
     </AdminContext>
   </QueryClientProvider>
-  </AuthProvider>
 );

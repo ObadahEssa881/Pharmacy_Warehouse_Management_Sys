@@ -13,9 +13,8 @@ import { InventoryService } from './inventory.service';
 import { CreateInventoryDto, UpdateInventoryDto } from './dto';
 import { JwtGuard, RoleGuard } from 'src/auth/guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { User } from 'src/auth/decorators/get-user.decorator'; // <-- Import user decorator
-import { UserJwtPayload } from 'src/auth/types'; // <-- Assuming your JWT payload type
-import { PaginationDto } from 'src/common/pagination';
+import { User } from 'src/auth/decorators/get-user.decorator';
+import { UserJwtPayload } from 'src/auth/types';
 
 @UseGuards(JwtGuard, RoleGuard)
 @Controller('inventory')
@@ -23,8 +22,15 @@ export class InventoryController {
   constructor(private readonly service: InventoryService) {}
 
   @Get()
-  findAll(@User() user: UserJwtPayload, @Query() q: PaginationDto) {
-    return this.service.findAll(user, q);
+  findAll(
+    @User() user: UserJwtPayload,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '10',
+  ) {
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+
+    return this.service.findAll(user, pageNum, limitNum);
   }
 
   @Get(':id')

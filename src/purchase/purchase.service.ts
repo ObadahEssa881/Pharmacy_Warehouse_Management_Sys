@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePurchaseDto, UpdatePurchaseStatusDto } from './dto';
-import { buildPagination, PaginationDto } from '../common/pagination/index';
+import { buildPagination } from '../common/pagination/index';
 import { PurchaseStatus } from '../common/enums/purchase‑status.enum';
 import { UserJwtPayload } from '../auth/types/user.types';
 
@@ -16,13 +16,46 @@ export class PurchaseService {
 
   private pharmacyScope(user: UserJwtPayload) {
     if (!user.pharmacy_id)
-      throw new ForbiddenException('Must be a pharmacy account');
+      throw new ForbiddenException('Must be associated with a pharmacy');
     return { pharmacy_id: user.pharmacy_id };
   }
 
   /** CREATE purchase + items + invoice in one transaction */
   async create(user: UserJwtPayload, dto: CreatePurchaseDto) {
+    if (!dto.items || dto.items.length === 0) {
+      throw new BadRequestException('Purchase must include at least one item');
+    }
+
+    let totalAmount = 0;
+
+    for (let i = 0; i < dto.items.length; i++) {
+      const item = dto.items[i];
+
+      if (!item.medicine_id || item.medicine_id <= 0) {
+        throw new BadRequestException(
+          `Item at index ${i} has invalid medicine_id`,
+        );
+      }
+
+      const quantity = Number(item.quantity);
+      if (isNaN(quantity) || quantity <= 0) {
+        throw new BadRequestException(
+          `Item at index ${i} has invalid quantity`,
+        );
+      }
+
+      const unitPrice = Number(item.unit_price);
+      if (isNaN(unitPrice) || unitPrice <= 0) {
+        throw new BadRequestException(
+          `Item at index ${i} has invalid unit_price`,
+        );
+      }
+
+      totalAmount += quantity * unitPrice;
+    }
+
     return this.prisma.$transaction(async (tx) => {
+      // Step 1: Create purchase order
       const order = await tx.purchaseOrder.create({
         data: {
           supplier_id: dto.supplier_id,
@@ -31,6 +64,7 @@ export class PurchaseService {
         },
       });
 
+      // Step 2: Create purchase order items
       await tx.purchaseOrderItem.createMany({
         data: dto.items.map((it) => ({
           order_id: order.id,
@@ -40,13 +74,12 @@ export class PurchaseService {
         })),
       });
 
+      // Step 3: Create invoice
       await tx.invoice.create({
         data: {
           order_id: order.id,
           supplier_id: dto.supplier_id,
-          total_amount: dto.items
-            .reduce((sum, it) => sum + Number(it.unit_price) * it.quantity, 0)
-            .toString(),
+          total_amount: totalAmount,
           payment_status: 'UNPAID',
         },
       });
@@ -55,13 +88,29 @@ export class PurchaseService {
     });
   }
 
-  async paginate(user: UserJwtPayload, q: PaginationDto) {
-    return this.prisma.purchaseOrder.findMany({
-      where: this.pharmacyScope(user),
-      include: { PurchaseOrderItems: true, Invoice: true },
-      orderBy: { order_date: 'desc' },
-      ...buildPagination(q),
-    });
+  async paginate(user: UserJwtPayload, page: number = 1, limit: number = 10) {
+    const { skip, take } = buildPagination(page, limit);
+
+    const [orders, total] = await this.prisma.$transaction([
+      this.prisma.purchaseOrder.findMany({
+        where: this.pharmacyScope(user),
+        include: { PurchaseOrderItems: true, Invoice: true },
+        orderBy: { order_date: 'desc' },
+        skip,
+        take,
+      }),
+      this.prisma.purchaseOrder.count({ where: this.pharmacyScope(user) }),
+    ]);
+
+    return {
+      orders,
+      meta: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
+      },
+    };
   }
 
   /** Approve / Reject & move stock */
@@ -74,38 +123,59 @@ export class PurchaseService {
       where: { id },
       include: { PurchaseOrderItems: true },
     });
-    if (!order) throw new NotFoundException();
-    if (order.pharmacy_id !== user.pharmacy_id) throw new ForbiddenException();
+
+    if (!order) throw new NotFoundException('Purchase order not found');
+    if (order.pharmacy_id !== user.pharmacy_id)
+      throw new ForbiddenException('Not authorized for this pharmacy');
     if (order.status !== PurchaseStatus.PENDING)
       throw new BadRequestException('Order already processed');
 
     return this.prisma.$transaction(async (tx) => {
       if (dto.status === PurchaseStatus.APPROVED) {
-        // Move inventory
         for (const item of order.PurchaseOrderItems) {
-          // 1. decrement warehouse
-          await tx.inventory.updateMany({
+          // 1. Check if warehouse has enough stock
+          const warehouseInventory = await tx.inventory.findFirst({
             where: {
               medicine_id: item.medicine_id,
-              warehouse_id: user.warehouse_id, // Pharmacy knows which warehouse it ordered from
+              warehouse_id: user.warehouse_id,
             },
+          });
+
+          if (
+            !warehouseInventory ||
+            warehouseInventory.quantity < item.quantity
+          ) {
+            throw new BadRequestException(
+              `Not enough stock in warehouse for medicine ID ${item.medicine_id}`,
+            );
+          }
+
+          // 2. Deduct from warehouse
+          await tx.inventory.update({
+            where: { id: warehouseInventory.id },
             data: { quantity: { decrement: item.quantity } },
           });
 
-          // 2. increment (or create) pharmacy inventory
-          const inv = await tx.inventory.findFirst({
+          // 3. Add to pharmacy inventory
+          const pharmacyInventory = await tx.inventory.findFirst({
             where: {
               medicine_id: item.medicine_id,
               pharmacy_id: user.pharmacy_id,
             },
           });
 
-          if (inv) {
+          if (pharmacyInventory) {
+            // Increment existing inventory
             await tx.inventory.update({
-              where: { id: inv.id },
-              data: { quantity: { increment: item.quantity } },
+              where: { id: pharmacyInventory.id },
+              data: {
+                quantity: { increment: item.quantity },
+                cost_price: item.unit_price,
+                last_updated: new Date(),
+              },
             });
           } else {
+            // Create new inventory entry
             await tx.inventory.create({
               data: {
                 medicine_id: item.medicine_id,
@@ -113,14 +183,15 @@ export class PurchaseService {
                 location_type: 'PHARMACY',
                 quantity: item.quantity,
                 cost_price: item.unit_price,
-                selling_price: item.unit_price, // you may change
-                expiry_date: new Date(), // unknown; override later
+                selling_price: Number(item.unit_price) * 1.2, // Optional: set markup
+                expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // e.g., +1 year
               },
             });
           }
         }
       }
 
+      // Update order status
       return tx.purchaseOrder.update({
         where: { id },
         data: { status: dto.status },

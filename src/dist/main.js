@@ -53,6 +53,7 @@ function bootstrap() {
                         credentials: true
                     });
                     app.useGlobalPipes(new common_1.ValidationPipe({
+                        transform: true,
                         whitelist: true
                     }));
                     app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());

@@ -55,26 +55,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.InventoryService = void 0;
 var common_1 = require("@nestjs/common");
-var pagination_1 = require("src/common/pagination");
 var InventoryService = /** @class */ (function () {
     function InventoryService(prisma) {
         this.prisma = prisma;
     }
-    InventoryService.prototype.findAll = function (user, p) {
-        var _a, _b, _c;
+    // inventory.service.ts
+    InventoryService.prototype.findAll = function (user, page, limit) {
+        if (page === void 0) { page = 1; }
+        if (limit === void 0) { limit = 10; }
         return __awaiter(this, void 0, void 0, function () {
-            var _d, skip, take, where, _e, inventories, total;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
+            var skip, where, _a, inventories, total;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _d = pagination_1.buildPagination(p), skip = _d.skip, take = _d.take;
+                        skip = (page - 1) * limit;
                         where = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
                             ? { pharmacy_id: user.pharmacy_id }
                             : { warehouse_id: user.warehouse_id };
+                        console.log(user.pharmacy_id);
                         return [4 /*yield*/, this.prisma.$transaction([
                                 this.prisma.inventory.findMany({
                                     skip: skip,
-                                    take: take,
+                                    take: limit,
                                     where: where,
                                     orderBy: { id: 'asc' },
                                     include: { medicine: true }
@@ -82,7 +84,7 @@ var InventoryService = /** @class */ (function () {
                                 this.prisma.inventory.count({ where: where }),
                             ])];
                     case 1:
-                        _e = _f.sent(), inventories = _e[0], total = _e[1];
+                        _a = _b.sent(), inventories = _a[0], total = _a[1];
                         return [2 /*return*/, {
                                 message: inventories.length
                                     ? 'Inventory fetched successfully'
@@ -90,9 +92,9 @@ var InventoryService = /** @class */ (function () {
                                 data: inventories,
                                 meta: {
                                     total: total,
-                                    page: (_a = p.page) !== null && _a !== void 0 ? _a : 1,
-                                    limit: (_b = p.limit) !== null && _b !== void 0 ? _b : 10,
-                                    pages: Math.ceil(total / ((_c = p.limit) !== null && _c !== void 0 ? _c : 10))
+                                    page: page,
+                                    limit: limit,
+                                    pages: Math.ceil(total / limit)
                                 }
                             }];
                 }
