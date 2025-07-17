@@ -184,6 +184,7 @@ model SaleItem {
     medicine    Medicine @relation(fields: [medicine_id], references: [id])
     quantity    Int
     unit_price  Decimal
+    cost_price  Decimal   
 }
 
 model Notification {
@@ -196,15 +197,7 @@ model Notification {
     is_read    Boolean  @default(false)
 }
 
-// Looking at your Prisma schema, it's a solid foundation for a pharmacy management system, but there are several areas that need refinement. Let me break down the issues and suggestions:
 
-// ## Major Issues & Modifications Needed
-
-// ### 1. **User Model - Role Management**
-// **Current Issue**: Role is just a string without validation or clear structure.
-
-// **Suggested Modification**:
-// ```prisma
 // enum UserRole {
 //   SUPER_ADMIN    // System-wide admin
 //   PHARMACY_OWNER // Owns one or more pharmacies
@@ -216,19 +209,19 @@ model Notification {
 
 // model User {
 //   id            Int            @id @default(autoincrement())
-//   username      String         @unique // Should be unique
+//   username      String         @unique 
 //   email         String         @unique
 //   password_hash String
 //   role          UserRole       // Use enum instead of string
-//   is_active     Boolean        @default(true) // Add user status
+//   is_active     Boolean        @default(true) 
 //   created_at    DateTime       @default(now())
-//   updated_at    DateTime       @updatedAt // Track updates
+//   updated_at    DateTime       @updatedAt 
 
-//   // Relationships
+//   
 //   pharmacy_id   Int?
 //   pharmacy      Pharmacy?      @relation(fields: [pharmacy_id], references: [id])
 //   notifications Notification[]
-//   sales         Sale[]         // Track who made each sale
+//   sales         Sale[]         
 
 //   @@map("users")
 // }

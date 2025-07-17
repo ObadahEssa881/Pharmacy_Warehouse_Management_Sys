@@ -11,13 +11,14 @@ var common_1 = require("@nestjs/common");
 var report_service_1 = require("./report.service");
 var report_controller_1 = require("./report.controller");
 var auth_module_1 = require("src/auth/auth.module");
+var prisma_service_1 = require("src/prisma/prisma.service");
 var ReportModule = /** @class */ (function () {
     function ReportModule() {
     }
     ReportModule = __decorate([
         common_1.Module({
             controllers: [report_controller_1.ReportController],
-            providers: [report_service_1.ReportService],
+            providers: [report_service_1.ReportService, prisma_service_1.PrismaService],
             imports: [auth_module_1.AuthModule]
         })
     ], ReportModule);

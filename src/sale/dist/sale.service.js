@@ -95,7 +95,8 @@ var SaleService = /** @class */ (function () {
                                                 sale_id: sale.id,
                                                 medicine_id: it.medicine_id,
                                                 quantity: it.quantity,
-                                                unit_price: it.unit_price
+                                                unit_price: it.unit_price,
+                                                cost_price: it.cost_price
                                             }); })
                                         })];
                                 case 2:
