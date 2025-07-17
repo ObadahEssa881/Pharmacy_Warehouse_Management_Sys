@@ -23,6 +23,9 @@ var SaleItemInput = /** @class */ (function () {
     __decorate([
         class_validator_1.IsString()
     ], SaleItemInput.prototype, "unit_price");
+    __decorate([
+        class_validator_1.IsDecimal()
+    ], SaleItemInput.prototype, "cost_price");
     return SaleItemInput;
 }());
 var CreateSaleDto = /** @class */ (function () {

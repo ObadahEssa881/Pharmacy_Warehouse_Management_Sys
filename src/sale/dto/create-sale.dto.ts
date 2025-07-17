@@ -6,6 +6,7 @@ import {
   ValidateNested,
   IsOptional,
   IsString,
+  IsDecimal,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -14,6 +15,9 @@ class SaleItemInput {
   @IsInt() @IsPositive() quantity: number;
   @IsString()
   unit_price: string;
+
+  @IsDecimal()
+  cost_price: number;
 }
 
 export class CreateSaleDto {

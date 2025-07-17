@@ -45,7 +45,7 @@ export class SaleService {
           `Item at index ${i} has invalid unit_price`,
         );
       }
-
+      
       totalAmount += quantity * unitPrice;
     }
 
@@ -67,6 +67,7 @@ export class SaleService {
           medicine_id: it.medicine_id,
           quantity: it.quantity,
           unit_price: it.unit_price,
+          cost_price: it.cost_price,
         })),
       });
 

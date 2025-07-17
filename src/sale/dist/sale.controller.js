@@ -14,6 +14,7 @@ exports.SaleController = void 0;
 var common_1 = require("@nestjs/common");
 var guard_1 = require("../auth/guard");
 var get_user_decorator_1 = require("../common/decorators/get\u2011user.decorator");
+var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
 var SaleController = /** @class */ (function () {
     function SaleController(service) {
         this.service = service;
@@ -38,7 +39,8 @@ var SaleController = /** @class */ (function () {
     ], SaleController.prototype, "paginate");
     SaleController = __decorate([
         common_1.Controller('sales'),
-        common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard)
+        common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard),
+        roles_decorator_1.Roles('PHARMACY_OWNER', 'PHARMACIST')
     ], SaleController);
     return SaleController;
 }());

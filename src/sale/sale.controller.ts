@@ -5,9 +5,11 @@ import { JwtGuard, RoleGuard } from '../auth/guard';
 import { SaleService } from './sale.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { GetUser } from '../common/decorators/get‑user.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('sales')
 @UseGuards(JwtGuard, RoleGuard)
+@Roles('PHARMACY_OWNER', 'PHARMACIST')
 export class SaleController {
   constructor(private readonly service: SaleService) {}
 

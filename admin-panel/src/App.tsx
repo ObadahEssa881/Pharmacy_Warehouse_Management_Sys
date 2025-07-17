@@ -84,11 +84,7 @@ export const App = () => (
                   <Route
                     key={path}
                     path={path}
-                    element={
-                      <TailAdminShell>
-                        {element}
-                      </TailAdminShell>
-                    }
+                    element={<TailAdminShell>{element}</TailAdminShell>}
                   />
                 ))}
 
