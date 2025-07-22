@@ -24,6 +24,7 @@ var inventory_module_1 = require("./inventory/inventory.module");
 var report_module_1 = require("./report/report.module");
 var notification_module_1 = require("./notification/notification.module");
 var user_module_1 = require("./user/user.module");
+var warehouse_module_1 = require("./warehouse/warehouse.module");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -43,6 +44,7 @@ var AppModule = /** @class */ (function () {
                 report_module_1.ReportModule,
                 notification_module_1.NotificationModule,
                 user_module_1.UserModule,
+                warehouse_module_1.WarehouseModule
             ],
             controllers: [app_controller_1.AppController],
             providers: [app_service_1.AppService]

@@ -150,7 +150,13 @@ var SaleService = /** @class */ (function () {
                         return [4 /*yield*/, this.prisma.$transaction([
                                 this.prisma.sale.findMany({
                                     where: { pharmacy_id: user.pharmacy_id },
-                                    include: { SaleItems: true },
+                                    include: {
+                                        SaleItems: {
+                                            include: {
+                                                medicine: true
+                                            }
+                                        }
+                                    },
                                     orderBy: { sale_date: 'desc' },
                                     skip: skip,
                                     take: limit

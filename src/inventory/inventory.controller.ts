@@ -33,6 +33,16 @@ export class InventoryController {
     return this.service.findAll(user, pageNum, limitNum);
   }
 
+  @Get('expiring-soon')
+  findExpiringSoon(@User() user: UserJwtPayload) {
+    return this.service.findExpiringSoon(user);
+  }
+
+  @Get('low-stock')
+  findLowStock(@User() user: UserJwtPayload) {
+    return this.service.findLowStock(user);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string, @User() user: UserJwtPayload) {
     return this.service.findOne(+id, user);

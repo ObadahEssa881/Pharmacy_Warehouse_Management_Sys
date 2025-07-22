@@ -1,59 +1,108 @@
 "use strict";
+// import React from 'react';
+// import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+// import { ThemeProvider, createTheme } from '@mui/material/styles';
+// import { SnackbarProvider } from 'notistack';
+// import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+// import { AdminContext } from 'react-admin';
 exports.__esModule = true;
-exports.App = void 0;
-var react_1 = require("react");
-var react_router_dom_1 = require("react-router-dom");
-var styles_1 = require("@mui/material/styles");
-var notistack_1 = require("notistack");
-var react_query_1 = require("@tanstack/react-query");
+// import { AuthProvider, useAuth } from './auth/AuthContext';
+// import { PrivateRoute } from './auth/PrivateRoute';
+// import { LoginPage } from './pages/LoginPage';
+// import { Unauthorized } from './pages/Unauthorized';
+// import { DashboardOwner } from './pages/DashboardOwner';
+// import { DashboardSupplier } from './pages/DashboardSupplier';
+// import { TailAdminShell } from './components/TailAdminShell';
+// import roles from './auth/roles';
+// import { dataProvider } from './dataProvider';
+// import { authProvider } from './auth/AuthProvider';
+// import ListPages from './pages/ListPages';
+// import { formRoutes } from './pages/FormPages';
+// const theme = createTheme({
+//   palette: { mode: 'light', primary: { main: '#1976d2' } },
+// });
+// const queryClient = new QueryClient();
+// const RoleRedirect = () => {
+//   const { role } = useAuth();
+//   if (role === roles.OWNER) return <Navigate to="/dashboard/owner" />;
+//   if (role === roles.ADMIN) return <Navigate to="/dashboard/supplier" />;
+//   return <Navigate to="/login" />;
+// };
+// export const App = () => (
+//   <QueryClientProvider client={queryClient}>
+//     <AdminContext dataProvider={dataProvider} authProvider={authProvider}>
+//       <ThemeProvider theme={theme}>
+//         <SnackbarProvider maxSnack={3}>
+//           <AuthProvider>
+//             <BrowserRouter>
+//               <Routes>
+//                 <Route path="/login" element={<LoginPage />} />
+//                 <Route path="/unauthorized" element={<Unauthorized />} />
+//                 {/* Dashboards */}
+//                 <Route
+//                   path="/dashboard/owner"
+//                   element={
+//                     <PrivateRoute roles={[roles.OWNER]}>
+//                       <TailAdminShell>
+//                         <DashboardOwner />
+//                       </TailAdminShell>
+//                     </PrivateRoute>
+//                   }
+//                 />
+//                 <Route
+//                   path="/dashboard/supplier"
+//                   element={
+//                     <PrivateRoute roles={[roles.ADMIN]}>
+//                       <TailAdminShell>
+//                         <DashboardSupplier />
+//                       </TailAdminShell>
+//                     </PrivateRoute>
+//                   }
+//                 />
+//                 {/* Resource List Pages */}
+//                 {ListPages.map(({ path, Element, roles: rl }) => (
+//                   <Route
+//                     key={path}
+//                     path={path}
+//                     element={
+//                       <PrivateRoute roles={rl}>
+//                         <TailAdminShell>
+//                           <Element />
+//                         </TailAdminShell>
+//                       </PrivateRoute>
+//                     }
+//                   />
+//                 ))}
+//                 {/* Create/Edit Pages */}
+//                 {formRoutes.map(({ path, element }) => (
+//                   <Route
+//                     key={path}
+//                     path={path}
+//                     element={<TailAdminShell>{element}</TailAdminShell>}
+//                   />
+//                 ))}
+//                 <Route path="*" element={<RoleRedirect />} />
+//               </Routes>
+//             </BrowserRouter>
+//           </AuthProvider>
+//         </SnackbarProvider>
+//       </ThemeProvider>
+//     </AdminContext>
+//   </QueryClientProvider>
+// );
 var react_admin_1 = require("react-admin");
-var AuthContext_1 = require("./auth/AuthContext");
-var PrivateRoute_1 = require("./auth/PrivateRoute");
-var LoginPage_1 = require("./pages/LoginPage");
-var Unauthorized_1 = require("./pages/Unauthorized");
-var DashboardOwner_1 = require("./pages/DashboardOwner");
-var DashboardSupplier_1 = require("./pages/DashboardSupplier");
-var TailAdminShell_1 = require("./components/TailAdminShell");
-var roles_1 = require("./auth/roles");
-var dataProvider_1 = require("./dataProvider");
 var AuthProvider_1 = require("./auth/AuthProvider");
-var ListPages_1 = require("./pages/ListPages");
-var FormPages_1 = require("./pages/FormPages");
-var theme = styles_1.createTheme({
-    palette: { mode: 'light', primary: { main: '#1976d2' } }
-});
-var queryClient = new react_query_1.QueryClient();
-var RoleRedirect = function () {
-    var role = AuthContext_1.useAuth().role;
-    if (role === roles_1["default"].OWNER)
-        return react_1["default"].createElement(react_router_dom_1.Navigate, { to: "/dashboard/owner" });
-    if (role === roles_1["default"].ADMIN)
-        return react_1["default"].createElement(react_router_dom_1.Navigate, { to: "/dashboard/supplier" });
-    return react_1["default"].createElement(react_router_dom_1.Navigate, { to: "/login" });
-};
-exports.App = function () { return (react_1["default"].createElement(react_query_1.QueryClientProvider, { client: queryClient },
-    react_1["default"].createElement(react_admin_1.AdminContext, { dataProvider: dataProvider_1.dataProvider, authProvider: AuthProvider_1.authProvider },
-        react_1["default"].createElement(styles_1.ThemeProvider, { theme: theme },
-            react_1["default"].createElement(notistack_1.SnackbarProvider, { maxSnack: 3 },
-                react_1["default"].createElement(AuthContext_1.AuthProvider, null,
-                    react_1["default"].createElement(react_router_dom_1.BrowserRouter, null,
-                        react_1["default"].createElement(react_router_dom_1.Routes, null,
-                            react_1["default"].createElement(react_router_dom_1.Route, { path: "/login", element: react_1["default"].createElement(LoginPage_1.LoginPage, null) }),
-                            react_1["default"].createElement(react_router_dom_1.Route, { path: "/unauthorized", element: react_1["default"].createElement(Unauthorized_1.Unauthorized, null) }),
-                            react_1["default"].createElement(react_router_dom_1.Route, { path: "/dashboard/owner", element: react_1["default"].createElement(PrivateRoute_1.PrivateRoute, { roles: [roles_1["default"].OWNER] },
-                                    react_1["default"].createElement(TailAdminShell_1.TailAdminShell, null,
-                                        react_1["default"].createElement(DashboardOwner_1.DashboardOwner, null))) }),
-                            react_1["default"].createElement(react_router_dom_1.Route, { path: "/dashboard/supplier", element: react_1["default"].createElement(PrivateRoute_1.PrivateRoute, { roles: [roles_1["default"].ADMIN] },
-                                    react_1["default"].createElement(TailAdminShell_1.TailAdminShell, null,
-                                        react_1["default"].createElement(DashboardSupplier_1.DashboardSupplier, null))) }),
-                            ListPages_1["default"].map(function (_a) {
-                                var path = _a.path, Element = _a.Element, rl = _a.roles;
-                                return (react_1["default"].createElement(react_router_dom_1.Route, { key: path, path: path, element: react_1["default"].createElement(PrivateRoute_1.PrivateRoute, { roles: rl },
-                                        react_1["default"].createElement(TailAdminShell_1.TailAdminShell, null,
-                                            react_1["default"].createElement(Element, null))) }));
-                            }),
-                            FormPages_1.formRoutes.map(function (_a) {
-                                var path = _a.path, element = _a.element;
-                                return (react_1["default"].createElement(react_router_dom_1.Route, { key: path, path: path, element: react_1["default"].createElement(TailAdminShell_1.TailAdminShell, null, element) }));
-                            }),
-                            react_1["default"].createElement(react_router_dom_1.Route, { path: "*", element: react_1["default"].createElement(RoleRedirect, null) }))))))))); };
+var dataProvider_1 = require("./data/dataProvider");
+var Dashboard_1 = require("./pages/Dashboard");
+var MedicinesList_1 = require("./resources/medicines/MedicinesList");
+var PurchaseOrdersList_1 = require("./resources/purchase-orders/PurchaseOrdersList");
+var ProfitLossReport_1 = require("./resources/reports/ProfitLossReport");
+function App() {
+    var role = localStorage.getItem('role');
+    return (React.createElement(react_admin_1.Admin, { dashboard: Dashboard_1["default"], authProvider: AuthProvider_1.authProvider, dataProvider: dataProvider_1.dataProvider },
+        React.createElement(react_admin_1.Resource, { name: "medicines", list: MedicinesList_1.MedicinesList }),
+        role === 'PHARMACY_OWNER' && (React.createElement(React.Fragment, null,
+            React.createElement(react_admin_1.Resource, { name: "purchase-orders", list: PurchaseOrdersList_1.PurchaseOrdersList }),
+            React.createElement(react_admin_1.Resource, { name: "reports/profit-loss", list: ProfitLossReport_1["default"] })))));
+}
+exports["default"] = App;
