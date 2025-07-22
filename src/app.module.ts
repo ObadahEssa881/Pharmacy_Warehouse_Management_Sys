@@ -15,6 +15,7 @@ import { InventoryModule } from './inventory/inventory.module';
 import { ReportModule } from './report/report.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
+import { WarehouseModule } from './warehouse/warehouse.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UserModule } from './user/user.module';
     ReportModule,
     NotificationModule,
     UserModule,
+    WarehouseModule
   ],
   controllers: [AppController],
   providers: [AppService],

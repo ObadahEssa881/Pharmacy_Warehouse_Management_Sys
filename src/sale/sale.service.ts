@@ -45,7 +45,7 @@ export class SaleService {
           `Item at index ${i} has invalid unit_price`,
         );
       }
-      
+
       totalAmount += quantity * unitPrice;
     }
 
@@ -108,7 +108,13 @@ export class SaleService {
     const [sales, total] = await this.prisma.$transaction([
       this.prisma.sale.findMany({
         where: { pharmacy_id: user.pharmacy_id },
-        include: { SaleItems: true },
+        include: {
+          SaleItems: {
+            include: {
+              medicine: true,
+            },
+          },
+        },
         orderBy: { sale_date: 'desc' },
         skip,
         take: limit,

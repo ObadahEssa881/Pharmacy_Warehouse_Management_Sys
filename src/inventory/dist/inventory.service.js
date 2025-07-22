@@ -226,6 +226,82 @@ var InventoryService = /** @class */ (function () {
             });
         });
     };
+    InventoryService.prototype.findExpiringSoon = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            var threeMonthsFromNow, where, expiringItems;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        threeMonthsFromNow = new Date();
+                        threeMonthsFromNow.setMonth(threeMonthsFromNow.getMonth() + 3);
+                        where = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
+                            ? {
+                                pharmacy_id: user.pharmacy_id,
+                                expiry_date: {
+                                    lte: threeMonthsFromNow
+                                }
+                            }
+                            : {
+                                warehouse_id: user.warehouse_id,
+                                expiry_date: {
+                                    lte: threeMonthsFromNow
+                                }
+                            };
+                        return [4 /*yield*/, this.prisma.inventory.findMany({
+                                where: where,
+                                include: { medicine: true },
+                                orderBy: { expiry_date: 'asc' }
+                            })];
+                    case 1:
+                        expiringItems = _a.sent();
+                        return [2 /*return*/, {
+                                message: expiringItems.length
+                                    ? 'Expiring inventory items found'
+                                    : 'No expiring inventory items found',
+                                data: expiringItems,
+                                count: expiringItems.length
+                            }];
+                }
+            });
+        });
+    };
+    InventoryService.prototype.findLowStock = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            var where, lowStockItems;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        where = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
+                            ? {
+                                pharmacy_id: user.pharmacy_id,
+                                quantity: {
+                                    lt: 2
+                                }
+                            }
+                            : {
+                                warehouse_id: user.warehouse_id,
+                                quantity: {
+                                    lt: 2
+                                }
+                            };
+                        return [4 /*yield*/, this.prisma.inventory.findMany({
+                                where: where,
+                                include: { medicine: true },
+                                orderBy: { quantity: 'asc' }
+                            })];
+                    case 1:
+                        lowStockItems = _a.sent();
+                        return [2 /*return*/, {
+                                message: lowStockItems.length
+                                    ? 'Low stock inventory items found'
+                                    : 'No low stock inventory items found',
+                                data: lowStockItems,
+                                count: lowStockItems.length
+                            }];
+                }
+            });
+        });
+    };
     InventoryService = __decorate([
         common_1.Injectable()
     ], InventoryService);

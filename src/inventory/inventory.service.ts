@@ -138,4 +138,70 @@ export class InventoryService {
 
     return { message: 'Inventory item deleted.' };
   }
+
+  async findExpiringSoon(user: UserJwtPayload) {
+    // Calculate date 3 months from now
+    const threeMonthsFromNow = new Date();
+    threeMonthsFromNow.setMonth(threeMonthsFromNow.getMonth() + 3);
+
+    // Determine where clause based on user role
+    const where = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
+      ? {
+          pharmacy_id: user.pharmacy_id,
+          expiry_date: {
+            lte: threeMonthsFromNow,
+          },
+        }
+      : {
+          warehouse_id: user.warehouse_id,
+          expiry_date: {
+            lte: threeMonthsFromNow,
+          },
+        };
+
+    const expiringItems = await this.prisma.inventory.findMany({
+      where,
+      include: { medicine: true },
+      orderBy: { expiry_date: 'asc' },
+    });
+
+    return {
+      message: expiringItems.length
+        ? 'Expiring inventory items found'
+        : 'No expiring inventory items found',
+      data: expiringItems,
+      count: expiringItems.length,
+    };
+  }
+
+  async findLowStock(user: UserJwtPayload) {
+    // Determine where clause based on user role
+    const where = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
+      ? {
+          pharmacy_id: user.pharmacy_id,
+          quantity: {
+            lt: 2,
+          },
+        }
+      : {
+          warehouse_id: user.warehouse_id,
+          quantity: {
+            lt: 2,
+          },
+        };
+
+    const lowStockItems = await this.prisma.inventory.findMany({
+      where,
+      include: { medicine: true },
+      orderBy: { quantity: 'asc' },
+    });
+
+    return {
+      message: lowStockItems.length
+        ? 'Low stock inventory items found'
+        : 'No low stock inventory items found',
+      data: lowStockItems,
+      count: lowStockItems.length,
+    };
+  }
 }
