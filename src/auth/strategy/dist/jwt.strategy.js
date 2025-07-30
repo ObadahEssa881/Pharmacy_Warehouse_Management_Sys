@@ -96,28 +96,39 @@ var JwtStrategy = /** @class */ (function (_super) {
     }
     JwtStrategy.prototype.validate = function (payload) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, password_hash, rest, supplier, password_hash, rest;
+            var user, password_hash, rest, supplier, password_hash, rest, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.prisma.user.findUnique({
-                            where: { id: payload.id }
-                        })];
+                    case 0:
+                        _a.trys.push([0, 5, , 6]);
+                        if (!(payload.type === 'user')) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.prisma.user.findUnique({
+                                where: { id: payload.id }
+                            })];
                     case 1:
                         user = _a.sent();
                         if (user) {
                             password_hash = user.password_hash, rest = __rest(user, ["password_hash"]);
-                            return [2 /*return*/, __assign(__assign({}, rest), { type: 'USER' })];
+                            return [2 /*return*/, __assign(__assign({}, rest), { role: payload.role, type: 'user', pharmacy_id: payload.pharmacy_id, warehouse_id: payload.warehouse_id })];
                         }
+                        _a.label = 2;
+                    case 2:
+                        if (!(payload.type === 'supplier')) return [3 /*break*/, 4];
                         return [4 /*yield*/, this.prisma.supplier.findUnique({
                                 where: { id: payload.id }
                             })];
-                    case 2:
+                    case 3:
                         supplier = _a.sent();
                         if (supplier) {
                             password_hash = supplier.password_hash, rest = __rest(supplier, ["password_hash"]);
-                            return [2 /*return*/, __assign(__assign({}, rest), { type: 'SUPPLIER' })];
+                            return [2 /*return*/, __assign(__assign({}, rest), { id: payload.id, email: payload.email, role: payload.role, type: 'supplier', warehouse_id: payload.warehouse_id })];
                         }
+                        _a.label = 4;
+                    case 4: return [2 /*return*/, null];
+                    case 5:
+                        error_1 = _a.sent();
                         return [2 /*return*/, null];
+                    case 6: return [2 /*return*/];
                 }
             });
         });

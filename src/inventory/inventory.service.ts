@@ -63,6 +63,7 @@ export class InventoryService {
   }
 
   async create(dto: CreateInventoryDto, user: UserJwtPayload) {
+    console.log(user);
     if (user.role === 'PHARMACIST' || user.role === 'PHARMACY_OWNER') {
       const pharmacy = await this.prisma.pharmacy.findUnique({
         where: { id: user.pharmacy_id },
@@ -84,7 +85,7 @@ export class InventoryService {
       return { message: 'Inventory created for pharmacy', data: inventory };
     }
 
-    if (user.role === 'supplier') {
+    if (user.role === 'SUPPLIER_ADMIN' || user.role === 'SUPPLIER_EMPLOYEE') {
       const warehouse = await this.prisma.warehouse.findUnique({
         where: { id: user.warehouse_id },
       });

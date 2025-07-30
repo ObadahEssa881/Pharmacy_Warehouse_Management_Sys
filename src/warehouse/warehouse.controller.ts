@@ -26,7 +26,8 @@ export class WarehouseController {
 
   // @Roles('')
   @Get()
-  async getAllWarehouses() {
+  async getAllWarehouses(@User() user: UserJwtPayload) {
+    console.log(user);
     return await this.warehouseService.getAllWarehouses();
   }
 

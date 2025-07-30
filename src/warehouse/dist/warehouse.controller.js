@@ -56,11 +56,13 @@ var WarehouseController = /** @class */ (function () {
         this.warehouseService = warehouseService;
     }
     // @Roles('')
-    WarehouseController.prototype.getAllWarehouses = function () {
+    WarehouseController.prototype.getAllWarehouses = function (user) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.warehouseService.getAllWarehouses()];
+                    case 0:
+                        console.log(user);
+                        return [4 /*yield*/, this.warehouseService.getAllWarehouses()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -91,7 +93,8 @@ var WarehouseController = /** @class */ (function () {
         return this.warehouseService.deleteWarehouse(id, pharmacy_id);
     };
     __decorate([
-        common_1.Get()
+        common_1.Get(),
+        __param(0, decorators_1.User())
     ], WarehouseController.prototype, "getAllWarehouses");
     __decorate([
         roles_decorator_1.Roles('PHARMACIST', 'PHARMACY_OWNER'),
