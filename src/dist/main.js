@@ -52,6 +52,10 @@ function bootstrap() {
                         origin: true,
                         credentials: true
                     });
+                    app.enableCors({
+                        origin: 'http://localhost:8000',
+                        credentials: true
+                    });
                     app.useGlobalPipes(new common_1.ValidationPipe({
                         transform: true,
                         whitelist: true

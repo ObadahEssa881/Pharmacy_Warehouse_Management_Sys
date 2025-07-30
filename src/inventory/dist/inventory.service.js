@@ -129,6 +129,7 @@ var InventoryService = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        console.log(user);
                         if (!(user.role === 'PHARMACIST' || user.role === 'PHARMACY_OWNER')) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.prisma.pharmacy.findUnique({
                                 where: { id: user.pharmacy_id }
@@ -152,7 +153,7 @@ var InventoryService = /** @class */ (function () {
                         inventory = _a.sent();
                         return [2 /*return*/, { message: 'Inventory created for pharmacy', data: inventory }];
                     case 3:
-                        if (!(user.role === 'supplier')) return [3 /*break*/, 6];
+                        if (!(user.role === 'SUPPLIER_ADMIN' || user.role === 'SUPPLIER_EMPLOYEE')) return [3 /*break*/, 6];
                         return [4 /*yield*/, this.prisma.warehouse.findUnique({
                                 where: { id: user.warehouse_id }
                             })];

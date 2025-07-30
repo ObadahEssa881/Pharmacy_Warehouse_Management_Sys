@@ -48,9 +48,10 @@ export class InventoryController {
     return this.service.findOne(+id, user);
   }
 
-  @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
+  // @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
   @Post('create')
   create(@Body() dto: CreateInventoryDto, @User() user: UserJwtPayload) {
+    console.log(user);
     return this.service.create(dto, user);
   }
 

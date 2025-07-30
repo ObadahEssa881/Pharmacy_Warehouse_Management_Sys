@@ -32,7 +32,7 @@ import { WarehouseModule } from './warehouse/warehouse.module';
     ReportModule,
     NotificationModule,
     UserModule,
-    WarehouseModule
+    WarehouseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -25,10 +25,18 @@ var InventoryController = /** @class */ (function () {
         var limitNum = parseInt(limit, 10);
         return this.service.findAll(user, pageNum, limitNum);
     };
+    InventoryController.prototype.findExpiringSoon = function (user) {
+        return this.service.findExpiringSoon(user);
+    };
+    InventoryController.prototype.findLowStock = function (user) {
+        return this.service.findLowStock(user);
+    };
     InventoryController.prototype.findOne = function (id, user) {
         return this.service.findOne(+id, user);
     };
+    // @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
     InventoryController.prototype.create = function (dto, user) {
+        console.log(user);
         return this.service.create(dto, user);
     };
     InventoryController.prototype.update = function (id, dto, user) {
@@ -44,11 +52,18 @@ var InventoryController = /** @class */ (function () {
         __param(2, common_1.Query('limit'))
     ], InventoryController.prototype, "findAll");
     __decorate([
+        common_1.Get('expiring-soon'),
+        __param(0, get_user_decorator_1.User())
+    ], InventoryController.prototype, "findExpiringSoon");
+    __decorate([
+        common_1.Get('low-stock'),
+        __param(0, get_user_decorator_1.User())
+    ], InventoryController.prototype, "findLowStock");
+    __decorate([
         common_1.Get(':id'),
         __param(0, common_1.Param('id')), __param(1, get_user_decorator_1.User())
     ], InventoryController.prototype, "findOne");
     __decorate([
-        roles_decorator_1.Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN'),
         common_1.Post('create'),
         __param(0, common_1.Body()), __param(1, get_user_decorator_1.User())
     ], InventoryController.prototype, "create");
