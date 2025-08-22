@@ -13,13 +13,15 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { CompanyModule } from './company/company.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { ReportModule } from './report/report.module';
-import { NotificationModule } from './notification/notification.module';
+import { NotificationsModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
+import { ScheduleModule } from '@nestjs/schedule'; // ✅ missing
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(), // <-- once at root
     AuthModule,
     PrismaModule,
     SupplierModule,
@@ -30,7 +32,7 @@ import { WarehouseModule } from './warehouse/warehouse.module';
     CompanyModule,
     InventoryModule,
     ReportModule,
-    NotificationModule,
+    NotificationsModule,
     UserModule,
     WarehouseModule,
   ],

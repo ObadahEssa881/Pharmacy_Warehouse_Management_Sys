@@ -7,5 +7,6 @@ import { AuthModule } from 'src/auth/auth.module';
   controllers: [PurchaseController],
   providers: [PurchaseService],
   imports: [AuthModule],
+  exports: [PurchaseService], // This must be present
 })
 export class PurchaseModule {}

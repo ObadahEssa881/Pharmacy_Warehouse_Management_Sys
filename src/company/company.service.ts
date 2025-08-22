@@ -6,6 +6,15 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { buildMeta, buildPagination } from 'src/common/query/pagination';
+import {
+  buildInclude,
+  buildOrderBy,
+  buildSearchOrWhere,
+  buildSelect,
+  buildWhereFromFilter,
+} from 'src/common/query/query-builder';
+import { ListQueryDto } from 'src/common/query/list-query.dto';
 
 @Injectable()
 export class CompanyService {
@@ -24,26 +33,35 @@ export class CompanyService {
     }
   }
 
-  async findAll(page: number = 1, limit: number = 10) {
-    const skip = (page - 1) * limit;
-    const [companies, total] = await Promise.all([
+  async findAll(query: ListQueryDto) {
+    const { skip, take } = buildPagination(query.page ?? 1, query.limit ?? 20);
+
+    const where = {
+      ...buildSearchOrWhere(query.search, ['name']),
+      ...buildWhereFromFilter(query.filter ?? {}),
+    };
+
+    const select = buildSelect(query.select);
+    const include = buildInclude(query.include);
+
+    const [companies, total] = await this.prisma.$transaction([
       this.prisma.company.findMany({
         skip,
-        take: limit,
-        orderBy: { id: 'asc' },
+        take,
+        where,
+        orderBy: buildOrderBy(query.sort) ?? { id: 'asc' },
+        ...(select ? { select } : {}),
+        ...(include ? { include } : {}),
       }),
-      this.prisma.company.count(),
+      this.prisma.company.count({ where }),
     ]);
 
     return {
-      message: 'Companies fetched successfully',
+      message: companies.length
+        ? 'Companies fetched successfully'
+        : 'No companies found.',
       data: companies,
-      meta: {
-        total,
-        page,
-        limit,
-        pages: Math.ceil(total / limit),
-      },
+      meta: buildMeta(total, query.page ?? 1, query.limit ?? 20),
     };
   }
 

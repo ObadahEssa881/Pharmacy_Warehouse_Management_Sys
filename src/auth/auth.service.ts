@@ -60,6 +60,8 @@ export class AuthService {
   }
 
   async signin(dto: SignInDto) {
+    console.log('access');
+
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -87,6 +89,7 @@ export class AuthService {
   }
 
   async signupSupplier(dto: SupplierSignUpDto) {
+    console.log('access 2');
     const hash = await argon.hash(dto.password);
     try {
       // Create warehouse first

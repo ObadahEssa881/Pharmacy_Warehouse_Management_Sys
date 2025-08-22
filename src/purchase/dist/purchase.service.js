@@ -165,7 +165,7 @@ var PurchaseService = /** @class */ (function () {
             });
         });
     };
-    /** Approve / Reject & move stock */
+    /** Properly handle status transitions with inventory adjustments */
     PurchaseService.prototype.updateStatus = function (user, id, dto) {
         return __awaiter(this, void 0, void 0, function () {
             var order;
@@ -182,48 +182,68 @@ var PurchaseService = /** @class */ (function () {
                             throw new common_1.NotFoundException('Purchase order not found');
                         if (order.pharmacy_id !== user.pharmacy_id)
                             throw new common_1.ForbiddenException('Not authorized for this pharmacy');
-                        if (order.status !== purchase_status_enum_1.PurchaseStatus.PENDING)
-                            throw new common_1.BadRequestException('Order already processed');
+                        if (order.status === dto.status)
+                            return [2 /*return*/, order]; // No change needed
                         return [2 /*return*/, this.prisma.$transaction(function (tx) { return __awaiter(_this, void 0, void 0, function () {
-                                var _i, _a, item, warehouseInventory, pharmacyInventory;
-                                return __generator(this, function (_b) {
-                                    switch (_b.label) {
+                                var _i, _a, item, warehouseInventory, _b, _c, item, pharmacyInventory, _d, _e, item, warehouseInventory;
+                                return __generator(this, function (_f) {
+                                    switch (_f.label) {
                                         case 0:
-                                            if (!(dto.status === purchase_status_enum_1.PurchaseStatus.APPROVED)) return [3 /*break*/, 9];
+                                            if (!(order.status === purchase_status_enum_1.PurchaseStatus.PENDING &&
+                                                dto.status === purchase_status_enum_1.PurchaseStatus.PROCESSING)) return [3 /*break*/, 6];
                                             _i = 0, _a = order.PurchaseOrderItems;
-                                            _b.label = 1;
+                                            _f.label = 1;
                                         case 1:
-                                            if (!(_i < _a.length)) return [3 /*break*/, 9];
+                                            if (!(_i < _a.length)) return [3 /*break*/, 5];
                                             item = _a[_i];
                                             return [4 /*yield*/, tx.inventory.findFirst({
                                                     where: {
                                                         medicine_id: item.medicine_id,
-                                                        warehouse_id: user.warehouse_id
+                                                        warehouse_id: user.warehouse_id,
+                                                        location_type: 'WAREHOUSE'
                                                     }
                                                 })];
                                         case 2:
-                                            warehouseInventory = _b.sent();
+                                            warehouseInventory = _f.sent();
                                             if (!warehouseInventory ||
                                                 warehouseInventory.quantity < item.quantity) {
                                                 throw new common_1.BadRequestException("Not enough stock in warehouse for medicine ID " + item.medicine_id);
                                             }
-                                            // 2. Deduct from warehouse
+                                            // 2. Deduct from warehouse (reserve items)
                                             return [4 /*yield*/, tx.inventory.update({
                                                     where: { id: warehouseInventory.id },
                                                     data: { quantity: { decrement: item.quantity } }
                                                 })];
                                         case 3:
-                                            // 2. Deduct from warehouse
-                                            _b.sent();
+                                            // 2. Deduct from warehouse (reserve items)
+                                            _f.sent();
+                                            _f.label = 4;
+                                        case 4:
+                                            _i++;
+                                            return [3 /*break*/, 1];
+                                        case 5: return [3 /*break*/, 25];
+                                        case 6:
+                                            if (!(order.status === purchase_status_enum_1.PurchaseStatus.PROCESSING &&
+                                                dto.status === purchase_status_enum_1.PurchaseStatus.SHIPPED)) return [3 /*break*/, 7];
+                                            return [3 /*break*/, 25];
+                                        case 7:
+                                            if (!(order.status === purchase_status_enum_1.PurchaseStatus.SHIPPED &&
+                                                dto.status === purchase_status_enum_1.PurchaseStatus.DELIVERED)) return [3 /*break*/, 16];
+                                            _b = 0, _c = order.PurchaseOrderItems;
+                                            _f.label = 8;
+                                        case 8:
+                                            if (!(_b < _c.length)) return [3 /*break*/, 14];
+                                            item = _c[_b];
                                             return [4 /*yield*/, tx.inventory.findFirst({
                                                     where: {
                                                         medicine_id: item.medicine_id,
-                                                        pharmacy_id: user.pharmacy_id
+                                                        pharmacy_id: user.pharmacy_id,
+                                                        location_type: 'PHARMACY'
                                                     }
                                                 })];
-                                        case 4:
-                                            pharmacyInventory = _b.sent();
-                                            if (!pharmacyInventory) return [3 /*break*/, 6];
+                                        case 9:
+                                            pharmacyInventory = _f.sent();
+                                            if (!pharmacyInventory) return [3 /*break*/, 11];
                                             // Increment existing inventory
                                             return [4 /*yield*/, tx.inventory.update({
                                                     where: { id: pharmacyInventory.id },
@@ -233,11 +253,11 @@ var PurchaseService = /** @class */ (function () {
                                                         last_updated: new Date()
                                                     }
                                                 })];
-                                        case 5:
+                                        case 10:
                                             // Increment existing inventory
-                                            _b.sent();
-                                            return [3 /*break*/, 8];
-                                        case 6: 
+                                            _f.sent();
+                                            return [3 /*break*/, 13];
+                                        case 11: 
                                         // Create new inventory entry
                                         return [4 /*yield*/, tx.inventory.create({
                                                 data: {
@@ -250,14 +270,72 @@ var PurchaseService = /** @class */ (function () {
                                                     expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
                                                 }
                                             })];
-                                        case 7:
+                                        case 12:
                                             // Create new inventory entry
-                                            _b.sent();
-                                            _b.label = 8;
-                                        case 8:
-                                            _i++;
-                                            return [3 /*break*/, 1];
-                                        case 9: 
+                                            _f.sent();
+                                            _f.label = 13;
+                                        case 13:
+                                            _b++;
+                                            return [3 /*break*/, 8];
+                                        case 14: 
+                                        // Update invoice payment status
+                                        return [4 /*yield*/, tx.invoice.update({
+                                                where: { order_id: order.id },
+                                                data: { payment_status: 'PAID' }
+                                            })];
+                                        case 15:
+                                            // Update invoice payment status
+                                            _f.sent();
+                                            return [3 /*break*/, 25];
+                                        case 16:
+                                            if (!(dto.status === purchase_status_enum_1.PurchaseStatus.CANCELLED)) return [3 /*break*/, 24];
+                                            if (!(order.status === purchase_status_enum_1.PurchaseStatus.PROCESSING ||
+                                                order.status === purchase_status_enum_1.PurchaseStatus.SHIPPED)) return [3 /*break*/, 23];
+                                            _d = 0, _e = order.PurchaseOrderItems;
+                                            _f.label = 17;
+                                        case 17:
+                                            if (!(_d < _e.length)) return [3 /*break*/, 23];
+                                            item = _e[_d];
+                                            return [4 /*yield*/, tx.inventory.findFirst({
+                                                    where: {
+                                                        medicine_id: item.medicine_id,
+                                                        warehouse_id: user.warehouse_id,
+                                                        location_type: 'WAREHOUSE'
+                                                    }
+                                                })];
+                                        case 18:
+                                            warehouseInventory = _f.sent();
+                                            if (!warehouseInventory) return [3 /*break*/, 20];
+                                            return [4 /*yield*/, tx.inventory.update({
+                                                    where: { id: warehouseInventory.id },
+                                                    data: { quantity: { increment: item.quantity } }
+                                                })];
+                                        case 19:
+                                            _f.sent();
+                                            return [3 /*break*/, 22];
+                                        case 20: 
+                                        // This shouldn't happen, but handle it just in case
+                                        return [4 /*yield*/, tx.inventory.create({
+                                                data: {
+                                                    medicine_id: item.medicine_id,
+                                                    warehouse_id: user.warehouse_id,
+                                                    location_type: 'WAREHOUSE',
+                                                    quantity: item.quantity,
+                                                    cost_price: item.unit_price,
+                                                    selling_price: Number(item.unit_price) * 1.2,
+                                                    expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+                                                }
+                                            })];
+                                        case 21:
+                                            // This shouldn't happen, but handle it just in case
+                                            _f.sent();
+                                            _f.label = 22;
+                                        case 22:
+                                            _d++;
+                                            return [3 /*break*/, 17];
+                                        case 23: return [3 /*break*/, 25];
+                                        case 24: throw new common_1.BadRequestException("Invalid status transition from " + order.status + " to " + dto.status);
+                                        case 25: 
                                         // Update order status
                                         return [2 /*return*/, tx.purchaseOrder.update({
                                                 where: { id: id },
@@ -268,6 +346,22 @@ var PurchaseService = /** @class */ (function () {
                                 });
                             }); })];
                 }
+            });
+        });
+    };
+    /** Get warehouse inventory for pharmacy owners */
+    PurchaseService.prototype.getWarehouseInventory = function (warehouseId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.prisma.inventory.findMany({
+                        where: {
+                            warehouse_id: warehouseId,
+                            location_type: 'WAREHOUSE'
+                        },
+                        include: {
+                            medicine: true
+                        }
+                    })];
             });
         });
     };

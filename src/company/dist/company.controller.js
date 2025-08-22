@@ -20,10 +20,8 @@ var CompanyController = /** @class */ (function () {
     CompanyController.prototype.create = function (dto) {
         return this.companyService.create(dto);
     };
-    CompanyController.prototype.findAll = function (page, limit) {
-        if (page === void 0) { page = 1; }
-        if (limit === void 0) { limit = 10; }
-        return this.companyService.findAll(page, limit);
+    CompanyController.prototype.findAll = function (query) {
+        return this.companyService.findAll(query);
     };
     CompanyController.prototype.findOne = function (id) {
         return this.companyService.findOne(id);
@@ -46,8 +44,7 @@ var CompanyController = /** @class */ (function () {
     ], CompanyController.prototype, "create");
     __decorate([
         common_1.Get('all'),
-        __param(0, common_1.Query('page', common_1.ParseIntPipe)),
-        __param(1, common_1.Query('limit', common_1.ParseIntPipe))
+        __param(0, common_1.Query())
     ], CompanyController.prototype, "findAll");
     __decorate([
         common_1.Get(':id'),

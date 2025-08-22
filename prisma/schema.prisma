@@ -19,16 +19,18 @@ enum UserRole {
 }
 
 model User {
-    id            Int            @id @default(autoincrement())
-    username      String
-    email         String         @unique
-    password_hash String
-    role          UserRole
-    created_at    DateTime       @default(now())
-    pharmacy_id   Int
-    Pharmacy      Pharmacy      @relation(fields: [pharmacy_id], references: [id])
-    Notifications Notification[]
+    id                Int                 @id @default(autoincrement())
+    username          String
+    email             String              @unique
+    password_hash     String
+    role              UserRole
+    created_at        DateTime            @default(now())
+    pharmacy_id       Int
+    Pharmacy          Pharmacy            @relation(fields: [pharmacy_id], references: [id])
+    Notifications     Notification[]
+    NotificationToken NotificationToken[]
 }
+
 //not created yet
 model Pharmacy {
     id             Int             @id @default(autoincrement())
@@ -41,6 +43,7 @@ model Pharmacy {
     Sales          Sale[]
     User           User[]
 }
+
 //not created yet
 
 model Warehouse {
@@ -71,8 +74,9 @@ model Supplier {
     PurchaseOrders PurchaseOrder[]
     Invoices       Invoice[]
     warehouseId    Int
-    Warehouse      Warehouse      @relation(fields: [warehouseId], references: [id])
+    Warehouse      Warehouse       @relation(fields: [warehouseId], references: [id])
 }
+
 //not created yet
 
 model Category {
@@ -184,7 +188,7 @@ model SaleItem {
     medicine    Medicine @relation(fields: [medicine_id], references: [id])
     quantity    Int
     unit_price  Decimal
-    cost_price  Decimal   
+    cost_price  Decimal
 }
 
 model Notification {
@@ -197,6 +201,15 @@ model Notification {
     is_read    Boolean  @default(false)
 }
 
+model NotificationToken {
+    id         Int      @id @default(autoincrement())
+    user_id    Int
+    token      String   @unique
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    user User @relation(fields: [user_id], references: [id])
+}
 
 // enum UserRole {
 //   SUPER_ADMIN    // System-wide admin
@@ -419,8 +432,6 @@ model Notification {
 // - **WAREHOUSE_MANAGER**: Warehouse inventory, purchase orders
 
 // Would you like me to elaborate on any of these modifications or discuss the implementation approach?
-
-
 
 // ****************************************************************************************
 // ****************************************************************************************
@@ -777,4 +788,3 @@ model Notification {
 //   iat?: number;
 //   exp?: number;
 // }
-

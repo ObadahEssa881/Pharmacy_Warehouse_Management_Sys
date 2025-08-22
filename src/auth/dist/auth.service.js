@@ -110,11 +110,13 @@ var AuthService = /** @class */ (function () {
             var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.prisma.user.findUnique({
-                            where: {
-                                email: dto.email
-                            }
-                        })];
+                    case 0:
+                        console.log('access');
+                        return [4 /*yield*/, this.prisma.user.findUnique({
+                                where: {
+                                    email: dto.email
+                                }
+                            })];
                     case 1:
                         user = _a.sent();
                         if (!user) {
@@ -140,7 +142,9 @@ var AuthService = /** @class */ (function () {
             var hash, warehouse, supplier, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, argon.hash(dto.password)];
+                    case 0:
+                        console.log('access 2');
+                        return [4 /*yield*/, argon.hash(dto.password)];
                     case 1:
                         hash = _a.sent();
                         _a.label = 2;

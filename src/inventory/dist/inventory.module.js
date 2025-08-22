@@ -11,6 +11,7 @@ var common_1 = require("@nestjs/common");
 var inventory_service_1 = require("./inventory.service");
 var inventory_controller_1 = require("./inventory.controller");
 var auth_module_1 = require("src/auth/auth.module");
+var notification_module_1 = require("src/notification/notification.module");
 var InventoryModule = /** @class */ (function () {
     function InventoryModule() {
     }
@@ -18,7 +19,7 @@ var InventoryModule = /** @class */ (function () {
         common_1.Module({
             controllers: [inventory_controller_1.InventoryController],
             providers: [inventory_service_1.InventoryService],
-            imports: [auth_module_1.AuthModule]
+            imports: [auth_module_1.AuthModule, notification_module_1.NotificationsModule]
         })
     ], InventoryModule);
     return InventoryModule;
