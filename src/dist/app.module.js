@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.AppModule = void 0;
 var common_1 = require("@nestjs/common");
+// import { PrismaService } from './prisma/prisma.service';
 var config_1 = require("@nestjs/config");
 var app_controller_1 = require("./app.controller");
 var app_service_1 = require("./app.service");
@@ -23,17 +24,18 @@ var inventory_module_1 = require("./inventory/inventory.module");
 var report_module_1 = require("./report/report.module");
 var notification_module_1 = require("./notification/notification.module");
 var user_module_1 = require("./user/user.module");
+var warehouse_module_1 = require("./warehouse/warehouse.module");
+var schedule_1 = require("@nestjs/schedule"); // ✅ missing
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         common_1.Module({
             imports: [
+                config_1.ConfigModule.forRoot({ isGlobal: true }),
+                schedule_1.ScheduleModule.forRoot(),
                 auth_module_1.AuthModule,
                 prisma_module_1.PrismaModule,
-                config_1.ConfigModule.forRoot({
-                    isGlobal: true
-                }),
                 supplier_module_1.SupplierModule,
                 purchase_module_1.PurchaseModule,
                 sale_module_1.SaleModule,
@@ -42,8 +44,9 @@ var AppModule = /** @class */ (function () {
                 company_module_1.CompanyModule,
                 inventory_module_1.InventoryModule,
                 report_module_1.ReportModule,
-                notification_module_1.NotificationModule,
+                notification_module_1.NotificationsModule,
                 user_module_1.UserModule,
+                warehouse_module_1.WarehouseModule,
             ],
             controllers: [app_controller_1.AppController],
             providers: [app_service_1.AppService]

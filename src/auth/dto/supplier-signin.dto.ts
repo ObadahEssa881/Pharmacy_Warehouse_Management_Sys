@@ -5,6 +5,15 @@ export class SupplierSignUpDto {
   @IsNotEmpty()
   name: string;
 
+  @IsNotEmpty()
+  contact_number: string;
+
+  @IsNotEmpty()
+  warehouseAddress: string;
+
+  @IsNotEmpty()
+  propertyName: string;
+
   @IsEmail()
   email: string;
 

@@ -1,29 +1,23 @@
-// create-purchase-order.dto.ts
-
+import { IsInt, IsArray, ValidateNested, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
-import { IsArray, IsDate, IsNumber, ValidateNested } from 'class-validator';
 
-export class CreatePurchaseOrderDto {
-  @IsNumber()
-  supplier_id: number;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => PurchaseOrderItemDto)
-  items: PurchaseOrderItemDto[];
-
-  @Type(() => Date)
-  @IsDate()
-  deliveryDate: Date;
-}
-
-export class PurchaseOrderItemDto {
-  @IsNumber()
+export class PurchaseItemDto {
+  @IsInt()
   medicine_id: number;
 
-  @IsNumber()
+  @IsInt()
   quantity: number;
 
   @IsNumber()
   unit_price: number;
+}
+
+export class CreatePurchaseDto {
+  @IsInt()
+  supplier_id: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PurchaseItemDto)
+  items: PurchaseItemDto[];
 }

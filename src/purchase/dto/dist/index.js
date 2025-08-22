@@ -11,3 +11,4 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 exports.__esModule = true;
 __exportStar(require("./create-purchase.dto"), exports);
+__exportStar(require("./update-purchase.dto"), exports);

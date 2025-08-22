@@ -18,7 +18,8 @@ var PurchaseModule = /** @class */ (function () {
         common_1.Module({
             controllers: [purchase_controller_1.PurchaseController],
             providers: [purchase_service_1.PurchaseService],
-            imports: [auth_module_1.AuthModule]
+            imports: [auth_module_1.AuthModule],
+            exports: [purchase_service_1.PurchaseService]
         })
     ], PurchaseModule);
     return PurchaseModule;
