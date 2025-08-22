@@ -6,28 +6,52 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateInventoryDto, UpdateInventoryDto } from './dto/index';
 import { UserJwtPayload } from 'src/auth/types'; // <-- Assuming your JWT payload type
+import { ListQueryDto } from 'src/common/query/list-query.dto';
+import { buildMeta, buildPagination } from 'src/common/query/pagination';
+import {
+  buildInclude,
+  buildOrderBy,
+  buildSearchOrWhere,
+  buildSelect,
+  buildWhereFromFilter,
+} from 'src/common/query/query-builder';
+import { NotificationsService } from 'src/notification/notification.service';
 
 @Injectable()
 export class InventoryService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notifications: NotificationsService, // inject here
+  ) {}
 
   // inventory.service.ts
 
-  async findAll(user: UserJwtPayload, page: number = 1, limit: number = 10) {
-    const skip = (page - 1) * limit;
+  async findAll(user: UserJwtPayload, query: ListQueryDto) {
+    const { skip, take } = buildPagination(query.page ?? 1, query.limit ?? 20);
 
-    const where = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
+    const baseWhere = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
       ? { pharmacy_id: user.pharmacy_id }
       : { warehouse_id: user.warehouse_id };
-    console.log(user.pharmacy_id);
+
+    const where = {
+      ...baseWhere,
+      ...buildSearchOrWhere(query.search, ['batch_number']), // example searchable field
+      ...buildWhereFromFilter(query.filter ?? {}),
+    };
+
+    const select = buildSelect(query.select);
+    const include = buildInclude(query.include);
 
     const [inventories, total] = await this.prisma.$transaction([
       this.prisma.inventory.findMany({
         skip,
-        take: limit,
+        take,
         where,
-        orderBy: { id: 'asc' },
-        include: { medicine: true },
+        orderBy: buildOrderBy(query.sort) ?? { id: 'asc' },
+        ...(select ? { select } : {}),
+        ...(include
+          ? { include: { medicine: true, ...include } }
+          : { include: { medicine: true } }),
       }),
       this.prisma.inventory.count({ where }),
     ]);
@@ -37,12 +61,7 @@ export class InventoryService {
         ? 'Inventory fetched successfully'
         : 'No inventory found for this user.',
       data: inventories,
-      meta: {
-        total,
-        page,
-        limit,
-        pages: Math.ceil(total / limit),
-      },
+      meta: buildMeta(total, query.page ?? 1, query.limit ?? 20),
     };
   }
 
@@ -204,5 +223,28 @@ export class InventoryService {
       data: lowStockItems,
       count: lowStockItems.length,
     };
+  }
+  // src/inventory/inventory.service.ts
+  async checkInventoryAlerts(pharmacy_id: number) {
+    const lowStockItems = await this.prisma.inventory.findMany({
+      where: { pharmacy_id, quantity: { lt: 5 } },
+    });
+
+    const nearExpiryItems = await this.prisma.inventory.findMany({
+      where: {
+        pharmacy_id,
+        expiry_date: {
+          lte: new Date(new Date().setDate(new Date().getDate() + 7)),
+        },
+      },
+    });
+
+    if (lowStockItems.length || nearExpiryItems.length) {
+      await this.notifications.sendPharmacyAlerts(
+        pharmacy_id,
+        lowStockItems.length,
+        nearExpiryItems.length,
+      );
+    }
   }
 }

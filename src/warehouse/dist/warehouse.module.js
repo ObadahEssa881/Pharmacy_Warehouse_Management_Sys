@@ -10,11 +10,15 @@ exports.WarehouseModule = void 0;
 var common_1 = require("@nestjs/common");
 var warehouse_controller_1 = require("./warehouse.controller");
 var warehouse_service_1 = require("./warehouse.service");
+var purchase_module_1 = require("src/purchase/purchase.module");
 var WarehouseModule = /** @class */ (function () {
     function WarehouseModule() {
     }
     WarehouseModule = __decorate([
         common_1.Module({
+            imports: [
+                purchase_module_1.PurchaseModule,
+            ],
             controllers: [warehouse_controller_1.WarehouseController],
             providers: [warehouse_service_1.WarehouseService]
         })

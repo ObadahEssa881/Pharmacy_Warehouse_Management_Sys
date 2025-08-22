@@ -12,6 +12,7 @@ exports.__esModule = true;
 exports.PurchaseController = void 0;
 var common_1 = require("@nestjs/common");
 var guard_1 = require("../auth/guard");
+// import { PaginationDto } from '../common/pagination/pagination.dto';
 var get_user_decorator_1 = require("../common/decorators/get\u2011user.decorator");
 var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
 var PurchaseController = /** @class */ (function () {
@@ -30,11 +31,12 @@ var PurchaseController = /** @class */ (function () {
         return this.service.updateStatus(user, id, dto);
     };
     __decorate([
-        roles_decorator_1.Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN'),
+        roles_decorator_1.Roles('PHARMACY_OWNER'),
         common_1.Post(),
         __param(0, get_user_decorator_1.GetUser()), __param(1, common_1.Body())
     ], PurchaseController.prototype, "create");
     __decorate([
+        roles_decorator_1.Roles('PHARMACY_OWNER'),
         common_1.Get(),
         __param(0, get_user_decorator_1.GetUser()),
         __param(1, common_1.Query('page')),

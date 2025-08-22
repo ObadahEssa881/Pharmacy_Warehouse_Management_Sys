@@ -18,12 +18,8 @@ var InventoryController = /** @class */ (function () {
     function InventoryController(service) {
         this.service = service;
     }
-    InventoryController.prototype.findAll = function (user, page, limit) {
-        if (page === void 0) { page = '1'; }
-        if (limit === void 0) { limit = '10'; }
-        var pageNum = parseInt(page, 10);
-        var limitNum = parseInt(limit, 10);
-        return this.service.findAll(user, pageNum, limitNum);
+    InventoryController.prototype.findAll = function (user, query) {
+        return this.service.findAll(user, query);
     };
     InventoryController.prototype.findExpiringSoon = function (user) {
         return this.service.findExpiringSoon(user);
@@ -47,9 +43,7 @@ var InventoryController = /** @class */ (function () {
     };
     __decorate([
         common_1.Get(),
-        __param(0, get_user_decorator_1.User()),
-        __param(1, common_1.Query('page')),
-        __param(2, common_1.Query('limit'))
+        __param(0, get_user_decorator_1.User()), __param(1, common_1.Query())
     ], InventoryController.prototype, "findAll");
     __decorate([
         common_1.Get('expiring-soon'),

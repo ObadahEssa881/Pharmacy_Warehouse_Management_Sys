@@ -15,6 +15,7 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { JwtGuard, RoleGuard } from 'src/auth/guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { ListQueryDto } from 'src/common/query/list-query.dto';
 
 @Controller('companies')
 @UseGuards(JwtGuard, RoleGuard)
@@ -28,11 +29,8 @@ export class CompanyController {
   }
 
   @Get('all')
-  findAll(
-    @Query('page', ParseIntPipe) page: number = 1,
-    @Query('limit', ParseIntPipe) limit: number = 10,
-  ) {
-    return this.companyService.findAll(page, limit);
+  findAll(@Query() query: ListQueryDto) {
+    return this.companyService.findAll(query);
   }
 
   @Get(':id')

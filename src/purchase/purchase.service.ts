@@ -113,7 +113,7 @@ export class PurchaseService {
     };
   }
 
-  /** Approve / Reject & move stock */
+  /** Properly handle status transitions with inventory adjustments */
   async updateStatus(
     user: UserJwtPayload,
     id: number,
@@ -127,17 +127,21 @@ export class PurchaseService {
     if (!order) throw new NotFoundException('Purchase order not found');
     if (order.pharmacy_id !== user.pharmacy_id)
       throw new ForbiddenException('Not authorized for this pharmacy');
-    if (order.status !== PurchaseStatus.PENDING)
-      throw new BadRequestException('Order already processed');
+    if (order.status === dto.status) return order; // No change needed
 
     return this.prisma.$transaction(async (tx) => {
-      if (dto.status === PurchaseStatus.APPROVED) {
+      // TRANSITION: PENDING → PROCESSING (Warehouse starts processing)
+      if (
+        order.status === PurchaseStatus.PENDING &&
+        dto.status === PurchaseStatus.PROCESSING
+      ) {
         for (const item of order.PurchaseOrderItems) {
           // 1. Check if warehouse has enough stock
           const warehouseInventory = await tx.inventory.findFirst({
             where: {
               medicine_id: item.medicine_id,
               warehouse_id: user.warehouse_id,
+              location_type: 'WAREHOUSE',
             },
           });
 
@@ -150,17 +154,32 @@ export class PurchaseService {
             );
           }
 
-          // 2. Deduct from warehouse
+          // 2. Deduct from warehouse (reserve items)
           await tx.inventory.update({
             where: { id: warehouseInventory.id },
             data: { quantity: { decrement: item.quantity } },
           });
-
-          // 3. Add to pharmacy inventory
+        }
+      }
+      // TRANSITION: PROCESSING → SHIPPED (Warehouse ships order)
+      else if (
+        order.status === PurchaseStatus.PROCESSING &&
+        dto.status === PurchaseStatus.SHIPPED
+      ) {
+        // No inventory changes, just status update
+      }
+      // TRANSITION: SHIPPED → DELIVERED (Pharmacy receives order)
+      else if (
+        order.status === PurchaseStatus.SHIPPED &&
+        dto.status === PurchaseStatus.DELIVERED
+      ) {
+        for (const item of order.PurchaseOrderItems) {
+          // 1. Add to pharmacy inventory
           const pharmacyInventory = await tx.inventory.findFirst({
             where: {
               medicine_id: item.medicine_id,
               pharmacy_id: user.pharmacy_id,
+              location_type: 'PHARMACY',
             },
           });
 
@@ -183,12 +202,61 @@ export class PurchaseService {
                 location_type: 'PHARMACY',
                 quantity: item.quantity,
                 cost_price: item.unit_price,
-                selling_price: Number(item.unit_price) * 1.2, // Optional: set markup
-                expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // e.g., +1 year
+                selling_price: Number(item.unit_price) * 1.2, // Optional markup
+                expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // +1 year
               },
             });
           }
         }
+
+        // Update invoice payment status
+        await tx.invoice.update({
+          where: { order_id: order.id },
+          data: { payment_status: 'PAID' },
+        });
+      }
+      // TRANSITION: Any → CANCELLED (Cancel order)
+      else if (dto.status === PurchaseStatus.CANCELLED) {
+        // If order was processing, restore warehouse inventory
+        if (
+          order.status === PurchaseStatus.PROCESSING ||
+          order.status === PurchaseStatus.SHIPPED
+        ) {
+          for (const item of order.PurchaseOrderItems) {
+            // Restore to warehouse inventory
+            const warehouseInventory = await tx.inventory.findFirst({
+              where: {
+                medicine_id: item.medicine_id,
+                warehouse_id: user.warehouse_id,
+                location_type: 'WAREHOUSE',
+              },
+            });
+
+            if (warehouseInventory) {
+              await tx.inventory.update({
+                where: { id: warehouseInventory.id },
+                data: { quantity: { increment: item.quantity } },
+              });
+            } else {
+              // This shouldn't happen, but handle it just in case
+              await tx.inventory.create({
+                data: {
+                  medicine_id: item.medicine_id,
+                  warehouse_id: user.warehouse_id,
+                  location_type: 'WAREHOUSE',
+                  quantity: item.quantity,
+                  cost_price: item.unit_price,
+                  selling_price: Number(item.unit_price) * 1.2,
+                  expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+                },
+              });
+            }
+          }
+        }
+      } else {
+        throw new BadRequestException(
+          `Invalid status transition from ${order.status} to ${dto.status}`,
+        );
       }
 
       // Update order status
@@ -197,6 +265,19 @@ export class PurchaseService {
         data: { status: dto.status },
         include: { PurchaseOrderItems: true, Invoice: true },
       });
+    });
+  }
+
+  /** Get warehouse inventory for pharmacy owners */
+  async getWarehouseInventory(warehouseId: number) {
+    return this.prisma.inventory.findMany({
+      where: {
+        warehouse_id: warehouseId,
+        location_type: 'WAREHOUSE',
+      },
+      include: {
+        medicine: true,
+      },
     });
   }
 }

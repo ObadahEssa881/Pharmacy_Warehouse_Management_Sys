@@ -15,6 +15,7 @@ import { JwtGuard, RoleGuard } from 'src/auth/guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { User } from 'src/auth/decorators/get-user.decorator';
 import { UserJwtPayload } from 'src/auth/types';
+import { ListQueryDto } from 'src/common/query/list-query.dto';
 
 @UseGuards(JwtGuard, RoleGuard)
 @Controller('inventory')
@@ -22,15 +23,8 @@ export class InventoryController {
   constructor(private readonly service: InventoryService) {}
 
   @Get()
-  findAll(
-    @User() user: UserJwtPayload,
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '10',
-  ) {
-    const pageNum = parseInt(page, 10);
-    const limitNum = parseInt(limit, 10);
-
-    return this.service.findAll(user, pageNum, limitNum);
+  findAll(@User() user: UserJwtPayload, @Query() query: ListQueryDto) {
+    return this.service.findAll(user, query);
   }
 
   @Get('expiring-soon')

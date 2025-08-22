@@ -55,47 +55,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.InventoryService = void 0;
 var common_1 = require("@nestjs/common");
+var pagination_1 = require("src/common/query/pagination");
+var query_builder_1 = require("src/common/query/query-builder");
 var InventoryService = /** @class */ (function () {
-    function InventoryService(prisma) {
+    function InventoryService(prisma, notifications) {
         this.prisma = prisma;
+        this.notifications = notifications;
     }
     // inventory.service.ts
-    InventoryService.prototype.findAll = function (user, page, limit) {
-        if (page === void 0) { page = 1; }
-        if (limit === void 0) { limit = 10; }
+    InventoryService.prototype.findAll = function (user, query) {
+        var _a, _b, _c, _d, _e, _f;
         return __awaiter(this, void 0, void 0, function () {
-            var skip, where, _a, inventories, total;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var _g, skip, take, baseWhere, where, select, include, _h, inventories, total;
+            return __generator(this, function (_j) {
+                switch (_j.label) {
                     case 0:
-                        skip = (page - 1) * limit;
-                        where = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
+                        _g = pagination_1.buildPagination((_a = query.page) !== null && _a !== void 0 ? _a : 1, (_b = query.limit) !== null && _b !== void 0 ? _b : 20), skip = _g.skip, take = _g.take;
+                        baseWhere = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
                             ? { pharmacy_id: user.pharmacy_id }
                             : { warehouse_id: user.warehouse_id };
-                        console.log(user.pharmacy_id);
+                        where = __assign(__assign(__assign({}, baseWhere), query_builder_1.buildSearchOrWhere(query.search, ['batch_number'])), query_builder_1.buildWhereFromFilter((_c = query.filter) !== null && _c !== void 0 ? _c : {}));
+                        select = query_builder_1.buildSelect(query.select);
+                        include = query_builder_1.buildInclude(query.include);
                         return [4 /*yield*/, this.prisma.$transaction([
-                                this.prisma.inventory.findMany({
-                                    skip: skip,
-                                    take: limit,
-                                    where: where,
-                                    orderBy: { id: 'asc' },
-                                    include: { medicine: true }
-                                }),
+                                this.prisma.inventory.findMany(__assign(__assign({ skip: skip,
+                                    take: take,
+                                    where: where, orderBy: (_d = query_builder_1.buildOrderBy(query.sort)) !== null && _d !== void 0 ? _d : { id: 'asc' } }, (select ? { select: select } : {})), (include
+                                    ? { include: __assign({ medicine: true }, include) }
+                                    : { include: { medicine: true } }))),
                                 this.prisma.inventory.count({ where: where }),
                             ])];
                     case 1:
-                        _a = _b.sent(), inventories = _a[0], total = _a[1];
+                        _h = _j.sent(), inventories = _h[0], total = _h[1];
                         return [2 /*return*/, {
                                 message: inventories.length
                                     ? 'Inventory fetched successfully'
                                     : 'No inventory found for this user.',
                                 data: inventories,
-                                meta: {
-                                    total: total,
-                                    page: page,
-                                    limit: limit,
-                                    pages: Math.ceil(total / limit)
-                                }
+                                meta: pagination_1.buildMeta(total, (_e = query.page) !== null && _e !== void 0 ? _e : 1, (_f = query.limit) !== null && _f !== void 0 ? _f : 20)
                             }];
                 }
             });
@@ -299,6 +296,37 @@ var InventoryService = /** @class */ (function () {
                                 data: lowStockItems,
                                 count: lowStockItems.length
                             }];
+                }
+            });
+        });
+    };
+    // src/inventory/inventory.service.ts
+    InventoryService.prototype.checkInventoryAlerts = function (pharmacy_id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var lowStockItems, nearExpiryItems;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.inventory.findMany({
+                            where: { pharmacy_id: pharmacy_id, quantity: { lt: 5 } }
+                        })];
+                    case 1:
+                        lowStockItems = _a.sent();
+                        return [4 /*yield*/, this.prisma.inventory.findMany({
+                                where: {
+                                    pharmacy_id: pharmacy_id,
+                                    expiry_date: {
+                                        lte: new Date(new Date().setDate(new Date().getDate() + 7))
+                                    }
+                                }
+                            })];
+                    case 2:
+                        nearExpiryItems = _a.sent();
+                        if (!(lowStockItems.length || nearExpiryItems.length)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.notifications.sendPharmacyAlerts(pharmacy_id, lowStockItems.length, nearExpiryItems.length)];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
                 }
             });
         });

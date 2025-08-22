@@ -44,6 +44,7 @@
     "express": "^5.1.0",
     "express-formidable": "^1.2.0",
     "express-session": "^1.18.1",
+    "firebase-admin": "^13.4.0",
     "formidable": "^3.5.4",
     "glob": "^11.0.3",
     "mysql2": "^3.14.1",

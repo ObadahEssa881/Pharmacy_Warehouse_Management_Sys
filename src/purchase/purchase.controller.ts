@@ -12,7 +12,7 @@ import {
 import { JwtGuard, RoleGuard } from '../auth/guard';
 import { PurchaseService } from './purchase.service';
 import { CreatePurchaseDto, UpdatePurchaseStatusDto } from './dto';
-import { PaginationDto } from '../common/pagination/pagination.dto';
+// import { PaginationDto } from '../common/pagination/pagination.dto';
 import { GetUser } from '../common/decorators/get‑user.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
@@ -21,12 +21,13 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 export class PurchaseController {
   constructor(private readonly service: PurchaseService) {}
 
-  @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
+  @Roles('PHARMACY_OWNER')
   @Post()
   create(@GetUser() user, @Body() dto: CreatePurchaseDto) {
     return this.service.create(user, dto);
   }
 
+  @Roles('PHARMACY_OWNER')
   @Get()
   paginate(
     @GetUser() user,

@@ -42,216 +42,240 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.NotificationService = void 0;
+exports.NotificationsService = void 0;
 var common_1 = require("@nestjs/common");
 var schedule_1 = require("@nestjs/schedule");
-var date_fns_1 = require("date-fns");
-var NotificationService = /** @class */ (function () {
-    function NotificationService(prisma) {
+var NotificationsService = /** @class */ (function () {
+    function NotificationsService(prisma, firebaseService) {
         this.prisma = prisma;
+        this.firebaseService = firebaseService;
+        this.logger = new common_1.Logger(NotificationsService_1.name);
     }
-    // Daily check for expired and low stock inventory
-    NotificationService.prototype.checkInventoryNotifications = function () {
+    NotificationsService_1 = NotificationsService;
+    NotificationsService.prototype.saveToken = function (userId, token) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
+                return [2 /*return*/, this.prisma.notificationToken.upsert({
+                        where: { token: token },
+                        create: { user_id: userId, token: token },
+                        update: { user_id: userId }
+                    })];
+            });
+        });
+    };
+    NotificationsService.prototype.removeToken = function (token) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.prisma.notificationToken.deleteMany({ where: { token: token } })];
+            });
+        });
+    };
+    NotificationsService.prototype.getUserTokens = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.prisma.notificationToken.findMany({
+                        where: { user_id: userId }
+                    })];
+            });
+        });
+    };
+    /** 🔔 Scheduled job: twice per day */
+    NotificationsService.prototype.scheduledInventoryChecks = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var pharmacies, _i, pharmacies_1, pharmacy;
+            return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.checkExpiringInventory()];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.checkLowStockInventory()];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    // Check for items expiring in less than 2 months
-    NotificationService.prototype.checkExpiringInventory = function () {
-        var _a, _b, _c, _d;
-        return __awaiter(this, void 0, void 0, function () {
-            var twoMonthsFromNow, expiringItems, _i, expiringItems_1, item, location, userIds, _e, userIds_1, userId, notificationDto;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
-                    case 0:
-                        twoMonthsFromNow = date_fns_1.addMonths(new Date(), 2);
-                        return [4 /*yield*/, this.prisma.inventory.findMany({
-                                where: {
-                                    expiry_date: {
-                                        lte: twoMonthsFromNow
-                                    }
-                                },
-                                include: {
-                                    medicine: true,
-                                    pharmacy: true,
-                                    warehouse: true
-                                }
-                            })];
-                    case 1:
-                        expiringItems = _f.sent();
-                        _i = 0, expiringItems_1 = expiringItems;
-                        _f.label = 2;
-                    case 2:
-                        if (!(_i < expiringItems_1.length)) return [3 /*break*/, 8];
-                        item = expiringItems_1[_i];
-                        location = item.pharmacy_id
-                            ? "Pharmacy: " + ((_a = item.pharmacy) === null || _a === void 0 ? void 0 : _a.name)
-                            : "Warehouse: " + ((_b = item.warehouse) === null || _b === void 0 ? void 0 : _b.name);
-                        return [4 /*yield*/, this.getUsersForLocation((_c = item.pharmacy_id) !== null && _c !== void 0 ? _c : undefined, (_d = item.warehouse_id) !== null && _d !== void 0 ? _d : undefined)];
-                    case 3:
-                        userIds = _f.sent();
-                        _e = 0, userIds_1 = userIds;
-                        _f.label = 4;
-                    case 4:
-                        if (!(_e < userIds_1.length)) return [3 /*break*/, 7];
-                        userId = userIds_1[_e];
-                        notificationDto = {
-                            message: "Medicine " + item.medicine.name + " is expiring soon on " + item.expiry_date.toISOString().split('T')[0] + " at " + location,
-                            type: 'EXPIRY_ALERT'
-                        };
-                        return [4 /*yield*/, this.createNotification(userId, notificationDto)];
-                    case 5:
-                        _f.sent();
-                        _f.label = 6;
-                    case 6:
-                        _e++;
-                        return [3 /*break*/, 4];
-                    case 7:
-                        _i++;
-                        return [3 /*break*/, 2];
-                    case 8: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    // Check for items with quantity below 5
-    NotificationService.prototype.checkLowStockInventory = function () {
-        var _a, _b, _c, _d;
-        return __awaiter(this, void 0, void 0, function () {
-            var lowStockItems, _i, lowStockItems_1, item, location, userIds, _e, userIds_2, userId, notificationDto;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
-                    case 0: return [4 /*yield*/, this.prisma.inventory.findMany({
-                            where: {
-                                quantity: {
-                                    lt: 5
-                                }
-                            },
-                            include: {
-                                medicine: true,
-                                pharmacy: true,
-                                warehouse: true
-                            }
+                    case 0: return [4 /*yield*/, this.prisma.pharmacy.findMany({
+                            select: { id: true }
                         })];
                     case 1:
-                        lowStockItems = _f.sent();
-                        _i = 0, lowStockItems_1 = lowStockItems;
-                        _f.label = 2;
+                        pharmacies = _a.sent();
+                        _i = 0, pharmacies_1 = pharmacies;
+                        _a.label = 2;
                     case 2:
-                        if (!(_i < lowStockItems_1.length)) return [3 /*break*/, 8];
-                        item = lowStockItems_1[_i];
-                        location = item.pharmacy_id
-                            ? "Pharmacy: " + ((_a = item.pharmacy) === null || _a === void 0 ? void 0 : _a.name)
-                            : "Warehouse: " + ((_b = item.warehouse) === null || _b === void 0 ? void 0 : _b.name);
-                        return [4 /*yield*/, this.getUsersForLocation((_c = item.pharmacy_id) !== null && _c !== void 0 ? _c : undefined, (_d = item.warehouse_id) !== null && _d !== void 0 ? _d : undefined)];
+                        if (!(_i < pharmacies_1.length)) return [3 /*break*/, 5];
+                        pharmacy = pharmacies_1[_i];
+                        return [4 /*yield*/, this.checkLowStockAndExpiry(pharmacy.id)];
                     case 3:
-                        userIds = _f.sent();
-                        _e = 0, userIds_2 = userIds;
-                        _f.label = 4;
+                        _a.sent();
+                        _a.label = 4;
                     case 4:
-                        if (!(_e < userIds_2.length)) return [3 /*break*/, 7];
-                        userId = userIds_2[_e];
-                        notificationDto = {
-                            message: "Medicine " + item.medicine.name + " is low in stock (Quantity: " + item.quantity + ") at " + location,
-                            type: 'LOW_STOCK_ALERT'
-                        };
-                        return [4 /*yield*/, this.createNotification(userId, notificationDto)];
-                    case 5:
-                        _f.sent();
-                        _f.label = 6;
-                    case 6:
-                        _e++;
-                        return [3 /*break*/, 4];
-                    case 7:
                         _i++;
                         return [3 /*break*/, 2];
-                    case 8: return [2 /*return*/];
+                    case 5: return [2 /*return*/];
                 }
             });
         });
     };
-    // Helper method to get users associated with a specific pharmacy or warehouse
-    NotificationService.prototype.getUsersForLocation = function (pharmacyId, warehouseId) {
-        return __awaiter(this, void 0, Promise, function () {
-            var users, supplier;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+    /** 🔔 Manual trigger (after sale, etc.) */
+    NotificationsService.prototype.checkLowStockAndExpiry = function (pharmacy_id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var lowStock, expiringSoon, users, _i, users_1, user, tokens, _a, tokens_1, t;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        if (!(pharmacyId !== undefined)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.prisma.user.findMany({
-                                where: { pharmacy_id: pharmacyId },
-                                select: { id: true }
+                        this.logger.log("Checking stock/expiry for pharmacy " + pharmacy_id);
+                        return [4 /*yield*/, this.prisma.inventory.findMany({
+                                where: {
+                                    pharmacy_id: pharmacy_id,
+                                    quantity: { lt: 5 }
+                                },
+                                select: { id: true, medicine_id: true, quantity: true }
                             })];
                     case 1:
-                        users = _a.sent();
-                        return [2 /*return*/, users.map(function (user) { return user.id; })];
+                        lowStock = _b.sent();
+                        return [4 /*yield*/, this.prisma.inventory.findMany({
+                                where: {
+                                    pharmacy_id: pharmacy_id,
+                                    expiry_date: { lte: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) }
+                                },
+                                select: { id: true, medicine_id: true, expiry_date: true }
+                            })];
                     case 2:
-                        if (!(warehouseId !== undefined)) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.prisma.supplier.findFirst({
-                                where: { warehouseId: warehouseId },
+                        expiringSoon = _b.sent();
+                        if (lowStock.length === 0 && expiringSoon.length === 0)
+                            return [2 /*return*/];
+                        return [4 /*yield*/, this.prisma.user.findMany({
+                                where: { pharmacy_id: pharmacy_id },
                                 select: { id: true }
                             })];
                     case 3:
-                        supplier = _a.sent();
-                        return [2 /*return*/, supplier ? [supplier.id] : []];
-                    case 4: return [2 /*return*/, []];
+                        users = _b.sent();
+                        _i = 0, users_1 = users;
+                        _b.label = 4;
+                    case 4:
+                        if (!(_i < users_1.length)) return [3 /*break*/, 12];
+                        user = users_1[_i];
+                        return [4 /*yield*/, this.getUserTokens(user.id)];
+                    case 5:
+                        tokens = _b.sent();
+                        _a = 0, tokens_1 = tokens;
+                        _b.label = 6;
+                    case 6:
+                        if (!(_a < tokens_1.length)) return [3 /*break*/, 11];
+                        t = tokens_1[_a];
+                        if (!(lowStock.length > 0)) return [3 /*break*/, 8];
+                        return [4 /*yield*/, this.firebaseService.sendNotification(t.token, 'Low Stock Alert', "Some medicines are below threshold in pharmacy " + pharmacy_id)];
+                    case 7:
+                        _b.sent();
+                        _b.label = 8;
+                    case 8:
+                        if (!(expiringSoon.length > 0)) return [3 /*break*/, 10];
+                        return [4 /*yield*/, this.firebaseService.sendNotification(t.token, 'Expiry Alert', "Some medicines will expire soon in pharmacy " + pharmacy_id)];
+                    case 9:
+                        _b.sent();
+                        _b.label = 10;
+                    case 10:
+                        _a++;
+                        return [3 /*break*/, 6];
+                    case 11:
+                        _i++;
+                        return [3 /*break*/, 4];
+                    case 12: return [2 /*return*/];
                 }
             });
         });
     };
-    // Create a new notification
-    NotificationService.prototype.createNotification = function (userId, notificationDto) {
+    NotificationsService.prototype.sendPharmacyAlerts = function (pharmacy_id, lowStock, nearExpiry) {
         return __awaiter(this, void 0, void 0, function () {
+            var users, tokens, title, body, _i, tokens_2, token, err_1;
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.prisma.notification.create({
-                        data: {
-                            user_id: userId,
-                            message: notificationDto.message,
-                            type: notificationDto.type,
-                            is_read: false
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.user.findMany({
+                            where: {
+                                pharmacy_id: pharmacy_id,
+                                NotificationToken: { some: {} }
+                            },
+                            select: { NotificationToken: true }
+                        })];
+                    case 1:
+                        users = _a.sent();
+                        tokens = users.flatMap(function (u) {
+                            return u.NotificationToken.map(function (t) { return t.token; });
+                        });
+                        if (!tokens.length) {
+                            this.logger.log("No notification tokens for pharmacy " + pharmacy_id);
+                            return [2 /*return*/];
                         }
-                    })];
+                        title = 'Inventory Alerts';
+                        body = "Low stock: " + lowStock + ", Near expiry: " + nearExpiry;
+                        _i = 0, tokens_2 = tokens;
+                        _a.label = 2;
+                    case 2:
+                        if (!(_i < tokens_2.length)) return [3 /*break*/, 7];
+                        token = tokens_2[_i];
+                        _a.label = 3;
+                    case 3:
+                        _a.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, this.firebaseService.sendNotification(token, title, body, {
+                                pharmacy_id: String(pharmacy_id)
+                            })];
+                    case 4:
+                        _a.sent();
+                        return [3 /*break*/, 6];
+                    case 5:
+                        err_1 = _a.sent();
+                        this.logger.error("Failed to send notification to token " + token, err_1);
+                        return [3 /*break*/, 6];
+                    case 6:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 7: return [2 /*return*/];
+                }
             });
         });
     };
-    // Get notifications for a specific user
-    NotificationService.prototype.getUserNotifications = function (userId) {
+    /** Run through all pharmacies and trigger alerts */
+    NotificationsService.prototype.checkAndNotifyAllPharmacies = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var pharmacies, _i, pharmacies_2, pharmacy, lowStock, nearExpiry;
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.prisma.notification.findMany({
-                        where: { user_id: userId },
-                        orderBy: { created_at: 'desc' }
-                    })];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.pharmacy.findMany({
+                            select: { id: true }
+                        })];
+                    case 1:
+                        pharmacies = _a.sent();
+                        _i = 0, pharmacies_2 = pharmacies;
+                        _a.label = 2;
+                    case 2:
+                        if (!(_i < pharmacies_2.length)) return [3 /*break*/, 7];
+                        pharmacy = pharmacies_2[_i];
+                        return [4 /*yield*/, this.prisma.inventory.count({
+                                where: { pharmacy_id: pharmacy.id, quantity: { lt: 5 } }
+                            })];
+                    case 3:
+                        lowStock = _a.sent();
+                        return [4 /*yield*/, this.prisma.inventory.count({
+                                where: {
+                                    pharmacy_id: pharmacy.id,
+                                    expiry_date: {
+                                        lte: new Date(new Date().setDate(new Date().getDate() + 7))
+                                    }
+                                }
+                            })];
+                    case 4:
+                        nearExpiry = _a.sent();
+                        if (!(lowStock || nearExpiry)) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this.sendPharmacyAlerts(pharmacy.id, lowStock, nearExpiry)];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 7: return [2 /*return*/];
+                }
             });
         });
     };
-    // Mark notification as read
-    NotificationService.prototype.markAsRead = function (notificationId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.prisma.notification.update({
-                        where: { id: notificationId },
-                        data: { is_read: true }
-                    })];
-            });
-        });
-    };
+    var NotificationsService_1;
     __decorate([
-        schedule_1.Cron(schedule_1.CronExpression.EVERY_DAY_AT_MIDNIGHT)
-    ], NotificationService.prototype, "checkInventoryNotifications");
-    NotificationService = __decorate([
+        schedule_1.Cron('0 9,18 * * *') // 9 AM & 6 PM
+    ], NotificationsService.prototype, "scheduledInventoryChecks");
+    NotificationsService = NotificationsService_1 = __decorate([
         common_1.Injectable()
-    ], NotificationService);
-    return NotificationService;
+    ], NotificationsService);
+    return NotificationsService;
 }());
-exports.NotificationService = NotificationService;
+exports.NotificationsService = NotificationsService;

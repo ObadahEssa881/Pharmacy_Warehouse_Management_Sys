@@ -1,5 +1,4 @@
 "use strict";
-// warehouse.service.ts
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -57,8 +56,9 @@ exports.__esModule = true;
 exports.WarehouseService = void 0;
 var common_1 = require("@nestjs/common");
 var WarehouseService = /** @class */ (function () {
-    function WarehouseService(prisma) {
+    function WarehouseService(prisma, purchaseService) {
         this.prisma = prisma;
+        this.purchaseService = purchaseService;
     }
     WarehouseService.prototype.getAllWarehouses = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -88,6 +88,27 @@ var WarehouseService = /** @class */ (function () {
                         }
                         return [2 /*return*/, inventory];
                 }
+            });
+        });
+    };
+    /** NEW: Get warehouse inventory for pharmacy owners without pharmacy ID check */
+    WarehouseService.prototype.getPublicWarehouseInventory = function (warehouseId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.prisma.inventory.findMany({
+                        where: {
+                            warehouse_id: warehouseId,
+                            location_type: 'WAREHOUSE'
+                        },
+                        include: {
+                            medicine: {
+                                include: {
+                                    category: true,
+                                    company: true
+                                }
+                            }
+                        }
+                    })];
             });
         });
     };

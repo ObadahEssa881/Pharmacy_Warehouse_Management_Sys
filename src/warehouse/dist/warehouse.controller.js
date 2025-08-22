@@ -1,5 +1,4 @@
 "use strict";
-// warehouse.controller.ts
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -52,10 +51,10 @@ var guard_1 = require("../auth/guard");
 var decorators_1 = require("src/auth/decorators");
 var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
 var WarehouseController = /** @class */ (function () {
-    function WarehouseController(warehouseService) {
+    function WarehouseController(warehouseService, purchaseService) {
         this.warehouseService = warehouseService;
+        this.purchaseService = purchaseService;
     }
-    // @Roles('')
     WarehouseController.prototype.getAllWarehouses = function (user) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -68,13 +67,26 @@ var WarehouseController = /** @class */ (function () {
             });
         });
     };
-    WarehouseController.prototype.getWarehouseInventory = function (user, warehouseIdFromQuery) {
-        var pharmacy_id = user.pharmacy_id, warehouse_id = user.warehouse_id;
-        var targetWarehouseId = warehouseIdFromQuery
-            ? parseInt(warehouseIdFromQuery)
-            : warehouse_id;
-        console.log(targetWarehouseId);
-        return this.warehouseService.getWarehouseInventory(pharmacy_id, targetWarehouseId);
+    WarehouseController.prototype.getWarehouseInventory = function (warehouseId, user) {
+        return __awaiter(this, void 0, void 0, function () {
+            var pharmacy_id, warehouse_id;
+            return __generator(this, function (_a) {
+                console.log(user);
+                pharmacy_id = user.pharmacy_id, warehouse_id = user.warehouse_id;
+                return [2 /*return*/, this.warehouseService.getWarehouseInventory(pharmacy_id, warehouseId)];
+            });
+        });
+    };
+    /** NEW: Public endpoint for pharmacy owners to view warehouse inventory */
+    WarehouseController.prototype.getPublicWarehouseInventory = function (warehouseId, user) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                console.log(111111111111111111111111111111111111111111111111111111111111111111111111111111111);
+                console.log(111111111111111111111111111111111111111111111111111111111111111111111111111111111);
+                console.log(111111111111111111111111111111111111111111111111111111111111111111111111111111111);
+                return [2 /*return*/, this.warehouseService.getPublicWarehouseInventory(warehouseId)];
+            });
+        });
     };
     WarehouseController.prototype.getWarehouseById = function (id, user) {
         var pharmacy_id = user.pharmacy_id, warehouse_id = user.warehouse_id;
@@ -98,30 +110,36 @@ var WarehouseController = /** @class */ (function () {
     ], WarehouseController.prototype, "getAllWarehouses");
     __decorate([
         roles_decorator_1.Roles('PHARMACIST', 'PHARMACY_OWNER'),
-        common_1.Get('inventory'),
-        __param(0, decorators_1.User()),
-        __param(1, common_1.Query('warehouseId'))
+        common_1.Get(':warehouseId/inventory'),
+        __param(0, common_1.Param('warehouseId', common_1.ParseIntPipe)),
+        __param(1, decorators_1.User())
     ], WarehouseController.prototype, "getWarehouseInventory");
+    __decorate([
+        roles_decorator_1.Roles('PHARMACY_OWNER'),
+        common_1.Get('public/:warehouseId/inventory'),
+        __param(0, common_1.Param('warehouseId', common_1.ParseIntPipe)),
+        __param(1, decorators_1.User())
+    ], WarehouseController.prototype, "getPublicWarehouseInventory");
     __decorate([
         roles_decorator_1.Roles('PHARMACIST', 'PHARMACY_OWNER', 'SUPPLIER_ADMIN'),
         common_1.Get(':id'),
         __param(0, common_1.Param('id')), __param(1, decorators_1.User())
     ], WarehouseController.prototype, "getWarehouseById");
     __decorate([
-        roles_decorator_1.Roles(),
+        roles_decorator_1.Roles('PHARMACY_OWNER'),
         common_1.Post(),
         __param(0, common_1.Body()),
         __param(1, decorators_1.User())
     ], WarehouseController.prototype, "createWarehouse");
     __decorate([
-        roles_decorator_1.Roles(),
+        roles_decorator_1.Roles('PHARMACY_OWNER'),
         common_1.Put(':id'),
         __param(0, common_1.Param('id')),
         __param(1, common_1.Body()),
         __param(2, decorators_1.User())
     ], WarehouseController.prototype, "updateWarehouse");
     __decorate([
-        roles_decorator_1.Roles(),
+        roles_decorator_1.Roles('PHARMACY_OWNER'),
         common_1.Delete(':id'),
         __param(0, common_1.Param('id')), __param(1, decorators_1.User())
     ], WarehouseController.prototype, "deleteWarehouse");

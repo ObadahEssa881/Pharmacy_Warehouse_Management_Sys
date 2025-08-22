@@ -6,22 +6,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.NotificationModule = void 0;
+exports.NotificationsModule = void 0;
 var common_1 = require("@nestjs/common");
+var schedule_1 = require("@nestjs/schedule");
 var notification_service_1 = require("./notification.service");
 var notification_controller_1 = require("./notification.controller");
 var prisma_service_1 = require("../prisma/prisma.service");
-var schedule_1 = require("@nestjs/schedule");
-var NotificationModule = /** @class */ (function () {
-    function NotificationModule() {
+var firebase_admin_service_1 = require("./firebase-admin.service");
+var NotificationsModule = /** @class */ (function () {
+    function NotificationsModule() {
     }
-    NotificationModule = __decorate([
+    NotificationsModule = __decorate([
         common_1.Module({
-            imports: [schedule_1.ScheduleModule.forRoot()],
-            controllers: [notification_controller_1.NotificationController],
-            providers: [notification_service_1.NotificationService, prisma_service_1.PrismaService]
+            imports: [schedule_1.ScheduleModule],
+            providers: [notification_service_1.NotificationsService, prisma_service_1.PrismaService, firebase_admin_service_1.FirebaseAdminService],
+            controllers: [notification_controller_1.NotificationsController],
+            exports: [notification_service_1.NotificationsService]
         })
-    ], NotificationModule);
-    return NotificationModule;
+    ], NotificationsModule);
+    return NotificationsModule;
 }());
-exports.NotificationModule = NotificationModule;
+exports.NotificationsModule = NotificationsModule;
