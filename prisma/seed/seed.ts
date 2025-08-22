@@ -120,24 +120,24 @@ async function main() {
   });
 
   // Sale
-  await prisma.sale.create({
-    data: {
-      pharmacy_id: pharmacy1.id,
-      customer_name: 'Jane Doe',
-      total_amount: 50.0,
-      payment_mode: 'CASH',
-      SaleItems: {
-        create: [
-          {
-            medicine_id: medicine1.id,
-            quantity: 10,
-            unit_price: 5.0,
-            cost_price: 3.5,
-          },
-        ],
-      },
-    },
-  });
+  // await prisma.sale.create({
+  //   data: {
+  //     pharmacy_id: pharmacy1.id,
+  //     customer_name: 'Jane Doe',
+  //     total_amount: 50.0,
+  //     payment_mode: 'CASH',
+  //     SaleItems: {
+  //       create: [
+  //         {
+  //           medicine_id: medicine1.id,
+  //           quantity: 10,
+  //           unit_price: 5.0,
+  //           cost_price: 3.5,
+  //         },
+  //       ],
+  //     },
+  //   },
+  // });
 
   console.log('✅ Seeding completed!');
   await seedCategories(prisma);
