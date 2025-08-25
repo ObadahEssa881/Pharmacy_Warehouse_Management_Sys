@@ -11,38 +11,47 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 exports.__esModule = true;
 exports.PurchaseController = void 0;
 var common_1 = require("@nestjs/common");
-// import { UpdatePurchaseDto } from './dto/update-purchase.dto';
+var guard_1 = require("../auth/guard");
+// import { PaginationDto } from '../common/pagination/pagination.dto';
+var get_user_decorator_1 = require("../common/decorators/get\u2011user.decorator");
 var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
-var guard_1 = require("src/auth/guard");
-var decorators_1 = require("src/auth/decorators");
 var PurchaseController = /** @class */ (function () {
-    function PurchaseController(purchaseService) {
-        this.purchaseService = purchaseService;
+    function PurchaseController(service) {
+        this.service = service;
     }
-    PurchaseController.prototype.create = function (dto, user) {
-        return this.purchaseService.create(dto, user);
+    PurchaseController.prototype.create = function (user, dto) {
+        return this.service.create(user, dto);
     };
-    PurchaseController.prototype.findAll = function () {
-        return this.purchaseService.findAll();
+    PurchaseController.prototype.paginate = function (user, page, limit) {
+        if (page === void 0) { page = 1; }
+        if (limit === void 0) { limit = 10; }
+        return this.service.paginate(user, page, limit);
     };
-    PurchaseController.prototype.findOne = function (id) {
-        return this.purchaseService.findOne(+id);
+    PurchaseController.prototype.updateStatus = function (user, id, dto) {
+        return this.service.updateStatus(user, id, dto);
     };
     __decorate([
-        common_1.Post('create'),
-        __param(0, common_1.Body()), __param(1, decorators_1.User())
+        roles_decorator_1.Roles('PHARMACY_OWNER'),
+        common_1.Post(),
+        __param(0, get_user_decorator_1.GetUser()), __param(1, common_1.Body())
     ], PurchaseController.prototype, "create");
     __decorate([
-        common_1.Get()
-    ], PurchaseController.prototype, "findAll");
-    __decorate([
-        common_1.Get(':id'),
-        __param(0, common_1.Param('id'))
-    ], PurchaseController.prototype, "findOne");
-    PurchaseController = __decorate([
         roles_decorator_1.Roles('PHARMACY_OWNER'),
-        common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard),
-        common_1.Controller('purchase')
+        common_1.Get(),
+        __param(0, get_user_decorator_1.GetUser()),
+        __param(1, common_1.Query('page')),
+        __param(2, common_1.Query('limit'))
+    ], PurchaseController.prototype, "paginate");
+    __decorate([
+        roles_decorator_1.Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN'),
+        common_1.Patch(':id/status'),
+        __param(0, get_user_decorator_1.GetUser()),
+        __param(1, common_1.Param('id', common_1.ParseIntPipe)),
+        __param(2, common_1.Body())
+    ], PurchaseController.prototype, "updateStatus");
+    PurchaseController = __decorate([
+        common_1.Controller('purchase-orders'),
+        common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard)
     ], PurchaseController);
     return PurchaseController;
 }());

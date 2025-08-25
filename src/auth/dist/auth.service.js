@@ -54,7 +54,7 @@ var AuthService = /** @class */ (function () {
     }
     AuthService.prototype.signup = function (dto) {
         return __awaiter(this, void 0, void 0, function () {
-            var hash, error_1;
+            var hash, pharmacy, user, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, argon.hash(dto.password)];
@@ -62,30 +62,45 @@ var AuthService = /** @class */ (function () {
                         hash = _a.sent();
                         _a.label = 2;
                     case 2:
-                        _a.trys.push([2, 4, , 5]);
+                        _a.trys.push([2, 6, , 7]);
+                        return [4 /*yield*/, this.prisma.pharmacy.create({
+                                data: {
+                                    name: dto.propertyName + "'s Pharmacy",
+                                    address: dto.address || 'N/A',
+                                    contact_number: dto.contact_number || 'N/A'
+                                }
+                            })];
+                    case 3:
+                        pharmacy = _a.sent();
                         return [4 /*yield*/, this.prisma.user.create({
                                 data: {
                                     username: dto.username,
                                     email: dto.email,
                                     password_hash: hash,
                                     role: dto.role,
-                                    pharmacy_id: dto.pharmacy_id
+                                    pharmacy_id: pharmacy.id
                                 }
                             })];
-                    case 3:
-                        _a.sent();
-                        return [3 /*break*/, 5];
                     case 4:
+                        user = _a.sent();
+                        // Update pharmacy to set owner_id after user is created
+                        return [4 /*yield*/, this.prisma.pharmacy.update({
+                                where: { id: pharmacy.id },
+                                data: { owner_id: user.id }
+                            })];
+                    case 5:
+                        // Update pharmacy to set owner_id after user is created
+                        _a.sent();
+                        return [2 /*return*/, 'created'];
+                    case 6:
                         error_1 = _a.sent();
-                        console.error(error_1 instanceof library_1.PrismaClientKnownRequestError);
                         if (error_1 instanceof library_1.PrismaClientKnownRequestError) {
                             if (error_1.code == 'P2002') {
-                                console.log(1);
-                                throw new common_1.ForbiddenException('Credential Taken');
+                                throw new common_1.ForbiddenException('Credentials Taken');
                             }
                         }
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
+                        throw error_1;
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -95,97 +110,137 @@ var AuthService = /** @class */ (function () {
             var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.prisma.user.findUnique({
-                            where: {
-                                email: dto.email
-                            }
-                        })];
+                    case 0:
+                        console.log('access');
+                        return [4 /*yield*/, this.prisma.user.findUnique({
+                                where: {
+                                    email: dto.email
+                                }
+                            })];
                     case 1:
                         user = _a.sent();
                         if (!user) {
-                            throw new common_1.ForbiddenException('Credintials incorrect');
+                            throw new common_1.ForbiddenException('Credentials incorrect');
                         }
                         return [4 /*yield*/, argon.verify(user.password_hash, dto.password)];
                     case 2:
                         if (!(_a.sent())) {
-                            throw new common_1.ForbiddenException('Credintials incorrect');
+                            throw new common_1.ForbiddenException('Credentials incorrect');
                         }
-                        return [2 /*return*/, this.signToken(user.id, user.email, user.role, 'user')];
+                        return [4 /*yield*/, this.prisma.pharmacy.findUnique({
+                                where: { id: user.pharmacy_id }
+                            })];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, this.signToken(user.id, user.email, user.role, 'user', user.pharmacy_id, null)];
                 }
             });
         });
     };
     AuthService.prototype.signupSupplier = function (dto) {
         return __awaiter(this, void 0, void 0, function () {
-            var hash, error_2;
+            var hash, warehouse, supplier, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, argon.hash(dto.password)];
+                    case 0:
+                        console.log('access 2');
+                        return [4 /*yield*/, argon.hash(dto.password)];
                     case 1:
                         hash = _a.sent();
                         _a.label = 2;
                     case 2:
-                        _a.trys.push([2, 4, , 5]);
+                        _a.trys.push([2, 6, , 7]);
+                        return [4 /*yield*/, this.prisma.warehouse.create({
+                                data: {
+                                    name: dto.propertyName + "'s Warehouse",
+                                    address: dto.warehouseAddress || 'N/A',
+                                    contact_number: dto.contact_number || 'N/A'
+                                }
+                            })];
+                    case 3:
+                        warehouse = _a.sent();
                         return [4 /*yield*/, this.prisma.supplier.create({
                                 data: {
                                     name: dto.name,
                                     email: dto.email,
                                     password_hash: hash,
-                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                                     role: dto.role,
                                     contact_person: dto.contact_person,
                                     phone: dto.phone,
-                                    address: dto.address
+                                    address: dto.address,
+                                    warehouseId: warehouse.id
                                 }
                             })];
-                    case 3:
-                        _a.sent();
-                        return [3 /*break*/, 5];
                     case 4:
+                        supplier = _a.sent();
+                        // Update warehouse to set owner_id
+                        return [4 /*yield*/, this.prisma.warehouse.update({
+                                where: { id: warehouse.id },
+                                data: { owner_id: supplier.id }
+                            })];
+                    case 5:
+                        // Update warehouse to set owner_id
+                        _a.sent();
+                        return [2 /*return*/, 'created'];
+                    case 6:
                         error_2 = _a.sent();
                         if (error_2 instanceof library_1.PrismaClientKnownRequestError &&
                             error_2.code === 'P2002') {
                             throw new common_1.ForbiddenException('Credential Taken');
                         }
                         throw error_2;
-                    case 5: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     AuthService.prototype.signinSupplier = function (dto) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var supplier, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var supplier, _b, warehouse;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0: return [4 /*yield*/, this.prisma.supplier.findUnique({
                             where: { email: dto.email }
                         })];
                     case 1:
-                        supplier = _b.sent();
-                        _a = !supplier;
-                        if (_a) return [3 /*break*/, 3];
+                        supplier = _c.sent();
+                        _b = !supplier;
+                        if (_b) return [3 /*break*/, 3];
                         return [4 /*yield*/, argon.verify(supplier.password_hash, dto.password)];
                     case 2:
-                        _a = !(_b.sent());
-                        _b.label = 3;
+                        _b = !(_c.sent());
+                        _c.label = 3;
                     case 3:
-                        if (_a) {
+                        if (_b) {
                             throw new common_1.ForbiddenException('Credentials incorrect');
                         }
-                        return [2 /*return*/, this.signToken(supplier.id, supplier.email, supplier.role, 'supplier')];
+                        return [4 /*yield*/, this.prisma.warehouse.findUnique({
+                                where: { id: supplier.warehouseId }
+                            })];
+                    case 4:
+                        warehouse = _c.sent();
+                        return [2 /*return*/, this.signToken(supplier.id, supplier.email, supplier.role, 'supplier', null, (_a = warehouse === null || warehouse === void 0 ? void 0 : warehouse.id) !== null && _a !== void 0 ? _a : null)];
                 }
             });
         });
     };
-    // auth.service.ts
-    AuthService.prototype.signToken = function (id, email, role, accountType) {
+    AuthService.prototype.signToken = function (id, email, role, accountType, pharmacy_id, warehouse_id) {
+        if (pharmacy_id === void 0) { pharmacy_id = null; }
+        if (warehouse_id === void 0) { warehouse_id = null; }
         return __awaiter(this, void 0, Promise, function () {
             var payload, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        payload = { id: id, email: email, role: role, type: accountType };
+                        payload = {
+                            id: id,
+                            email: email,
+                            role: role,
+                            type: accountType,
+                            pharmacy_id: pharmacy_id,
+                            warehouse_id: warehouse_id
+                        };
                         return [4 /*yield*/, this.jwt.signAsync(payload, {
                                 expiresIn: '1h',
                                 secret: this.config.get('JWT_SECRET')

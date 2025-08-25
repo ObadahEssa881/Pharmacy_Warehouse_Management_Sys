@@ -18,23 +18,51 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super(options);
   }
 
-  async validate(payload: { id: number; email: string }) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: payload.id },
-    });
-    if (user) {
-      const { password_hash, ...rest } = user;
-      return { ...rest, type: 'USER' };
-    }
+  async validate(payload: {
+    id: number;
+    email: string;
+    role: string;
+    type: 'user' | 'supplier'; // Add missing fields
+    pharmacy_id?: number;
+    warehouse_id?: number;
+  }) {
+    try {
+      if (payload.type === 'user') {
+        const user = await this.prisma.user.findUnique({
+          where: { id: payload.id },
+        });
+        if (user) {
+          const { password_hash, ...rest } = user;
+          return {
+            ...rest,
+            role: payload.role,
+            type: 'user' as const,
+            pharmacy_id: payload.pharmacy_id,
+            warehouse_id: payload.warehouse_id,
+          };
+        }
+      }
 
-    const supplier = await this.prisma.supplier.findUnique({
-      where: { id: payload.id },
-    });
-    if (supplier) {
-      const { password_hash, ...rest } = supplier;
-      return { ...rest, type: 'SUPPLIER' };
-    }
+      if (payload.type === 'supplier') {
+        const supplier = await this.prisma.supplier.findUnique({
+          where: { id: payload.id },
+        });
+        if (supplier) {
+          const { password_hash, ...rest } = supplier;
+          return {
+            ...rest,
+            id: payload.id,
+            email: payload.email,
+            role: payload.role,
+            type: 'supplier' as const,
+            warehouse_id: payload.warehouse_id,
+          };
+        }
+      }
 
-    return null;
+      return null;
+    } catch (error) {
+      return null;
+    }
   }
 }

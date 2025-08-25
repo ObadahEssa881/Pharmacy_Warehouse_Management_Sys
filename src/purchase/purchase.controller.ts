@@ -1,51 +1,49 @@
 import {
   Controller,
-  Get,
   Post,
-  Body,
-  // Patch,
+  Get,
+  Patch,
   Param,
-  // Delete,
+  Body,
+  Query,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
+import { JwtGuard, RoleGuard } from '../auth/guard';
 import { PurchaseService } from './purchase.service';
-import { CreatePurchaseOrderDto } from './dto/create-purchase.dto';
-// import { UpdatePurchaseDto } from './dto/update-purchase.dto';
+import { CreatePurchaseDto, UpdatePurchaseStatusDto } from './dto';
+// import { PaginationDto } from '../common/pagination/pagination.dto';
+import { GetUser } from '../common/decorators/get‑user.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { JwtGuard, RoleGuard } from 'src/auth/guard';
-import { User } from 'src/auth/decorators';
-import { UserJwtPayload } from 'src/auth/types';
-@Roles('PHARMACY_OWNER')
+
+@Controller('purchase-orders')
 @UseGuards(JwtGuard, RoleGuard)
-@Controller('purchase')
 export class PurchaseController {
-  constructor(private readonly purchaseService: PurchaseService) {}
+  constructor(private readonly service: PurchaseService) {}
 
-  @Post('create')
-  create(@Body() dto: CreatePurchaseOrderDto, @User() user: UserJwtPayload) {
-    return this.purchaseService.create(dto, user);
+  @Roles('PHARMACY_OWNER')
+  @Post()
+  create(@GetUser() user, @Body() dto: CreatePurchaseDto) {
+    return this.service.create(user, dto);
   }
 
+  @Roles('PHARMACY_OWNER')
   @Get()
-  findAll() {
-    return this.purchaseService.findAll();
+  paginate(
+    @GetUser() user,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.service.paginate(user, page, limit);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.purchaseService.findOne(+id);
+  @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
+  @Patch(':id/status')
+  updateStatus(
+    @GetUser() user,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdatePurchaseStatusDto,
+  ) {
+    return this.service.updateStatus(user, id, dto);
   }
-
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updatePurchaseDto: UpdatePurchaseDto,
-  // ) {
-  //   return this.purchaseService.update(+id, updatePurchaseDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.purchaseService.remove(+id);
-  // }
 }
