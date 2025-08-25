@@ -11,13 +11,27 @@ export function buildSearchOrWhere(
 ): Prisma.PrismaClientKnownRequestError | object | undefined {
   if (!search || searchableFields.length === 0) return undefined;
 
+  const cleanSearch = search.replace(/^"|"$/g, '');
+
   return {
-    OR: searchableFields.map((field) => ({
-      [field]: {
-        contains: search,
-        mode: 'insensitive',
-      },
-    })),
+    OR: searchableFields.map((field) => {
+      if(field.includes('.')){
+        const [relation , subfield] = field.split('.');
+        return {
+          [relation]:{
+            [subfield] :{
+              contains: cleanSearch
+            } ,
+          },
+        };
+      }
+      return {
+        [field]: {
+          contains: cleanSearch,
+          // mode: 'insensitive',
+        },
+      }
+    }),
   };
 }
 
