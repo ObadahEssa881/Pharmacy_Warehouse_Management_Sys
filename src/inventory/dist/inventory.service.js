@@ -74,7 +74,7 @@ var InventoryService = /** @class */ (function () {
                         baseWhere = ['PHARMACIST', 'PHARMACY_OWNER'].includes(user.role)
                             ? { pharmacy_id: user.pharmacy_id }
                             : { warehouse_id: user.warehouse_id };
-                        where = __assign(__assign(__assign({}, baseWhere), query_builder_1.buildSearchOrWhere(query.search, ['medicine'])), query_builder_1.buildWhereFromFilter((_c = query.filter) !== null && _c !== void 0 ? _c : {}));
+                        where = __assign(__assign(__assign({}, baseWhere), query_builder_1.buildSearchOrWhere(query.search, ['medicine.name'])), query_builder_1.buildWhereFromFilter((_c = query.filter) !== null && _c !== void 0 ? _c : {}));
                         select = query_builder_1.buildSelect(query.select);
                         include = query_builder_1.buildInclude(query.include);
                         return [4 /*yield*/, this.prisma.$transaction([

@@ -242,7 +242,7 @@ var AuthService = /** @class */ (function () {
                             warehouse_id: warehouse_id
                         };
                         return [4 /*yield*/, this.jwt.signAsync(payload, {
-                                expiresIn: '1h',
+                                // expiresIn: '1h',
                                 secret: this.config.get('JWT_SECRET')
                             })];
                     case 1:
