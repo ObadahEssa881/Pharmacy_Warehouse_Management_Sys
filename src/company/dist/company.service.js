@@ -92,7 +92,11 @@ var CompanyService = /** @class */ (function () {
                 switch (_j.label) {
                     case 0:
                         _g = pagination_1.buildPagination((_a = query.page) !== null && _a !== void 0 ? _a : 1, (_b = query.limit) !== null && _b !== void 0 ? _b : 20), skip = _g.skip, take = _g.take;
-                        where = __assign(__assign({}, query_builder_1.buildSearchOrWhere(query.search, ['name'])), query_builder_1.buildWhereFromFilter((_c = query.filter) !== null && _c !== void 0 ? _c : {}));
+                        where = __assign(__assign({}, query_builder_1.buildSearchOrWhere(query.search, [
+                            'name',
+                            'address',
+                            'contact_person',
+                        ])), query_builder_1.buildWhereFromFilter((_c = query.filter) !== null && _c !== void 0 ? _c : {}));
                         select = query_builder_1.buildSelect(query.select);
                         include = query_builder_1.buildInclude(query.include);
                         return [4 /*yield*/, this.prisma.$transaction([

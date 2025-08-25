@@ -35,7 +35,7 @@ export class InventoryService {
 
     const where = {
       ...baseWhere,
-      ...buildSearchOrWhere(query.search, ['batch_number']), // example searchable field
+      ...buildSearchOrWhere(query.search, ['medicine']), // example searchable field
       ...buildWhereFromFilter(query.filter ?? {}),
     };
 

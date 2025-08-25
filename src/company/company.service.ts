@@ -37,7 +37,11 @@ export class CompanyService {
     const { skip, take } = buildPagination(query.page ?? 1, query.limit ?? 20);
 
     const where = {
-      ...buildSearchOrWhere(query.search, ['name']),
+      ...buildSearchOrWhere(query.search, [
+        'name',
+        'address',
+        'contact_person',
+      ]),
       ...buildWhereFromFilter(query.filter ?? {}),
     };
 
