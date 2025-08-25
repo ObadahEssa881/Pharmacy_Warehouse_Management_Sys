@@ -1,4 +1,5 @@
 "use strict";
+// create-purchase-order.dto.ts
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -6,35 +7,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.CreatePurchaseDto = exports.PurchaseItemDto = void 0;
-var class_validator_1 = require("class-validator");
+exports.PurchaseOrderItemDto = exports.CreatePurchaseOrderDto = void 0;
 var class_transformer_1 = require("class-transformer");
-var PurchaseItemDto = /** @class */ (function () {
-    function PurchaseItemDto() {
+var class_validator_1 = require("class-validator");
+var CreatePurchaseOrderDto = /** @class */ (function () {
+    function CreatePurchaseOrderDto() {
     }
-    __decorate([
-        class_validator_1.IsInt()
-    ], PurchaseItemDto.prototype, "medicine_id");
-    __decorate([
-        class_validator_1.IsInt()
-    ], PurchaseItemDto.prototype, "quantity");
     __decorate([
         class_validator_1.IsNumber()
-    ], PurchaseItemDto.prototype, "unit_price");
-    return PurchaseItemDto;
-}());
-exports.PurchaseItemDto = PurchaseItemDto;
-var CreatePurchaseDto = /** @class */ (function () {
-    function CreatePurchaseDto() {
-    }
-    __decorate([
-        class_validator_1.IsInt()
-    ], CreatePurchaseDto.prototype, "supplier_id");
+    ], CreatePurchaseOrderDto.prototype, "supplier_id");
     __decorate([
         class_validator_1.IsArray(),
         class_validator_1.ValidateNested({ each: true }),
-        class_transformer_1.Type(function () { return PurchaseItemDto; })
-    ], CreatePurchaseDto.prototype, "items");
-    return CreatePurchaseDto;
+        class_transformer_1.Type(function () { return PurchaseOrderItemDto; })
+    ], CreatePurchaseOrderDto.prototype, "items");
+    __decorate([
+        class_transformer_1.Type(function () { return Date; }),
+        class_validator_1.IsDate()
+    ], CreatePurchaseOrderDto.prototype, "deliveryDate");
+    return CreatePurchaseOrderDto;
 }());
-exports.CreatePurchaseDto = CreatePurchaseDto;
+exports.CreatePurchaseOrderDto = CreatePurchaseOrderDto;
+var PurchaseOrderItemDto = /** @class */ (function () {
+    function PurchaseOrderItemDto() {
+    }
+    __decorate([
+        class_validator_1.IsNumber()
+    ], PurchaseOrderItemDto.prototype, "medicine_id");
+    __decorate([
+        class_validator_1.IsNumber()
+    ], PurchaseOrderItemDto.prototype, "quantity");
+    __decorate([
+        class_validator_1.IsNumber()
+    ], PurchaseOrderItemDto.prototype, "unit_price");
+    return PurchaseOrderItemDto;
+}());
+exports.PurchaseOrderItemDto = PurchaseOrderItemDto;

@@ -26,38 +26,19 @@ var SupplierController = /** @class */ (function () {
     SupplierController.prototype.remove = function (email) {
         return this.supplierService.remove(email);
     };
-    // GET /suppliers/me/purchase-orders
-    SupplierController.prototype.getMyOrders = function (User) {
-        return this.supplierService.getOrdersBySupplier(User);
-    };
-    SupplierController.prototype.updateStatus = function (id, dto, User) {
-        return this.supplierService.updateStatus(User, id, dto.status);
-    };
     __decorate([
-        roles_decorator_1.Roles('SUPPLIER_ADMIN'),
         common_1.Get()
     ], SupplierController.prototype, "findAll");
     __decorate([
-        roles_decorator_1.Roles('SUPPLIER_ADMIN'),
         common_1.Get(':email'),
         __param(0, common_1.Param('email'))
     ], SupplierController.prototype, "findOne");
     __decorate([
-        roles_decorator_1.Roles('SUPPLIER_ADMIN'),
         common_1.Delete('delete/:email'),
         __param(0, common_1.Param('email'))
     ], SupplierController.prototype, "remove");
-    __decorate([
-        common_1.Get('me/purchase-orders'),
-        roles_decorator_1.Roles('SUPPLIER')
-    ], SupplierController.prototype, "getMyOrders");
-    __decorate([
-        common_1.Patch(':id/status'),
-        roles_decorator_1.Roles('SUPPLIER'),
-        __param(0, common_1.Param('id', common_1.ParseIntPipe)),
-        __param(1, common_1.Body())
-    ], SupplierController.prototype, "updateStatus");
     SupplierController = __decorate([
+        roles_decorator_1.Roles('SUPPLIER_ADMIN'),
         common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard),
         common_1.Controller('supplier')
     ], SupplierController);

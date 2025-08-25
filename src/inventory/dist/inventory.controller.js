@@ -11,70 +11,46 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 exports.__esModule = true;
 exports.InventoryController = void 0;
 var common_1 = require("@nestjs/common");
-var guard_1 = require("src/auth/guard");
-var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
-var get_user_decorator_1 = require("src/auth/decorators/get-user.decorator");
 var InventoryController = /** @class */ (function () {
-    function InventoryController(service) {
-        this.service = service;
+    function InventoryController(inventoryService) {
+        this.inventoryService = inventoryService;
     }
-    InventoryController.prototype.findAll = function (user, query) {
-        return this.service.findAll(user, query);
+    InventoryController.prototype.create = function (createInventoryDto) {
+        return this.inventoryService.create(createInventoryDto);
     };
-    InventoryController.prototype.findExpiringSoon = function (user) {
-        return this.service.findExpiringSoon(user);
+    InventoryController.prototype.findAll = function () {
+        return this.inventoryService.findAll();
     };
-    InventoryController.prototype.findLowStock = function (user) {
-        return this.service.findLowStock(user);
+    InventoryController.prototype.findOne = function (id) {
+        return this.inventoryService.findOne(+id);
     };
-    InventoryController.prototype.findOne = function (id, user) {
-        return this.service.findOne(+id, user);
+    InventoryController.prototype.update = function (id, updateInventoryDto) {
+        return this.inventoryService.update(+id, updateInventoryDto);
     };
-    // @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
-    InventoryController.prototype.create = function (dto, user) {
-        console.log(user);
-        return this.service.create(dto, user);
-    };
-    InventoryController.prototype.update = function (id, dto, user) {
-        return this.service.update(+id, dto, user);
-    };
-    InventoryController.prototype.remove = function (id, user) {
-        return this.service.remove(+id, user);
+    InventoryController.prototype.remove = function (id) {
+        return this.inventoryService.remove(+id);
     };
     __decorate([
-        common_1.Get(),
-        __param(0, get_user_decorator_1.User()), __param(1, common_1.Query())
-    ], InventoryController.prototype, "findAll");
-    __decorate([
-        common_1.Get('expiring-soon'),
-        __param(0, get_user_decorator_1.User())
-    ], InventoryController.prototype, "findExpiringSoon");
-    __decorate([
-        common_1.Get('low-stock'),
-        __param(0, get_user_decorator_1.User())
-    ], InventoryController.prototype, "findLowStock");
-    __decorate([
-        common_1.Get(':id'),
-        __param(0, common_1.Param('id')), __param(1, get_user_decorator_1.User())
-    ], InventoryController.prototype, "findOne");
-    __decorate([
-        common_1.Post('create'),
-        __param(0, common_1.Body()), __param(1, get_user_decorator_1.User())
+        common_1.Post(),
+        __param(0, common_1.Body())
     ], InventoryController.prototype, "create");
     __decorate([
-        roles_decorator_1.Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN'),
+        common_1.Get()
+    ], InventoryController.prototype, "findAll");
+    __decorate([
+        common_1.Get(':id'),
+        __param(0, common_1.Param('id'))
+    ], InventoryController.prototype, "findOne");
+    __decorate([
         common_1.Patch(':id'),
         __param(0, common_1.Param('id')),
-        __param(1, common_1.Body()),
-        __param(2, get_user_decorator_1.User())
+        __param(1, common_1.Body())
     ], InventoryController.prototype, "update");
     __decorate([
-        roles_decorator_1.Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN'),
         common_1.Delete(':id'),
-        __param(0, common_1.Param('id')), __param(1, get_user_decorator_1.User())
+        __param(0, common_1.Param('id'))
     ], InventoryController.prototype, "remove");
     InventoryController = __decorate([
-        common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard),
         common_1.Controller('inventory')
     ], InventoryController);
     return InventoryController;

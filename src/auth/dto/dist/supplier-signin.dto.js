@@ -16,15 +16,6 @@ var SupplierSignUpDto = /** @class */ (function () {
         class_validator_1.IsNotEmpty()
     ], SupplierSignUpDto.prototype, "name");
     __decorate([
-        class_validator_1.IsNotEmpty()
-    ], SupplierSignUpDto.prototype, "contact_number");
-    __decorate([
-        class_validator_1.IsNotEmpty()
-    ], SupplierSignUpDto.prototype, "warehouseAddress");
-    __decorate([
-        class_validator_1.IsNotEmpty()
-    ], SupplierSignUpDto.prototype, "propertyName");
-    __decorate([
         class_validator_1.IsEmail()
     ], SupplierSignUpDto.prototype, "email");
     __decorate([

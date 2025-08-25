@@ -17,111 +17,60 @@ export class AuthService {
     private jwt: JwtService,
     private config: ConfigService,
   ) {}
-
   async signup(dto: SignUpDto) {
     const hash = await argon.hash(dto.password);
 
     try {
-      // Create pharmacy first (to get ID)
-      const pharmacy = await this.prisma.pharmacy.create({
-        data: {
-          name: `${dto.propertyName}'s Pharmacy`,
-          address: dto.address || 'N/A',
-          contact_number: dto.contact_number || 'N/A',
-        },
-      });
-
-      // Then create the user with pharmacy_id
-      const user = await this.prisma.user.create({
+      await this.prisma.user.create({
         data: {
           username: dto.username,
           email: dto.email,
           password_hash: hash,
           role: dto.role,
-          pharmacy_id: pharmacy.id,
+          pharmacy_id: dto.pharmacy_id,
         },
       });
-
-      // Update pharmacy to set owner_id after user is created
-      await this.prisma.pharmacy.update({
-        where: { id: pharmacy.id },
-        data: { owner_id: user.id },
-      });
-
-      return 'created';
     } catch (error) {
+      console.error(error instanceof PrismaClientKnownRequestError);
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code == 'P2002') {
-          throw new ForbiddenException('Credentials Taken');
+          console.log(1);
+          throw new ForbiddenException('Credential Taken');
         }
       }
-      throw error;
     }
   }
 
   async signin(dto: SignInDto) {
-    console.log('access');
-
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
       },
     });
     if (!user) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new ForbiddenException('Credintials incorrect');
     }
     if (!(await argon.verify(user.password_hash, dto.password))) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new ForbiddenException('Credintials incorrect');
     }
-
-    await this.prisma.pharmacy.findUnique({
-      where: { id: user.pharmacy_id },
-    });
-
-    return this.signToken(
-      user.id,
-      user.email,
-      user.role,
-      'user',
-      user.pharmacy_id,
-      null,
-    );
+    return this.signToken(user.id, user.email, user.role, 'user');
   }
 
   async signupSupplier(dto: SupplierSignUpDto) {
-    console.log('access 2');
     const hash = await argon.hash(dto.password);
     try {
-      // Create warehouse first
-      const warehouse = await this.prisma.warehouse.create({
-        data: {
-          name: `${dto.propertyName}'s Warehouse`,
-          address: dto.warehouseAddress || 'N/A',
-          contact_number: dto.contact_number || 'N/A',
-        },
-      });
-
-      // Then create supplier with warehouseId
-      const supplier = await this.prisma.supplier.create({
+      await this.prisma.supplier.create({
         data: {
           name: dto.name,
           email: dto.email,
           password_hash: hash,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           role: dto.role,
           contact_person: dto.contact_person,
           phone: dto.phone,
           address: dto.address,
-          warehouseId: warehouse.id,
         },
       });
-
-      // Update warehouse to set owner_id
-      await this.prisma.warehouse.update({
-        where: { id: warehouse.id },
-        data: { owner_id: supplier.id },
-      });
-
-      return 'created';
     } catch (error) {
       if (
         error instanceof PrismaClientKnownRequestError &&
@@ -145,38 +94,22 @@ export class AuthService {
       throw new ForbiddenException('Credentials incorrect');
     }
 
-    const warehouse = await this.prisma.warehouse.findUnique({
-      where: { id: supplier.warehouseId },
-    });
-
     return this.signToken(
       supplier.id,
       supplier.email,
       supplier.role,
       'supplier',
-      null,
-      warehouse?.id ?? null,
     );
   }
 
+  // auth.service.ts
   async signToken(
     id: number,
     email: string,
     role: string,
     accountType: 'user' | 'supplier',
-    pharmacy_id: number | null = null,
-    warehouse_id: number | null = null,
   ): Promise<{ access_token: string }> {
-    const payload = {
-      id,
-      email,
-      role,
-      type: accountType,
-      pharmacy_id,
-      warehouse_id,
-      // ...(pharmacy_id && { pharmacy_id }),
-      // ...(warehouse_id && { warehouse_id }),
-    };
+    const payload = { id, email, role, type: accountType };
 
     const token = await this.jwt.signAsync(payload, {
       // expiresIn: '1h',

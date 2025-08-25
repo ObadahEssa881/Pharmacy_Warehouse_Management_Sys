@@ -104,55 +104,6 @@ var SupplierService = /** @class */ (function () {
             });
         });
     };
-    SupplierService.prototype.getOrdersBySupplier = function (User) {
-        return __awaiter(this, void 0, void 0, function () {
-            var userId, supplier;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        userId = User.id;
-                        return [4 /*yield*/, this.prisma.supplier.findUnique({
-                                where: { id: userId }
-                            })];
-                    case 1:
-                        supplier = _a.sent();
-                        if (!supplier)
-                            throw new common_1.ForbiddenException('Not a supplier');
-                        return [2 /*return*/, this.prisma.purchaseOrder.findMany({
-                                where: { supplier_id: supplier.id },
-                                include: { PurchaseOrderItems: true, pharmacy: true }
-                            })];
-                }
-            });
-        });
-    };
-    SupplierService.prototype.updateStatus = function (User, orderId, status) {
-        return __awaiter(this, void 0, void 0, function () {
-            var supplier, order;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.prisma.supplier.findUnique({
-                            where: { id: User.id }
-                        })];
-                    case 1:
-                        supplier = _a.sent();
-                        if (!supplier)
-                            throw new common_1.ForbiddenException();
-                        return [4 /*yield*/, this.prisma.purchaseOrder.findUnique({
-                                where: { id: orderId }
-                            })];
-                    case 2:
-                        order = _a.sent();
-                        if (!order || order.supplier_id !== supplier.id)
-                            throw new common_1.ForbiddenException('Not your order');
-                        return [2 /*return*/, this.prisma.purchaseOrder.update({
-                                where: { id: orderId },
-                                data: { status: status }
-                            })];
-                }
-            });
-        });
-    };
     SupplierService = __decorate([
         common_1.Injectable()
     ], SupplierService);

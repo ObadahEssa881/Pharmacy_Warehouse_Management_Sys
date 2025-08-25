@@ -40,159 +40,19 @@ var client_1 = require("@prisma/client");
 var category_seed_1 = require("./category.seed");
 var company_seed_1 = require("./company.seed");
 var medicine_seed_1 = require("./medicine.seed");
-var argon = require("argon2");
 var prisma = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var pharmacy1, passwordHash, warehouse1, supplier1, category, company, medicine1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log('Seeding database...');
-                    return [4 /*yield*/, prisma.pharmacy.create({
-                            data: {
-                                name: 'Central Pharmacy',
-                                address: '123 Main St',
-                                contact_number: '123456789'
-                            }
-                        })];
+                case 0: return [4 /*yield*/, category_seed_1.seedCategories(prisma)];
                 case 1:
-                    pharmacy1 = _a.sent();
-                    return [4 /*yield*/, argon.hash('password123')];
-                case 2:
-                    passwordHash = _a.sent();
-                    return [4 /*yield*/, prisma.user.createMany({
-                            data: [
-                                {
-                                    username: 'owner1',
-                                    email: 'owner1@pharma.com',
-                                    password_hash: passwordHash,
-                                    role: client_1.UserRole.PHARMACY_OWNER,
-                                    pharmacy_id: pharmacy1.id
-                                },
-                                {
-                                    username: 'pharmacist1',
-                                    email: 'pharmacist1@pharma.com',
-                                    password_hash: passwordHash,
-                                    role: client_1.UserRole.PHARMACIST,
-                                    pharmacy_id: pharmacy1.id
-                                },
-                            ]
-                        })];
-                case 3:
-                    _a.sent();
-                    return [4 /*yield*/, prisma.warehouse.create({
-                            data: {
-                                name: 'Main Warehouse',
-                                address: '456 Warehouse Rd',
-                                contact_number: '987654321'
-                            }
-                        })];
-                case 4:
-                    warehouse1 = _a.sent();
-                    return [4 /*yield*/, prisma.supplier.create({
-                            data: {
-                                name: 'Best Supplier',
-                                email: 'supplier@warehouse.com',
-                                password_hash: passwordHash,
-                                role: client_1.SupplierRole.SUPPLIER_ADMIN,
-                                contact_person: 'John Doe',
-                                phone: '555555555',
-                                address: '789 Supplier Ave',
-                                warehouseId: warehouse1.id
-                            }
-                        })];
-                case 5:
-                    supplier1 = _a.sent();
-                    return [4 /*yield*/, prisma.category.create({
-                            data: { name: 'Painkillers', description: 'Pain relief medicines' }
-                        })];
-                case 6:
-                    category = _a.sent();
-                    return [4 /*yield*/, prisma.company.create({
-                            data: {
-                                name: 'HealthCorp',
-                                contact_person: 'Alice',
-                                phone: '444444444',
-                                email: 'contact@healthcorp.com',
-                                address: '101 Pharma St'
-                            }
-                        })];
-                case 7:
-                    company = _a.sent();
-                    return [4 /*yield*/, prisma.medicine.create({
-                            data: {
-                                name: 'Paracetamol',
-                                titer: '500mg',
-                                category_id: category.id,
-                                company_id: company.id,
-                                unit_price: 5.0,
-                                supplier_id: supplier1.id,
-                                Type: 'Tablet'
-                            }
-                        })];
-                case 8:
-                    medicine1 = _a.sent();
-                    // Inventory
-                    return [4 /*yield*/, prisma.inventory.create({
-                            data: {
-                                medicine_id: medicine1.id,
-                                location_type: client_1.LocationType.PHARMACY,
-                                quantity: 100,
-                                cost_price: 3.5,
-                                selling_price: 5.0,
-                                expiry_date: new Date('2026-12-31'),
-                                pharmacy_id: pharmacy1.id
-                            }
-                        })];
-                case 9:
-                    // Inventory
-                    _a.sent();
-                    // Purchase Order
-                    return [4 /*yield*/, prisma.purchaseOrder.create({
-                            data: {
-                                supplier_id: supplier1.id,
-                                pharmacy_id: pharmacy1.id,
-                                status: 'DELIVERED',
-                                PurchaseOrderItems: {
-                                    create: [{ medicine_id: medicine1.id, quantity: 50, unit_price: 3.5 }]
-                                }
-                            }
-                        })];
-                case 10:
-                    // Purchase Order
-                    _a.sent();
-                    // Sale
-                    return [4 /*yield*/, prisma.sale.create({
-                            data: {
-                                pharmacy_id: pharmacy1.id,
-                                customer_name: 'Jane Doe',
-                                total_amount: 50.0,
-                                payment_mode: 'CASH',
-                                SaleItems: {
-                                    create: [
-                                        {
-                                            medicine_id: medicine1.id,
-                                            quantity: 10,
-                                            unit_price: 5.0,
-                                            cost_price: 3.5
-                                        },
-                                    ]
-                                }
-                            }
-                        })];
-                case 11:
-                    // Sale
-                    _a.sent();
-                    console.log('✅ Seeding completed!');
-                    return [4 /*yield*/, category_seed_1.seedCategories(prisma)];
-                case 12:
                     _a.sent();
                     return [4 /*yield*/, company_seed_1.seedCompanies(prisma)];
-                case 13:
+                case 2:
                     _a.sent();
                     return [4 /*yield*/, medicine_seed_1.seedMedicines(prisma)];
-                case 14:
+                case 3:
                     _a.sent();
                     return [2 /*return*/];
             }

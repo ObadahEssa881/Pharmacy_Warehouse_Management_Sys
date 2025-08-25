@@ -1,18 +1,34 @@
-import { Body, Controller, Post, Delete, Req } from '@nestjs/common';
-import { NotificationsService } from './notification.service';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { NotificationService } from './notification.service';
+import { CreateNotificationDto } from './dto/create-notification.dto';
+import { UpdateNotificationDto } from './dto/update-notification.dto';
 
-@Controller('notifications')
-export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) {}
+@Controller('notification')
+export class NotificationController {
+  constructor(private readonly notificationService: NotificationService) {}
 
-  @Post('register-token')
-  registerToken(@Req() req, @Body('token') token: string) {
-    // assume userId comes from auth middleware (req.user.id)
-    return this.notificationsService.saveToken(req.user.id, token);
+  @Post()
+  create(@Body() createNotificationDto: CreateNotificationDto) {
+    return this.notificationService.create(createNotificationDto);
   }
 
-  @Delete('remove-token')
-  removeToken(@Body('token') token: string) {
-    return this.notificationsService.removeToken(token);
+  @Get()
+  findAll() {
+    return this.notificationService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.notificationService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateNotificationDto: UpdateNotificationDto) {
+    return this.notificationService.update(+id, updateNotificationDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.notificationService.remove(+id);
   }
 }

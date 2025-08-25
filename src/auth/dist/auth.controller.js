@@ -19,7 +19,6 @@ var AuthController = /** @class */ (function () {
         return this.authService.signup(dto);
     };
     AuthController.prototype.signinUser = function (dto) {
-        console.log(dto);
         return this.authService.signin(dto);
     };
     AuthController.prototype.signupSupplier = function (dto) {

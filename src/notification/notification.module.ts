@@ -1,14 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
-import { NotificationsService } from './notification.service';
-import { NotificationsController } from './notification.controller';
-import { PrismaService } from '../prisma/prisma.service';
-import { FirebaseAdminService } from './firebase-admin.service';
+import { NotificationService } from './notification.service';
+import { NotificationController } from './notification.controller';
 
 @Module({
-  imports: [ScheduleModule],
-  providers: [NotificationsService, PrismaService, FirebaseAdminService],
-  controllers: [NotificationsController],
-  exports: [NotificationsService],
+  controllers: [NotificationController],
+  providers: [NotificationService],
 })
-export class NotificationsModule {}
+export class NotificationModule {}

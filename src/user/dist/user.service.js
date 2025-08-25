@@ -64,58 +64,43 @@ var UserService = /** @class */ (function () {
             });
         });
     };
-    UserService.prototype.findOne = function (id) {
+    UserService.prototype.findOne = function (email) {
         return __awaiter(this, void 0, void 0, function () {
             var users;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.prisma.user.findUnique({
                             where: {
-                                id: id
+                                email: email
                             }
                         })];
                     case 1:
                         users = _a.sent();
                         if (!users) {
-                            return [2 /*return*/, new common_1.NotFoundException('User not found')];
+                            return [2 /*return*/, 'not found please verify credintials'];
                         }
                         return [2 /*return*/, users];
                 }
             });
         });
     };
-    UserService.prototype.remove = function (id) {
+    UserService.prototype.remove = function (email) {
         return __awaiter(this, void 0, void 0, function () {
             var users;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.prisma.user["delete"]({
                             where: {
-                                id: id
+                                email: email
                             }
                         })];
                     case 1:
                         users = _a.sent();
                         if (!users) {
-                            return [2 /*return*/, new common_1.NotFoundException('not found please verify credintials')];
+                            return [2 /*return*/, 'not found please verify credintials'];
                         }
-                        return [2 /*return*/, "the user " + id + " deleted"];
+                        return [2 /*return*/, "the user " + email + " deleted"];
                 }
-            });
-        });
-    };
-    UserService.prototype.update = function (id, dto) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.prisma.user.update({
-                        where: { id: id },
-                        data: {
-                            username: dto.username,
-                            email: dto.email,
-                            role: dto.role,
-                            pharmacy_id: dto.pharmacy_id
-                        }
-                    })];
             });
         });
     };

@@ -4,12 +4,6 @@ import { UserRole } from '@prisma/client';
 export class SignUpDto {
   @IsNotEmpty()
   username: string;
-  @IsNotEmpty()
-  propertyName: string;
-  @IsNotEmpty()
-  address: string;
-  @IsNotEmpty()
-  contact_number: string;
 
   @IsEmail()
   email: string;

@@ -5,212 +5,198 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 enum UserRole {
-    PHARMACY_OWNER // Owns one or more pharmacies
-    PHARMACIST // Can handle sales, inventory checks
+  PHARMACY_OWNER // Owns one or more pharmacies
+  PHARMACIST // Can handle sales, inventory checks
 }
 
 model User {
-    id                Int                 @id @default(autoincrement())
-    username          String
-    email             String              @unique
-    password_hash     String
-    role              UserRole
-    created_at        DateTime            @default(now())
-    pharmacy_id       Int
-    Pharmacy          Pharmacy            @relation(fields: [pharmacy_id], references: [id])
-    Notifications     Notification[]
-    NotificationToken NotificationToken[]
+  id            Int            @id @default(autoincrement())
+  username      String
+  email         String         @unique
+  password_hash String
+  role          UserRole
+  created_at    DateTime       @default(now())
+  pharmacy_id   Int?
+  Pharmacy      Pharmacy?      @relation(fields: [pharmacy_id], references: [id])
+  Notifications Notification[]
 }
 
-//not created yet
 model Pharmacy {
-    id             Int             @id @default(autoincrement())
-    name           String
-    address        String
-    contact_number String
-    owner_id       Int?            @unique // Ensure one-to-one relationship
-    Inventory      Inventory[]
-    PurchaseOrders PurchaseOrder[]
-    Sales          Sale[]
-    User           User[]
+  id             Int             @id @default(autoincrement())
+  name           String
+  address        String
+  contact_number String
+  owner_id       Int             @unique // Ensure one-to-one relationship
+  Inventory      Inventory[]
+  PurchaseOrders PurchaseOrder[]
+  Sales          Sale[]
+  User           User[]
 }
-
-//not created yet
 
 model Warehouse {
-    id             Int         @id @default(autoincrement())
-    name           String
-    address        String
-    owner_id       Int?        @unique // Ensure one-to-one relationship
-    contact_number String
-    Inventory      Inventory[]
-    supplier       Supplier[]
+  id             Int         @id @default(autoincrement())
+  name           String
+  address        String
+  contact_number String
+  Inventory      Inventory[]
 }
 
 enum SupplierRole {
-    SUPPLIER_ADMIN
-    SUPPLIER_EMPLOYEE
+  SUPPLIER_ADMIN
+  SUPPLIER_EMPLOYEE
 }
 
 model Supplier {
-    id             Int             @id @default(autoincrement())
-    name           String
-    email          String          @unique
-    password_hash  String
-    role           SupplierRole
-    contact_person String?
-    phone          String
-    address        String
-    Medicines      Medicine[]
-    PurchaseOrders PurchaseOrder[]
-    Invoices       Invoice[]
-    warehouseId    Int
-    Warehouse      Warehouse       @relation(fields: [warehouseId], references: [id])
+  id             Int             @id @default(autoincrement())
+  name           String
+  email          String          @unique
+  password_hash  String
+  role           SupplierRole
+  contact_person String?
+  phone          String
+  address        String
+  Medicines      Medicine[]
+  PurchaseOrders PurchaseOrder[]
+  Invoices       Invoice[]
 }
 
-//not created yet
-
 model Category {
-    id          Int        @id @default(autoincrement())
-    name        String     @unique
-    description String?
-    Medicines   Medicine[]
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  Medicines   Medicine[]
 }
 
 model Company {
-    id             Int        @id @default(autoincrement())
-    name           String     @unique
-    contact_person String?
-    phone          String
-    email          String     @unique
-    address        String
-    Medicines      Medicine[]
+  id             Int        @id @default(autoincrement())
+  name           String     @unique
+  contact_person String?
+  phone          String
+  email          String     @unique
+  address        String
+  Medicines      Medicine[]
 }
 
 model Medicine {
-    id                 Int                 @id @default(autoincrement())
-    name               String
-    titer              String
-    category_id        Int
-    category           Category            @relation(fields: [category_id], references: [id])
-    company_id         Int
-    company            Company             @relation(fields: [company_id], references: [id])
-    unit_price         Decimal
-    supplier_id        Int
-    supplier           Supplier            @relation(fields: [supplier_id], references: [id])
-    Inventory          Inventory[]
-    PurchaseOrderItems PurchaseOrderItem[]
-    SaleItems          SaleItem[]
-    Type               String?
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  titer              String
+  category_id        Int
+  category           Category            @relation(fields: [category_id], references: [id])
+  company_id         Int
+  company            Company             @relation(fields: [company_id], references: [id])
+  unit_price         Decimal
+  supplier_id        Int
+  supplier           Supplier            @relation(fields: [supplier_id], references: [id])
+  Inventory          Inventory[]
+  PurchaseOrderItems PurchaseOrderItem[]
+  SaleItems          SaleItem[]
+  Type               String?
 }
 
 enum LocationType {
-    PHARMACY
-    WAREHOUSE
+  PHARMACY
+  WAREHOUSE
 }
 
 model Inventory {
-    id            Int          @id @default(autoincrement())
-    medicine_id   Int
-    medicine      Medicine     @relation(fields: [medicine_id], references: [id])
-    location_type LocationType
-    quantity      Int
-    cost_price    Decimal // Purchase cost
-    selling_price Decimal // Retail price
-    expiry_date   DateTime
-    last_updated  DateTime     @default(now())
-    pharmacy_id   Int?
-    pharmacy      Pharmacy?    @relation(fields: [pharmacy_id], references: [id])
-
-    warehouse_id Int?
-    warehouse    Warehouse? @relation(fields: [warehouse_id], references: [id])
+  id            Int          @id @default(autoincrement())
+  medicine_id   Int
+  medicine      Medicine     @relation(fields: [medicine_id], references: [id])
+  location_type LocationType
+  quantity      Int
+  cost_price    Decimal // Purchase cost
+  selling_price Decimal // Retail price
+  expiry_date   DateTime
+  last_updated  DateTime     @default(now())
+  location_id   Int
+  pharmacy      Pharmacy?    @relation(fields: [location_id], references: [id], map: "Inventory_pharmacy_fkey") // Unique constraint name
+  warehouse     Warehouse?   @relation(fields: [location_id], references: [id], map: "Inventory_warehouse_fkey") // Unique constraint name
 }
 
 model PurchaseOrder {
-    id                 Int                 @id @default(autoincrement())
-    supplier_id        Int
-    supplier           Supplier            @relation(fields: [supplier_id], references: [id])
-    pharmacy_id        Int
-    pharmacy           Pharmacy            @relation(fields: [pharmacy_id], references: [id])
-    order_date         DateTime            @default(now())
-    delivery_date      DateTime?
-    status             String
-    Invoice            Invoice?
-    PurchaseOrderItems PurchaseOrderItem[]
+  id                 Int                 @id @default(autoincrement())
+  supplier_id        Int
+  supplier           Supplier            @relation(fields: [supplier_id], references: [id])
+  pharmacy_id        Int
+  pharmacy           Pharmacy            @relation(fields: [pharmacy_id], references: [id])
+  order_date         DateTime            @default(now())
+  delivery_date      DateTime?
+  status             String
+  Invoice            Invoice?
+  PurchaseOrderItems PurchaseOrderItem[]
 }
 
 model PurchaseOrderItem {
-    id          Int           @id @default(autoincrement())
-    order_id    Int
-    order       PurchaseOrder @relation(fields: [order_id], references: [id])
-    medicine_id Int
-    medicine    Medicine      @relation(fields: [medicine_id], references: [id])
-    quantity    Int
-    unit_price  Decimal
+  id          Int           @id @default(autoincrement())
+  order_id    Int
+  order       PurchaseOrder @relation(fields: [order_id], references: [id])
+  medicine_id Int
+  medicine    Medicine      @relation(fields: [medicine_id], references: [id])
+  quantity    Int
+  unit_price  Decimal
 }
 
 model Invoice {
-    id             Int           @id @default(autoincrement())
-    order_id       Int           @unique
-    order          PurchaseOrder @relation(fields: [order_id], references: [id])
-    supplier_id    Int
-    supplier       Supplier      @relation(fields: [supplier_id], references: [id])
-    invoice_date   DateTime      @default(now())
-    total_amount   Decimal
-    payment_status String
+  id             Int           @id @default(autoincrement())
+  order_id       Int           @unique
+  order          PurchaseOrder @relation(fields: [order_id], references: [id])
+  supplier_id    Int
+  supplier       Supplier      @relation(fields: [supplier_id], references: [id])
+  invoice_date   DateTime      @default(now())
+  total_amount   Decimal
+  payment_status String
 }
 
 model Sale {
-    id            Int        @id @default(autoincrement())
-    pharmacy_id   Int
-    pharmacy      Pharmacy   @relation(fields: [pharmacy_id], references: [id])
-    customer_name String?
-    sale_date     DateTime   @default(now())
-    total_amount  Decimal
-    payment_mode  String
-    SaleItems     SaleItem[]
+  id            Int        @id @default(autoincrement())
+  pharmacy_id   Int
+  pharmacy      Pharmacy   @relation(fields: [pharmacy_id], references: [id])
+  customer_name String?
+  sale_date     DateTime   @default(now())
+  total_amount  Decimal
+  payment_mode  String
+  SaleItems     SaleItem[]
 }
 
 model SaleItem {
-    id          Int      @id @default(autoincrement())
-    sale_id     Int
-    sale        Sale     @relation(fields: [sale_id], references: [id])
-    medicine_id Int
-    medicine    Medicine @relation(fields: [medicine_id], references: [id])
-    quantity    Int
-    unit_price  Decimal
-    cost_price  Decimal
+  id          Int      @id @default(autoincrement())
+  sale_id     Int
+  sale        Sale     @relation(fields: [sale_id], references: [id])
+  medicine_id Int
+  medicine    Medicine @relation(fields: [medicine_id], references: [id])
+  quantity    Int
+  unit_price  Decimal
 }
 
 model Notification {
-    id         Int      @id @default(autoincrement())
-    user_id    Int
-    user       User     @relation(fields: [user_id], references: [id])
-    message    String
-    type       String
-    created_at DateTime @default(now())
-    is_read    Boolean  @default(false)
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  user       User     @relation(fields: [user_id], references: [id])
+  message    String
+  type       String
+  created_at DateTime @default(now())
+  is_read    Boolean  @default(false)
 }
 
-model NotificationToken {
-    id         Int      @id @default(autoincrement())
-    user_id    Int
-    token      String   @unique
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+// Looking at your Prisma schema, it's a solid foundation for a pharmacy management system, but there are several areas that need refinement. Let me break down the issues and suggestions:
 
-    user User @relation(fields: [user_id], references: [id])
-}
+// ## Major Issues & Modifications Needed
 
+// ### 1. **User Model - Role Management**
+// **Current Issue**: Role is just a string without validation or clear structure.
+
+// **Suggested Modification**:
+// ```prisma
 // enum UserRole {
 //   SUPER_ADMIN    // System-wide admin
 //   PHARMACY_OWNER // Owns one or more pharmacies
@@ -222,19 +208,19 @@ model NotificationToken {
 
 // model User {
 //   id            Int            @id @default(autoincrement())
-//   username      String         @unique 
+//   username      String         @unique // Should be unique
 //   email         String         @unique
 //   password_hash String
 //   role          UserRole       // Use enum instead of string
-//   is_active     Boolean        @default(true) 
+//   is_active     Boolean        @default(true) // Add user status
 //   created_at    DateTime       @default(now())
-//   updated_at    DateTime       @updatedAt 
+//   updated_at    DateTime       @updatedAt // Track updates
 
-//   
+//   // Relationships
 //   pharmacy_id   Int?
 //   pharmacy      Pharmacy?      @relation(fields: [pharmacy_id], references: [id])
 //   notifications Notification[]
-//   sales         Sale[]         
+//   sales         Sale[]         // Track who made each sale
 
 //   @@map("users")
 // }
@@ -432,359 +418,3 @@ model NotificationToken {
 // - **WAREHOUSE_MANAGER**: Warehouse inventory, purchase orders
 
 // Would you like me to elaborate on any of these modifications or discuss the implementation approach?
-
-// ****************************************************************************************
-// ****************************************************************************************
-
-// lets start step by step after we finish we test then go to the next step 
-// tell me what do you want files to know from me data base and nest js to start the actual full coding for the files in the filament that we need 
-// like the user and supplier the auth controller and service in the nest the jwt payload and validition function i will send them and tell me if you need further files or info to write the code whole for the step one so i can copy it and test it :
-// data base user and supplier ( there is other tables in the system ) :
-// enum UserRole {
-//     PHARMACY_OWNER 
-//     PHARMACIST 
-// }
-// model User {
-//     id            Int            @id @default(autoincrement())
-//     username      String
-//     email         String         @unique
-//     password_hash String
-//     role          UserRole
-//     created_at    DateTime       @default(now())
-//     pharmacy_id   Int
-//     Pharmacy      Pharmacy      @relation(fields: [pharmacy_id], references: [id])
-//     Notifications Notification[]
-// }
-// model Pharmacy {
-//     id             Int             @id @default(autoincrement())
-//     name           String
-//     address        String
-//     contact_number String
-//     owner_id       Int?            @unique 
-//     Inventory      Inventory[]
-//     PurchaseOrders PurchaseOrder[]
-//     Sales          Sale[]
-//     User           User[]
-// }
-// model Warehouse {
-//     id             Int         @id @default(autoincrement())
-//     name           String
-//     address        String
-//     owner_id       Int?        @unique 
-//     contact_number String
-//     Inventory      Inventory[]
-//     supplier       Supplier[]
-// }
-// enum SupplierRole {
-//     SUPPLIER_ADMIN
-//     SUPPLIER_EMPLOYEE
-// }
-// model Supplier {
-//     id             Int             @id @default(autoincrement())
-//     name           String
-//     email          String          @unique
-//     password_hash  String
-//     role           SupplierRole
-//     contact_person String?
-//     phone          String
-//     address        String
-//     Medicines      Medicine[]
-//     PurchaseOrders PurchaseOrder[]
-//     Invoices       Invoice[]
-//     warehouseId    Int
-//     Warehouse      Warehouse      @relation(fields: [warehouseId], references: [id])
-// }
-// auth controller :
-// import { Body, Controller, Post } from '@nestjs/common';
-// import { AuthService } from './auth.service';
-// import { SignInDto, SignUpDto } from './dto';
-// import {
-//   SupplierSignInDto,
-//   SupplierSignUpDto,
-// } from './dto/supplier-signin.dto';
-// @Controller('auth')
-// export class AuthController {
-//   constructor(private readonly authService: AuthService) {}
-//   @Post('user/signup')
-//   signupUser(@Body() dto: SignUpDto) {
-//     return this.authService.signup(dto);
-//   }
-//   @Post('user/signin')
-//   signinUser(@Body() dto: SignInDto) {
-//     console.log(dto);
-//     return this.authService.signin(dto);
-//   }
-//   @Post('supplier/signup')
-//   signupSupplier(@Body() dto: SupplierSignUpDto) {
-//     return this.authService.signupSupplier(dto);
-//   }
-//   @Post('supplier/signin')
-//   signinSupplier(@Body() dto: SupplierSignInDto) {
-//     return this.authService.signinSupplier(dto);
-//   }
-// }
-// auth service :
-// import { ForbiddenException, Injectable } from '@nestjs/common';
-// import { PrismaService } from 'src/prisma/prisma.service';
-// import { SignInDto, SignUpDto } from './dto';
-// import * as argon from 'argon2';
-// import { JwtService } from '@nestjs/jwt';
-// import { ConfigService } from '@nestjs/config';
-// import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-// import {
-//   SupplierSignInDto,
-//   SupplierSignUpDto,
-// } from './dto/supplier-signin.dto';
-// @Injectable()
-// export class AuthService {
-//   constructor(
-//     private prisma: PrismaService,
-//     private jwt: JwtService,
-//     private config: ConfigService,
-//   ) {}
-//   async signup(dto: SignUpDto) {
-//     const hash = await argon.hash(dto.password);
-//     try {
-//       const pharmacy = await this.prisma.pharmacy.create({
-//         data: {
-//           name: `${dto.propertyName}'s Pharmacy`,
-//           address: dto.address || 'N/A',
-//           contact_number: dto.contact_number || 'N/A',
-//         },
-//       });
-//       const user = await this.prisma.user.create({
-//         data: {
-//           username: dto.username,
-//           email: dto.email,
-//           password_hash: hash,
-//           role: dto.role,
-//           pharmacy_id: pharmacy.id,
-//         },
-//       });
-//       await this.prisma.pharmacy.update({
-//         where: { id: pharmacy.id },
-//         data: { owner_id: user.id },
-//       });
-//       return 'created';
-//     } catch (error) {
-//       if (error instanceof PrismaClientKnownRequestError) {
-//         if (error.code == 'P2002') {
-//           throw new ForbiddenException('Credentials Taken');
-//         }
-//       }
-//       throw error;
-//     }
-//   }
-//   async signin(dto: SignInDto) {
-//     const user = await this.prisma.user.findUnique({
-//       where: {
-//         email: dto.email,
-//       },
-//     });
-//     if (!user) {
-//       throw new ForbiddenException('Credentials incorrect');
-//     }
-//     if (!(await argon.verify(user.password_hash, dto.password))) {
-//       throw new ForbiddenException('Credentials incorrect');
-//     }
-//     await this.prisma.pharmacy.findUnique({
-//       where: { id: user.pharmacy_id },
-//     });
-//     return this.signToken(
-//       user.id,
-//       user.email,
-//       user.role,
-//       'user',
-//       user.pharmacy_id,
-//       null,
-//     );
-//   }
-//   async signupSupplier(dto: SupplierSignUpDto) {
-//     const hash = await argon.hash(dto.password);
-//     try {
-//       // Create warehouse first
-//       const warehouse = await this.prisma.warehouse.create({
-//         data: {
-//           name: `${dto.propertyName}'s Warehouse`,
-//           address: dto.warehouseAddress || 'N/A',
-//           contact_number: dto.contact_number || 'N/A',
-//         },
-//       });
-//       const supplier = await this.prisma.supplier.create({
-//         data: {
-//           name: dto.name,
-//           email: dto.email,
-//           password_hash: hash,
-//           role: dto.role,
-//           contact_person: dto.contact_person,
-//           phone: dto.phone,
-//           address: dto.address,
-//           warehouseId: warehouse.id,
-//         },
-//       });
-//       await this.prisma.warehouse.update({
-//         where: { id: warehouse.id },
-//         data: { owner_id: supplier.id },
-//       });
-//       return 'created';
-//     } catch (error) {
-//       if (
-//         error instanceof PrismaClientKnownRequestError &&
-//         error.code === 'P2002'
-//       ) {
-//         throw new ForbiddenException('Credential Taken');
-//       }
-//       throw error;
-//     }
-//   }
-//   async signinSupplier(dto: SupplierSignInDto) {
-//     const supplier = await this.prisma.supplier.findUnique({
-//       where: { email: dto.email },
-//     });
-//     if (
-//       !supplier ||
-//       !(await argon.verify(supplier.password_hash, dto.password))
-//     ) {
-//       throw new ForbiddenException('Credentials incorrect');
-//     }
-//     const warehouse = await this.prisma.warehouse.findUnique({
-//       where: { id: supplier.warehouseId },
-//     });
-//     return this.signToken(
-//       supplier.id,
-//       supplier.email,
-//       supplier.role,
-//       'supplier',
-//       null,
-//       warehouse?.id ?? null,
-//     );
-//   }
-//   async signToken(
-//     id: number,
-//     email: string,
-//     role: string,
-//     accountType: 'user' | 'supplier',
-//     pharmacy_id: number | null = null,
-//     warehouse_id: number | null = null,
-//   ): Promise<{ access_token: string }> {
-//     const payload = {
-//       id,
-//       email,
-//       role,
-//       type: accountType,
-//       pharmacy_id,
-//       warehouse_id,
-//     };
-//     const token = await this.jwt.signAsync(payload, {
-//       expiresIn: '1h',
-//       secret: this.config.get('JWT_SECRET'),
-//     });
-
-//     return { access_token: token };
-//   }
-// }
-// dtos:
-// user :
-// import { IsEmail, IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
-// import { UserRole } from '@prisma/client';
-// export class SignUpDto {
-//   @IsNotEmpty()
-//   username: string;
-//   @IsNotEmpty()
-//   propertyName: string;
-//   @IsNotEmpty()
-//   address: string;
-//   @IsNotEmpty()
-//   contact_number: string;
-//   @IsEmail()
-//   email: string;
-//   @IsNotEmpty()
-//   password: string;
-//   @IsEnum(UserRole)
-//   role: UserRole;
-//   @IsOptional()
-//   pharmacy_id?: number;
-// }
-// export class SignInDto {
-//   @IsEmail()
-//   email: string;
-//   @IsNotEmpty()
-//   password: string;
-// }
-// supplier :
-// import { IsEmail, IsNotEmpty, IsEnum, IsString } from 'class-validator';
-// import { SupplierRole } from '@prisma/client';
-// export class SupplierSignUpDto {
-//   @IsNotEmpty()
-//   name: string;
-//   @IsNotEmpty()
-//   contact_number: string;
-//   @IsNotEmpty()
-//   warehouseAddress: string;
-//   @IsNotEmpty()
-//   propertyName: string;
-//   @IsEmail()
-//   email: string;
-//   @IsNotEmpty()
-//   password: string;
-//   @IsEnum(SupplierRole)
-//   role: SupplierRole;
-//   @IsString()
-//   @IsNotEmpty()
-//   phone: string;
-//   contact_person?: string;
-//   @IsNotEmpty()
-//   address: string;
-// }
-// export class SupplierSignInDto {
-//   @IsEmail()
-//   email: string;
-//   @IsNotEmpty()
-//   password: string;
-// }
-// jwt :
-// import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
-// import { PassportStrategy } from '@nestjs/passport';
-// import { Injectable } from '@nestjs/common';
-// import { ConfigService } from '@nestjs/config';
-// import { PrismaService } from 'src/prisma/prisma.service';
-// @Injectable()
-// export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-//   constructor(
-//     private readonly config: ConfigService,
-//     private prisma: PrismaService,
-//   ) {
-//     const options: StrategyOptions = {
-//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//       secretOrKey: config.get<string>('JWT_SECRET', 'fallback-secret'), // Ensure it's defined
-//     }
-//     super(options);
-//   }
-//   async validate(payload: { id: number; email: string }) {
-//     const user = await this.prisma.user.findUnique({
-//       where: { id: payload.id },
-//     });
-//     if (user) {
-//       const { password_hash, ...rest } = user;
-//       return { ...rest, type: 'USER' };
-//     }
-//     const supplier = await this.prisma.supplier.findUnique({
-//       where: { id: payload.id },
-//     });
-//     if (supplier) {
-//       const { password_hash, ...rest } = supplier;
-//       return { ...rest, type: 'SUPPLIER' };
-//     }
-//     return null;
-//   }
-// }
-// payload:
-// export interface UserJwtPayload {
-//   id: number;
-//   email: string;
-//   pharmacy_id: number;
-//   warehouse_id: number;
-//   role: string;
-//   iat?: number;
-//   exp?: number;
-// }

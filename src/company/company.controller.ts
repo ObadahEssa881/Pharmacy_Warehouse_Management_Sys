@@ -3,58 +3,46 @@ import {
   Get,
   Post,
   Body,
+  Patch,
   Param,
   Delete,
-  Put,
-  Query,
-  ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
-import { JwtGuard, RoleGuard } from 'src/auth/guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { ListQueryDto } from 'src/common/query/list-query.dto';
+import { CreateCompanyDto, UpdateCompanyDto } from './dto';
+import { JwtGuard } from 'src/auth/guard';
 
-@Controller('companies')
-@UseGuards(JwtGuard, RoleGuard)
+@Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
-  @Post('create')
-  create(@Body() dto: CreateCompanyDto) {
-    return this.companyService.create(dto);
+  @Post()
+  create(@Body() createCompanyDto: CreateCompanyDto) {
+    return this.companyService.create(createCompanyDto);
   }
 
-  @Get('all')
-  findAll(@Query() query: ListQueryDto) {
-    return this.companyService.findAll(query);
+  @UseGuards(JwtGuard)
+  @Get()
+  async findAll() {
+    const companies = await this.companyService.findAll();
+    return {companies : companies};
   }
 
+  @UseGuards(JwtGuard)
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.companyService.findOne(id);
+  findOne(@Param('id') id: string) {
+    return this.companyService.findOne(+id);
   }
 
-  @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
-  @Put('update/:id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateCompanyDto) {
-    return this.companyService.update(id, dto);
+  @UseGuards(JwtGuard)
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
+    return this.companyService.update(+id, updateCompanyDto);
   }
 
-  @Roles('PHARMACY_OWNER', 'SUPPLIER_ADMIN')
-  @Delete('delete/:id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.companyService.remove(id);
-  }
-  @Get(':id/medicines')
-  getMedicinesByCompany(
-    @Param('id') companyId: string,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-  ) {
-    return this.companyService.getMedicinesByCompany(+companyId, page, limit);
+  @UseGuards(JwtGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.companyService.remove(+id);
   }
 }
