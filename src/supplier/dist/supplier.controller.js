@@ -13,6 +13,7 @@ exports.SupplierController = void 0;
 var common_1 = require("@nestjs/common");
 var guard_1 = require("src/auth/guard");
 var roles_decorator_1 = require("src/auth/decorators/roles.decorator");
+var decorators_1 = require("src/auth/decorators");
 var SupplierController = /** @class */ (function () {
     function SupplierController(supplierService) {
         this.supplierService = supplierService;
@@ -27,11 +28,11 @@ var SupplierController = /** @class */ (function () {
         return this.supplierService.remove(email);
     };
     // GET /suppliers/me/purchase-orders
-    SupplierController.prototype.getMyOrders = function (User) {
-        return this.supplierService.getOrdersBySupplier(User);
+    SupplierController.prototype.getMyOrders = function (user) {
+        return this.supplierService.getOrdersBySupplier(user);
     };
-    SupplierController.prototype.updateStatus = function (id, dto, User) {
-        return this.supplierService.updateStatus(User, id, dto.status);
+    SupplierController.prototype.updateStatus = function (id, dto, user) {
+        return this.supplierService.updateStatus(user, id, dto.status);
     };
     __decorate([
         roles_decorator_1.Roles('SUPPLIER_ADMIN'),
@@ -49,13 +50,15 @@ var SupplierController = /** @class */ (function () {
     ], SupplierController.prototype, "remove");
     __decorate([
         common_1.Get('me/purchase-orders'),
-        roles_decorator_1.Roles('SUPPLIER')
+        roles_decorator_1.Roles('SUPPLIER_EMPLOYEE'),
+        __param(0, decorators_1.User())
     ], SupplierController.prototype, "getMyOrders");
     __decorate([
         common_1.Patch(':id/status'),
-        roles_decorator_1.Roles('SUPPLIER'),
+        roles_decorator_1.Roles('SUPPLIER_EMPLOYEE'),
         __param(0, common_1.Param('id', common_1.ParseIntPipe)),
-        __param(1, common_1.Body())
+        __param(1, common_1.Body()),
+        __param(2, decorators_1.User())
     ], SupplierController.prototype, "updateStatus");
     SupplierController = __decorate([
         common_1.UseGuards(guard_1.JwtGuard, guard_1.RoleGuard),
