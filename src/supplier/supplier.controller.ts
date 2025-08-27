@@ -13,6 +13,7 @@ import { JwtGuard, RoleGuard } from 'src/auth/guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UserJwtPayload } from 'src/auth/types';
 import { PurchaseStatus } from 'src/common/enums/purchase‑status.enum';
+import { User } from 'src/auth/decorators';
 @UseGuards(JwtGuard, RoleGuard)
 @Controller('supplier')
 export class SupplierController {
@@ -37,17 +38,17 @@ export class SupplierController {
   }
   // GET /suppliers/me/purchase-orders
   @Get('me/purchase-orders')
-  @Roles('SUPPLIER')
-  getMyOrders(User: UserJwtPayload) {
-    return this.supplierService.getOrdersBySupplier(User);
+  @Roles('SUPPLIER_EMPLOYEE')
+  getMyOrders(@User() user: UserJwtPayload) {
+    return this.supplierService.getOrdersBySupplier(user);
   }
   @Patch(':id/status')
-  @Roles('SUPPLIER')
+  @Roles('SUPPLIER_EMPLOYEE')
   updateStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: { status: PurchaseStatus },
-    User: UserJwtPayload,
+    @User() user: UserJwtPayload,
   ) {
-    return this.supplierService.updateStatus(User, id, dto.status);
+    return this.supplierService.updateStatus(user, id, dto.status);
   }
 }

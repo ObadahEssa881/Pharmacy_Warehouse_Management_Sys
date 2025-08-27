@@ -38,8 +38,9 @@ export class SupplierService {
     }
     return `the user ${email} deleted`;
   }
-  async getOrdersBySupplier(User: UserJwtPayload) {
-    const userId = User.id;
+  async getOrdersBySupplier(user: UserJwtPayload) {
+    // console.log(User);
+    const userId = user.id;
     const supplier = await this.prisma.supplier.findUnique({
       where: { id: userId },
     });
@@ -51,12 +52,13 @@ export class SupplierService {
     });
   }
   async updateStatus(
-    User: UserJwtPayload,
+    user: UserJwtPayload,
     orderId: number,
     status: PurchaseStatus,
   ) {
+    console.log(orderId, status);
     const supplier = await this.prisma.supplier.findUnique({
-      where: { id: User.id },
+      where: { id: user.id },
     });
     if (!supplier) throw new ForbiddenException();
 

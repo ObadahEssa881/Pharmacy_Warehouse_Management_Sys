@@ -104,13 +104,13 @@ var SupplierService = /** @class */ (function () {
             });
         });
     };
-    SupplierService.prototype.getOrdersBySupplier = function (User) {
+    SupplierService.prototype.getOrdersBySupplier = function (user) {
         return __awaiter(this, void 0, void 0, function () {
             var userId, supplier;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        userId = User.id;
+                        userId = user.id;
                         return [4 /*yield*/, this.prisma.supplier.findUnique({
                                 where: { id: userId }
                             })];
@@ -126,14 +126,16 @@ var SupplierService = /** @class */ (function () {
             });
         });
     };
-    SupplierService.prototype.updateStatus = function (User, orderId, status) {
+    SupplierService.prototype.updateStatus = function (user, orderId, status) {
         return __awaiter(this, void 0, void 0, function () {
             var supplier, order;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.prisma.supplier.findUnique({
-                            where: { id: User.id }
-                        })];
+                    case 0:
+                        console.log(orderId, status);
+                        return [4 /*yield*/, this.prisma.supplier.findUnique({
+                                where: { id: user.id }
+                            })];
                     case 1:
                         supplier = _a.sent();
                         if (!supplier)
