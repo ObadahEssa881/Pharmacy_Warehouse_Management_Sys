@@ -22,6 +22,9 @@ export class SignUpDto {
 
   @IsOptional()
   pharmacy_id?: number;
+
+  @IsOptional()
+  fcm_token: string;
 }
 
 export class SignInDto {
@@ -30,4 +33,7 @@ export class SignInDto {
 
   @IsNotEmpty()
   password: string;
+
+  @IsOptional()
+  fcm_token: string;
 }

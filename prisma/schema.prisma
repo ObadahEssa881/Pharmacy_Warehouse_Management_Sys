@@ -27,6 +27,7 @@ model User {
     created_at        DateTime            @default(now())
     pharmacy_id       Int
     Pharmacy          Pharmacy            @relation(fields: [pharmacy_id], references: [id])
+    fcm_token         String?
     Notifications     Notification[]
     NotificationToken NotificationToken[]
 }

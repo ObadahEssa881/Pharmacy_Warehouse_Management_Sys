@@ -38,6 +38,7 @@ export class AuthService {
           email: dto.email,
           password_hash: hash,
           role: dto.role,
+          fcm_token: dto.fcm_token,
           pharmacy_id: pharmacy.id,
         },
       });
@@ -78,6 +79,10 @@ export class AuthService {
       where: { id: user.pharmacy_id },
     });
 
+    await this.prisma.user.update({
+      where: { email: dto.email },
+      data: {fcm_token : dto.fcm_token},
+    });
     return this.signToken(
       user.id,
       user.email,
