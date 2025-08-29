@@ -9,10 +9,11 @@ import { CreatePurchaseDto, UpdatePurchaseStatusDto } from './dto';
 import { buildPagination } from '../common/pagination/index';
 import { PurchaseStatus } from '../common/enums/purchase‑status.enum';
 import { UserJwtPayload } from '../auth/types/user.types';
+import { FirebaseAdminService } from '../notification/firebase-admin.service';
 
 @Injectable()
 export class PurchaseService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService , private readonly firebase: FirebaseAdminService) {}
 
   private pharmacyScope(user: UserJwtPayload) {
     if (!user.pharmacy_id)
@@ -83,6 +84,19 @@ export class PurchaseService {
           payment_status: 'UNPAID',
         },
       });
+
+
+      const finduser = await this.prisma.user.findUnique({
+        where: { id : user.id }
+      });
+      if(finduser?.fcm_token){
+        await this.firebase.sendNotification(
+          finduser?.fcm_token ,
+          'طلب شراء جديد',
+          `قام ${user} بإنشاء طلب شراء #${order.id}`,
+          { orderId: String(order.id) }, // بيانات إضافية اختيارية
+        );
+      }
 
       return order;
     });

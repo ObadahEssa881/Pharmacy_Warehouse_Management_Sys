@@ -9,6 +9,6 @@ import { FirebaseAdminService } from './firebase-admin.service';
   imports: [ScheduleModule],
   providers: [NotificationsService, PrismaService, FirebaseAdminService],
   controllers: [NotificationsController],
-  exports: [NotificationsService],
+  exports: [NotificationsService ,FirebaseAdminService],
 })
 export class NotificationsModule {}
