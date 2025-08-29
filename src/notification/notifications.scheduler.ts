@@ -7,7 +7,8 @@ export class NotificationsScheduler {
   constructor(private readonly notifications: NotificationsService) {}
 
   /** Run at 08:00 and 20:00 server time */
-  @Cron('0 8,20 * * *')
+  // @Cron('0 8,20 * * *')
+  @Cron('* * * * *')
   async twiceDailyInventoryAlerts() {
     await this.notifications.checkAndNotifyAllPharmacies();
   }

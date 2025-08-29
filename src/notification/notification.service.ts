@@ -99,14 +99,12 @@ export class NotificationsService {
     const users = await this.prisma.user.findMany({
       where: {
         pharmacy_id,
-        NotificationToken: { some: {} },
+        fcm_token: { not: null },
       },
-      select: { NotificationToken: true },
+      select: { fcm_token: true },
     });
 
-    const tokens = users.flatMap((u) =>
-      u.NotificationToken.map((t) => t.token),
-    );
+    const tokens = users.map((u) => u.fcm_token).filter(Boolean);
 
     if (!tokens.length) {
       this.logger.log(`No notification tokens for pharmacy ${pharmacy_id}`);
@@ -118,9 +116,11 @@ export class NotificationsService {
 
     for (const token of tokens) {
       try {
-        await this.firebaseService.sendNotification(token, title, body, {
-          pharmacy_id: String(pharmacy_id),
-        });
+        if(token){
+          await this.firebaseService.sendNotification(token, title, body, {
+            pharmacy_id: String(pharmacy_id),
+          });
+        }
       } catch (err) {
         this.logger.error(`Failed to send notification to token ${token}`, err);
       }
