@@ -200,13 +200,13 @@ export class InventoryService {
       ? {
           pharmacy_id: user.pharmacy_id,
           quantity: {
-            lt: 2,
+            lt: 5,
           },
         }
       : {
           warehouse_id: user.warehouse_id,
           quantity: {
-            lt: 2,
+            lt: 5,
           },
         };
 
