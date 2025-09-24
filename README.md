@@ -23,6 +23,40 @@
 
 ## Description
 
+# Pharmacy Warehouse Management System
+
+Graduation Project  
+Author: [Obadah Abo Essa](https://www.linkedin.com/in/obadah-abo-essa)  
+Tech Stack: TypeScript, NestJS, Prisma
+
+## Overview
+This project is a comprehensive Pharmacy Warehouse Management System designed to handle inventory, transactions, and administrative tasks for pharmacies. Built using NestJS (Node.js framework) and Prisma ORM, it emphasizes scalability, maintainability, and clean architectural principles.
+
+## Features
+- Inventory management (add, update, track medicines)
+- Admin panel for managing users and permissions
+- Transaction logging and reporting
+- Integration with relational databases via Prisma
+- Modular backend structure for easy extensibility
+
+## Structure
+- `src/` - Main application code
+- `admin-panel/` - Administration interface
+- `prisma/` - Database schema and migration files
+- `test/` - Test files
+- `.env copy` - Example environment configuration
+
+## Getting Started
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Configure environment variables
+4. Run migrations: `npx prisma migrate deploy`
+5. Start the server: `npm run start`
+
+## Contribution
+Open to improvements—feel free to fork and submit PRs!
+
+
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Project setup
