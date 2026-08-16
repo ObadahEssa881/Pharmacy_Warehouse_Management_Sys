@@ -1,7 +1,9 @@
-# compiled output
-/dist
+# compiled output (any level, not just repo root)
+dist/
 /node_modules
+node_modules/
 /build
+build/
 
 # Logs
 logs
